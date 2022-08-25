@@ -1,0 +1,40 @@
+{
+    "name": "Smart Reductor",
+    "sites": [
+        {
+            "name": "Site 1",
+            "departments": [
+                {
+                    "name": "department 1",
+                    "departments": [
+                        {
+                            "name": "department 2",
+                            "workCenters": [
+                                {
+                                    "name": "workCenter 1"
+                                },
+                                {
+                                    "name": "workCenter 2"
+                                },
+                                {
+                                    "name": "workCenter 3"
+                                }
+                            ],
+                            "storageZones": [
+                                {
+                                    "name": "storage 1"
+                                },
+                                {
+                                    "name": "storage 2"
+                                },
+                                {
+                                    "name": "storage 3"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

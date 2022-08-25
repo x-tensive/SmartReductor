@@ -37,3 +37,11 @@ function DPA-GetHost()
 
     return Invoke-RestMethod -Method "Get" -Uri $getHostUrl -Headers $headers -WebSession $global:dpaSession
 }
+
+function DPA-GetEnterpriseStruct([Int32] $parentTypeId, [string] $parentId)
+{
+    $getStructUrl = $global:dpaApi + "/ManageEnterpriseStructure/getDynamicTree/" + $parentTypeId + "/" + $parentId;
+    $headers = @{ Cookie = $global:dpaCookie }
+
+    return Invoke-RestMethod -Method "Get" -Uri $getStructUrl -Headers $headers -WebSession $global:dpaSession
+}
