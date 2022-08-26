@@ -1,11 +1,11 @@
 {
-    "name": "Smart Reductor",
+    "name": "Самое главное предприятие",
     "sites": [
         {
-            "name": "Site 1",
+            "name": "Цех 2",
             "departments": [
                 {
-                    "name": "department 1",
+                    "name": "Подразделение Цеха 2",
                     "departments": [
                         {
                             "name": "department 2",
@@ -31,6 +31,16 @@
                                     "name": "storage 3"
                                 }
                             ]
+                        }
+                    ],
+                    "workCenters": [
+                        {
+                            "name": "ВиртуальныйSUB"
+                        }
+                    ],
+                    "storageZones": [
+                        {
+                            "name": "Склад 2 Цеха"
                         }
                     ]
                 }
