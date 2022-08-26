@@ -137,7 +137,7 @@ function EnterpriseStruct-Fetch()
 function EnterpriseStructure-GenerateRemoveActions-workCenter($workCenterCfg, [ref] $actions)
 {
     $actions.Value += @{
-        action = "RemoveWorkCenter"
+        actionName = "RemoveWorkCenter"
         id = $workCenterCfg.id
         name = $workCenterCfg.name
     }
@@ -146,7 +146,7 @@ function EnterpriseStructure-GenerateRemoveActions-workCenter($workCenterCfg, [r
 function EnterpriseStructure-GenerateRemoveActions-storageZone($storageZoneCfg, [ref] $actions)
 {
     $actions.Value += @{
-        action = "RemoveStorageZone"
+        actionName = "RemoveStorageZone"
         id = $storageZoneCfg.id
         name = $storageZoneCfg.name
     }
@@ -158,7 +158,7 @@ function EnterpriseStructure-GenerateRemoveActions-department($departmentCfg, [r
     foreach ($workCenterCfg in $departmentCfg.workCenters) { EnterpriseStructure-GenerateRemoveActions-workCenter $workCenterCfg $actions }
     foreach ($storageZoneCfg in $departmentCfg.storageZones) { EnterpriseStructure-GenerateRemoveActions-storageZone $storageZoneCfg $actions }
     $actions.Value += @{
-        action = "RemoveDepartment"
+        actionName = "RemoveDepartment"
         id = $departmentCfg.id
         name = $departmentCfg.name
     }
@@ -168,7 +168,7 @@ function EnterpriseStructure-GenerateRemoveActions-site($siteCfg, [ref] $actions
 {
     foreach ($departmentCfg in $siteCfg.departments) { EnterpriseStructure-GenerateRemoveActions-department $departmentCfg $actions }
     $actions.Value += @{
-        action = "RemoveSite"
+        actionName = "RemoveSite"
         id = $siteCfg.id
         name = $siteCfg.name
     }
@@ -178,7 +178,7 @@ function EnterpriseStructure-GenerateRemoveActions-enterprise($enterpriseCfg, [r
 {
     foreach ($siteCfg in $enterpriseCfg.sites) { EnterpriseStructure-GenerateRemoveActions-site $siteCfg $actions }
     $actions.Value += @{
-        action = "RemoveEnterprise"
+        actionName = "RemoveEnterprise"
         id = $enterpriseCfg.id
         name = $enterpriseCfg.name
     }
@@ -187,7 +187,7 @@ function EnterpriseStructure-GenerateRemoveActions-enterprise($enterpriseCfg, [r
 function EnterpriseStructure-GenerateCreateActions-workCenter($workCenterCfg, [ref] $actions)
 {
     $actions.Value += @{
-        action = "CreateWorkCenter"
+        actionName = "CreateWorkCenter"
         cfg = $workCenterCfg
     }
 }
@@ -195,7 +195,7 @@ function EnterpriseStructure-GenerateCreateActions-workCenter($workCenterCfg, [r
 function EnterpriseStructure-GenerateCreateActions-storageZone($storageZoneCfg, [ref] $actions)
 {
     $actions.Value += @{
-        action = "CreateStorageZone"
+        actionName = "CreateStorageZone"
         cfg = $storageZoneCfg
     }
 }
@@ -203,7 +203,7 @@ function EnterpriseStructure-GenerateCreateActions-storageZone($storageZoneCfg, 
 function EnterpriseStructure-GenerateCreateActions-department($departmentCfg, [ref] $actions)
 {
     $actions.Value += @{
-        action = "CreateDepartment"
+        actionName = "CreateDepartment"
         cfg = $departmentCfg
     }
     foreach ($subDepartmentCfg in $departmentCfg.departments) {
@@ -220,7 +220,7 @@ function EnterpriseStructure-GenerateCreateActions-department($departmentCfg, [r
 function EnterpriseStructure-GenerateCreateActions-site($siteCfg, [ref] $actions)
 {
     $actions.Value += @{
-        action = "CreateSite"
+        actionName = "CreateSite"
         cfg = $siteCfg
     }
     foreach ($departmentCfg in $siteCfg.departments) {
@@ -231,7 +231,7 @@ function EnterpriseStructure-GenerateCreateActions-site($siteCfg, [ref] $actions
 function EnterpriseStructure-GenerateCreateActions-enterprise($enterpriseCfg, [ref] $actions)
 {
     $actions.Value += @{
-        action = "CreateEnterprise"
+        actionName = "CreateEnterprise"
         cfg = $enterpriseCfg
     }
     foreach ($siteCfg in $enterpriseCfg.sites) {
@@ -357,12 +357,12 @@ function EnterpriseStructure-GenerateUpdateActions($enterpriseCfg, $existentCfg)
     }
 
     foreach ($action in $actions) {
-        if ($action.action.StartsWith("Remove")) {
-            Write-Host $action.action -NoNewLine -Foreground yellow
+        if ($action.actionName.StartsWith("Remove")) {
+            Write-Host $action.actionName -NoNewLine -Foreground yellow
             Write-Host (" " + $action.id + ":" + $action.name)
         }
-        if ($action.action.StartsWith("Create")) {
-            Write-Host $action.action -NoNewLine
+        if ($action.actionName.StartsWith("Create")) {
+            Write-Host $action.actionName -NoNewLine
             Write-Host (" " + $action.cfg.name)
         }
     }
@@ -386,6 +386,4 @@ function EnterpriseStruct-Update()
     Write-Host "enterprise struct UPDATE ACTIONS" -Foreground green
     Write-Host
     $updateActions = EnterpriseStructure-GenerateUpdateActions $enterpriseCfg $existentCfg
-
-    Write-Host ($enterpriseCfg | ConvertTo-Json -Depth 100)
 }

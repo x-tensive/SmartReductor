@@ -1,3 +1,9 @@
+param (
+    [string] $url = "http://localhost",
+    [string] $userName = "admin",
+    [string] $userPassword = "admin"
+)
+
 Remove-Module -Name "dpa" 2> $null
 Remove-Module -Name "enterpriseStruct" 2> $null
 
@@ -9,7 +15,7 @@ $enterpriseStructModule = $PSScriptRoot + "/scripts/enterpriseStruct.psm1"
 Import-Module $dpaModule -DisableNameChecking
 Import-Module $enterpriseStructModule -DisableNameChecking
 
-DPA-Login "http://dpadev" "admin" "admin"
+DPA-Login $url $userName $userPassword
 
 $dpaHost = DPA-GetHost
 Write-Host $dpaHost.name $dpaHost.dpaHostVersion
