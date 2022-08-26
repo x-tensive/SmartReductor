@@ -1,15 +1,5 @@
 $ErrorActionPreference = "Stop"
 
-function EnterpriseStruct-GetNodeTypeName([Int32] $typeId)
-{
-    if ($typeId -eq 1) { return "enterprise" }
-    if ($typeId -eq 2) { return "site" }
-    if ($typeId -eq 3) { return "department" }
-    if ($typeId -eq 4) { return "workCenter" }
-    if ($typeId -eq 26) { return "storageZone" }
-    return $null
-}
-
 function EnterpriseStruct-IsContainerType([Int32] $typeId)
 {
     if ($typeId -eq 1) { return $true }   # enterprise
@@ -77,23 +67,70 @@ function EnterpriseStruct-ReadConfiguration()
     $structCfgFileName = $PSScriptRoot + "/../data/enterpriseStruct.json"
     $enterpriseCfg = Get-Content $structCfgFileName | Out-String | ConvertFrom-Json
     EnterpriseStruct-Configuration-DumpEnterprise $enterpriseCfg
+    return $enterpriseCfg;
 }
 
-function EnterpriseStruct-Fetch([string] $path, [Int32] $parentTypeId, [string] $parentId)
+function EnterpriseStruct-FetchNodeCfg([Int32] $typeId, [string] $id, [string] $name, $parentNodeCfg)
+{
+    $nodeCfg = @{
+        id = $id
+        name = $name
+    }
+
+    # enterprise
+    if ($typeId -eq 1) {
+        $nodeCfg.sites = @()
+        $parentNodeCfg.enterprises += $nodeCfg
+    }  
+
+    # site
+    if ($typeId -eq 2) {
+        $nodeCfg.departments = @()
+        $parentNodeCfg.sites += $nodeCfg
+    } 
+
+    # department
+    if ($typeId -eq 3) {
+        $nodeCfg.departments = @()
+        $nodeCfg.workCenters = @()
+        $nodeCfg.storageZones = @()
+        $parentNodeCfg.departments += $nodeCfg
+    }
+
+    # workCenter
+    if ($typeId -eq 4) {
+        $parentNodeCfg.workCenters += $nodeCfg
+    }
+
+    # storageZone
+    if ($typeId -eq 26) {
+        $parentNodeCfg.storageZones += $nodeCfg
+    }
+
+    return $nodeCfg
+}
+
+function EnterpriseStruct-FetchNode([Int32] $parentTypeId, [string] $parentId, $nodeCfg)
 {
     $nodes = DPA-GetEnterpriseStruct $parentTypeId $parentId
     foreach ($node in $nodes) {
-        $currentPath = $path
+        $currentNodeCfg = $nodeCfg
         $isVirtualContainer = EnterpriseStruct-IsVirtualContainerType $node.type
         if (-not $isVirtualContainer) {
-            $nodeTypeName = EnterpriseStruct-GetNodeTypeName $node.type
-            Write-Host ($path + $node.text) -NoNewLine
-            Write-Host (" (" + $nodeTypeName + ")") -Foreground darkgray
-            $currentPath = $path + $node.text + "/"
+            $currentNodeCfg = EnterpriseStruct-FetchNodeCfg $node.type $node.id $node.text $nodeCfg
         }
         $isContainer = EnterpriseStruct-IsContainerType $node.type
-        if ($isContainer) { EnterpriseStruct-Fetch $currentPath $node.type $node.id }
+        if ($isContainer) { EnterpriseStruct-FetchNode $node.type $node.id $currentNodeCfg}
     }
+}
+
+function EnterpriseStruct-Fetch()
+{
+    $existentCfgContainer = @{
+        enterprises = @()
+    }
+    EnterpriseStruct-FetchNode 0 "0" $existentCfgContainer
+    foreach ($enterpriseCfg in $existentCfgContainer.enterprises) { EnterpriseStruct-Configuration-DumpEnterprise $enterpriseCfg }
 }
 
 function EnterpriseStruct-Update()
@@ -101,10 +138,10 @@ function EnterpriseStruct-Update()
     Write-Host
     Write-Host "enterprise struct READ CONFIGURATION" -Foreground green
     Write-Host
-    EnterpriseStruct-ReadConfiguration
+    $enterpriseCfg = EnterpriseStruct-ReadConfiguration
 
     Write-Host
     Write-Host "enterprise struct FETCH" -Foreground green
     Write-Host
-    EnterpriseStruct-Fetch "" 0 "0"
+    $existentCfg = EnterpriseStruct-Fetch
 }
