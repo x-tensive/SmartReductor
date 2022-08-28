@@ -80,11 +80,19 @@ function DPA-GetHost()
 function DPA-GetEnterpriseStruct([Int32] $parentTypeId, [string] $parentId)
 {
     if ((DPA-version-lowerThan "5.8.0.0")) {
-        $getStructUrl = $global:dpaApi + "/DpaEnterpriseStrusture/getDynamicTree/" + $parentTypeId + "/" + $parentId + "/false";
+        $getStructUrl = $global:dpaApi + "/DpaEnterpriseStrusture/getDynamicTree/" + $parentTypeId + "/" + $parentId + "/false"
     } else {
-        $getStructUrl = $global:dpaApi + "/ManageEnterpriseStructure/getDynamicTree/" + $parentTypeId + "/" + $parentId;
+        $getStructUrl = $global:dpaApi + "/ManageEnterpriseStructure/getDynamicTree/" + $parentTypeId + "/" + $parentId
     }
     $headers = @{ Cookie = $global:dpaCookie }
 
     return Invoke-RestMethod -Method "Get" -Uri $getStructUrl -Headers $headers -WebSession $global:dpaSession
+}
+
+function DPA-WorkCenter-remove($id)
+{
+    $removeUrl = $global:dpaApi + "/DpaEnterpriseStrusture/removeEquipment/" + $id
+    $headers = @{ Cookie = $global:dpaCookie }
+
+    return Invoke-RestMethod -Method "Post" -Uri $removeUrl -Headers $headers -WebSession $global:dpaSession
 }

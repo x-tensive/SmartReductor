@@ -140,6 +140,10 @@ function EnterpriseStructure-GenerateRemoveActions-workCenter($workCenterCfg, [r
         actionName = "RemoveWorkCenter"
         id = $workCenterCfg.id
         name = $workCenterCfg.name
+        execute = {
+            param($action)
+            DPA-WorkCenter-remove $action.id
+        }
     }
 }
 
@@ -370,6 +374,26 @@ function EnterpriseStructure-GenerateUpdateActions($enterpriseCfg, $existentCfg)
     return $actions
 }
 
+function EnterpriseStructure-ExecuteUpdateActions([ref] $updateActions)
+{
+    foreach ($action in $updateActions.Value) {
+        if ($action.actionName.StartsWith("Remove")) {
+            Write-Host $action.actionName -NoNewLine -Foreground yellow
+            Write-Host (" " + $action.id + ":" + $action.name) -NoNewline
+        }
+        if ($action.actionName.StartsWith("Create")) {
+            Write-Host $action.actionName -NoNewLine
+            Write-Host (" " + $action.cfg.name) -NoNewLine
+        }
+
+        Write-Host " ..." -NoNewline
+
+        $action.execute.Invoke($action)
+
+        Write-Host "OK" -Foreground green
+    }
+}
+
 function EnterpriseStruct-Update()
 {
     Write-Host
@@ -386,4 +410,9 @@ function EnterpriseStruct-Update()
     Write-Host "enterprise struct UPDATE ACTIONS" -Foreground green
     Write-Host
     $updateActions = EnterpriseStructure-GenerateUpdateActions $enterpriseCfg $existentCfg
+
+    Write-Host
+    Write-Host "enterprise struct EXECUTE UPDATE ACTIONS" -Foreground green
+    Write-Host
+    EnterpriseStructure-ExecuteUpdateActions ([ref] $updateActions)
 }
