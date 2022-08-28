@@ -105,6 +105,24 @@ function DPA-StorageZone-remove($id)
     return Invoke-RestMethod -Method "Post" -Uri $removeUrl -Headers $headers -WebSession $global:dpaSession
 }
 
+function DPA-Department-create($siteId, $parentDepartmentId, [string] $name)
+{
+    $removeUrl = $global:dpaApi + "/DpaEnterpriseStrusture/createDepartment"
+    $headers = @{ Cookie = $global:dpaCookie }
+    
+    $bodyRaw = @{
+        siteId = $siteId
+        name = $name
+    }
+    if ($parentDepartmentId) {
+        $bodyRaw.ownerDepartmentId = $parentDepartmentId
+    }
+    $bodyData = $bodyRaw | ConvertTo-Json
+    $body = [System.Text.Encoding]::UTF8.GetBytes($bodyData)
+
+    return Invoke-RestMethod -Method "Post" -Uri $removeUrl -Headers $headers -Body $body  -ContentType "application/json" -WebSession $global:dpaSession
+}
+
 function DPA-Department-remove($id)
 {
     $removeUrl = $global:dpaApi + "/DpaEnterpriseStrusture/removeDepartment/" + $id

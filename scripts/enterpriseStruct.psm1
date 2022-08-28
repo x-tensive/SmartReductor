@@ -220,14 +220,21 @@ function EnterpriseStructure-GenerateCreateActions-storageZone($storageZoneCfg, 
     }
 }
 
-function EnterpriseStructure-GenerateCreateActions-department($departmentCfg, [ref] $actions)
+function EnterpriseStructure-GenerateCreateActions-department($siteCfg, $parentDepartmentCfg, $departmentCfg, [ref] $actions)
 {
     $actions.Value += @{
         actionName = "CreateDepartment"
         cfg = $departmentCfg
+        siteCfg = $siteCfg
+        parentDepartmentCfg = $parentDepartmentCfg
+        execute = {
+            param($action)
+            $department = DPA-Department-create $action.siteCfg.id $action.parentDepartmentCfg.id $action.cfg.name
+            $action.cfg.id = $department.id
+        }
     }
     foreach ($subDepartmentCfg in $departmentCfg.departments) {
-        EnterpriseStructure-GenerateCreateActions-department $subDepartmentCfg $actions
+        EnterpriseStructure-GenerateCreateActions-department $siteCfg $departmentCfg $subDepartmentCfg $actions
     }
     foreach ($workCenterCfg in $departmentCfg.workCenters) {
         EnterpriseStructure-GenerateCreateActions-workCenter $workCenterCfg $actions
@@ -237,20 +244,20 @@ function EnterpriseStructure-GenerateCreateActions-department($departmentCfg, [r
     }
 }
 
-function EnterpriseStructure-GenerateCreateActions-site($siteCfg, [ref] $actions)
+function EnterpriseStructure-GenerateCreateActions-site($enterpriseCfg, $siteCfg, [ref] $actions)
 {
     $actions.Value += @{
         actionName = "CreateSite"
         cfg = $siteCfg
+        enterpriseCfg = $enterpriseCfg
         execute = {
             param($action)
-            Write-Host ($action.cfg | ConvertTo-Json -Depth 100)
-            #$site = DPA-Site-create $action.cfg. $action.cfg.name
-            #$action.cfg.id = $site.id
+            $site = DPA-Site-create $action.enterpriseCfg.id $action.cfg.name
+            $action.cfg.id = $site.id
         }
     }
     foreach ($departmentCfg in $siteCfg.departments) {
-        EnterpriseStructure-GenerateCreateActions-department $departmentCfg $actions
+        EnterpriseStructure-GenerateCreateActions-department $siteCfg $null $departmentCfg $actions
     }
 }
 
@@ -266,7 +273,7 @@ function EnterpriseStructure-GenerateCreateActions-enterprise($enterpriseCfg, [r
         }
     }
     foreach ($siteCfg in $enterpriseCfg.sites) {
-        EnterpriseStructure-GenerateCreateActions-site $siteCfg $actions
+        EnterpriseStructure-GenerateCreateActions-site $enterpriseCfg $siteCfg $actions
     }
 }
 
@@ -316,7 +323,7 @@ function EnterpriseStructure-GenerateUpdateActions-storageZones([ref] $storageZo
     }
 }
 
-function EnterpriseStructure-GenerateUpdateActions-departments([ref] $departmentsCfg, [ref] $existentDepartmentsCfg, [ref] $actions)
+function EnterpriseStructure-GenerateUpdateActions-departments($siteCfg, $parentDepartmentCfg, [ref] $departmentsCfg, [ref] $existentDepartmentsCfg, [ref] $actions)
 {
     foreach ($existentDepartmentCfg in $existentDepartmentsCfg.Value) {
         $departmentCfg = $departmentsCfg.Value | where { $_.name -eq $existentDepartmentCfg.name }
@@ -329,7 +336,7 @@ function EnterpriseStructure-GenerateUpdateActions-departments([ref] $department
         $existentDepartmentCfg = $existentDepartmentsCfg.Value | where { $_.name -eq $departmentCfg.name }
         if ($existentDepartmentCfg) {
             $departmentCfg.id = $existentDepartmentCfg.id
-            EnterpriseStructure-GenerateUpdateActions-departments ([ref]$departmentCfg.departments) ([ref]$existentDepartmentCfg.departments) $actions
+            EnterpriseStructure-GenerateUpdateActions-departments $siteCfg $departmentCfg ([ref]$departmentCfg.departments) ([ref]$existentDepartmentCfg.departments) $actions
             EnterpriseStructure-GenerateUpdateActions-workCenters ([ref]$departmentCfg.workCenters) ([ref]$existentDepartmentCfg.workCenters) $actions
             EnterpriseStructure-GenerateUpdateActions-storageZones ([ref]$departmentCfg.storageZones) ([ref]$existentDepartmentCfg.storageZones) $actions
         }
@@ -337,12 +344,12 @@ function EnterpriseStructure-GenerateUpdateActions-departments([ref] $department
 
     foreach ($departmentCfg in $departmentsCfg.Value) {
         if (-not $departmentCfg.ContainsKey("id")) {
-            EnterpriseStructure-GenerateCreateActions-department $departmentCfg $actions
+            EnterpriseStructure-GenerateCreateActions-department $siteCfg $null $departmentCfg $actions
         }
     }
 }
 
-function EnterpriseStructure-GenerateUpdateActions-sites([ref] $sitesCfg, [ref] $existentSitesCfg, [ref] $actions)
+function EnterpriseStructure-GenerateUpdateActions-sites($enterpriseCfg, [ref] $sitesCfg, [ref] $existentSitesCfg, [ref] $actions)
 {
     foreach ($existentSiteCfg in $existentSitesCfg.Value) {
         $siteCfg = $sitesCfg.Value | where { $_.name -eq $existentSiteCfg.name }
@@ -355,13 +362,13 @@ function EnterpriseStructure-GenerateUpdateActions-sites([ref] $sitesCfg, [ref] 
         $existentSiteCfg = $existentSitesCfg.Value | where { $_.name -eq $siteCfg.name }
         if ($existentSiteCfg) {
             $siteCfg.id = $existentSiteCfg.id
-            EnterpriseStructure-GenerateUpdateActions-departments ([ref]$siteCfg.departments) ([ref]$existentSiteCfg.departments) $actions
+            EnterpriseStructure-GenerateUpdateActions-departments $siteCfg $null ([ref]$siteCfg.departments) ([ref]$existentSiteCfg.departments) $actions
         }
     }
 
     foreach ($siteCfg in $sitesCfg.Value) {
         if (-not $siteCfg.ContainsKey("id")) {
-            EnterpriseStructure-GenerateCreateActions-site $siteCfg $actions
+            EnterpriseStructure-GenerateCreateActions-site $enterpriseCfg $siteCfg $actions
         }
     }
 }
@@ -379,7 +386,7 @@ function EnterpriseStructure-GenerateUpdateActions($enterpriseCfg, $existentCfg)
     foreach ($existentEnterpriseCfg in $existentCfg) {
         if ($enterpriseCfg.name -eq $existentEnterpriseCfg.name) {
             $enterpriseCfg.id = $existentEnterpriseCfg.id
-            EnterpriseStructure-GenerateUpdateActions-sites ([ref]$enterpriseCfg.sites) ([ref]$existentEnterpriseCfg.sites) ([ref]$actions)
+            EnterpriseStructure-GenerateUpdateActions-sites $enterpriseCfg ([ref]$enterpriseCfg.sites) ([ref]$existentEnterpriseCfg.sites) ([ref]$actions)
         }
     }
 
