@@ -242,6 +242,12 @@ function EnterpriseStructure-GenerateCreateActions-site($siteCfg, [ref] $actions
     $actions.Value += @{
         actionName = "CreateSite"
         cfg = $siteCfg
+        execute = {
+            param($action)
+            Write-Host ($action.cfg | ConvertTo-Json -Depth 100)
+            #$site = DPA-Site-create $action.cfg. $action.cfg.name
+            #$action.cfg.id = $site.id
+        }
     }
     foreach ($departmentCfg in $siteCfg.departments) {
         EnterpriseStructure-GenerateCreateActions-department $departmentCfg $actions
@@ -253,6 +259,11 @@ function EnterpriseStructure-GenerateCreateActions-enterprise($enterpriseCfg, [r
     $actions.Value += @{
         actionName = "CreateEnterprise"
         cfg = $enterpriseCfg
+        execute = {
+            param($action)
+            $enterprise = DPA-Enterprise-create $action.cfg.name
+            $action.cfg.id = $enterprise.id
+        }
     }
     foreach ($siteCfg in $enterpriseCfg.sites) {
         EnterpriseStructure-GenerateCreateActions-site $siteCfg $actions

@@ -113,12 +113,39 @@ function DPA-Department-remove($id)
     return Invoke-RestMethod -Method "Post" -Uri $removeUrl -Headers $headers -WebSession $global:dpaSession
 }
 
+function DPA-Site-create($enterpriseId, [string] $name)
+{
+    $removeUrl = $global:dpaApi + "/DpaEnterpriseStrusture/createSite"
+    $headers = @{ Cookie = $global:dpaCookie }
+    
+    $bodyData = @{
+        enterpriseId = $enterpriseId
+        name = $name
+    } | ConvertTo-Json
+    $body = [System.Text.Encoding]::UTF8.GetBytes($bodyData)
+
+    return Invoke-RestMethod -Method "Post" -Uri $removeUrl -Headers $headers -Body $body  -ContentType "application/json" -WebSession $global:dpaSession
+}
+
 function DPA-Site-remove($id)
 {
     $removeUrl = $global:dpaApi + "/DpaEnterpriseStrusture/removeSite/" + $id
     $headers = @{ Cookie = $global:dpaCookie }
 
     return Invoke-RestMethod -Method "Post" -Uri $removeUrl -Headers $headers -WebSession $global:dpaSession
+}
+
+function DPA-Enterprise-create([string] $name)
+{
+    $removeUrl = $global:dpaApi + "/DpaEnterpriseStrusture/create"
+    $headers = @{ Cookie = $global:dpaCookie }
+    
+    $bodyData = @{
+        name = $name
+    } | ConvertTo-Json
+    $body = [System.Text.Encoding]::UTF8.GetBytes($bodyData)
+
+    return Invoke-RestMethod -Method "Post" -Uri $removeUrl -Headers $headers -Body $body  -ContentType "application/json" -WebSession $global:dpaSession
 }
 
 function DPA-Enterprise-remove($id)
