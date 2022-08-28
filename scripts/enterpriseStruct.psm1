@@ -153,6 +153,10 @@ function EnterpriseStructure-GenerateRemoveActions-storageZone($storageZoneCfg, 
         actionName = "RemoveStorageZone"
         id = $storageZoneCfg.id
         name = $storageZoneCfg.name
+        execute = {
+            param($action)
+            DPA-StorageZone-remove $action.id
+        }
     }
 }
 
@@ -165,6 +169,10 @@ function EnterpriseStructure-GenerateRemoveActions-department($departmentCfg, [r
         actionName = "RemoveDepartment"
         id = $departmentCfg.id
         name = $departmentCfg.name
+        execute = {
+            param($action)
+            DPA-Department-remove $action.id
+        }
     }
 }
 
@@ -175,6 +183,10 @@ function EnterpriseStructure-GenerateRemoveActions-site($siteCfg, [ref] $actions
         actionName = "RemoveSite"
         id = $siteCfg.id
         name = $siteCfg.name
+        execute = {
+            param($action)
+            DPA-Site-remove $action.id
+        }
     }
 }
 
@@ -185,6 +197,10 @@ function EnterpriseStructure-GenerateRemoveActions-enterprise($enterpriseCfg, [r
         actionName = "RemoveEnterprise"
         id = $enterpriseCfg.id
         name = $enterpriseCfg.name
+        execute = {
+            param($action)
+            DPA-Enterprise-remove $action.id
+        }
     }
 }
 

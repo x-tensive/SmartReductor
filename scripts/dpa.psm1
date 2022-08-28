@@ -96,3 +96,35 @@ function DPA-WorkCenter-remove($id)
 
     return Invoke-RestMethod -Method "Post" -Uri $removeUrl -Headers $headers -WebSession $global:dpaSession
 }
+
+function DPA-StorageZone-remove($id)
+{
+    $removeUrl = $global:dpaApi + "/DpaEnterpriseStrusture/removeStorageZone/" + $id
+    $headers = @{ Cookie = $global:dpaCookie }
+
+    return Invoke-RestMethod -Method "Post" -Uri $removeUrl -Headers $headers -WebSession $global:dpaSession
+}
+
+function DPA-Department-remove($id)
+{
+    $removeUrl = $global:dpaApi + "/DpaEnterpriseStrusture/removeDepartment/" + $id
+    $headers = @{ Cookie = $global:dpaCookie }
+
+    return Invoke-RestMethod -Method "Post" -Uri $removeUrl -Headers $headers -WebSession $global:dpaSession
+}
+
+function DPA-Site-remove($id)
+{
+    $removeUrl = $global:dpaApi + "/DpaEnterpriseStrusture/removeSite/" + $id
+    $headers = @{ Cookie = $global:dpaCookie }
+
+    return Invoke-RestMethod -Method "Post" -Uri $removeUrl -Headers $headers -WebSession $global:dpaSession
+}
+
+function DPA-Enterprise-remove($id)
+{
+    $removeUrl = $global:dpaApi + "/DpaEnterpriseStrusture/removeEnterprise/" + $id
+    $headers = @{ Cookie = $global:dpaCookie }
+
+    return Invoke-RestMethod -Method "Post" -Uri $removeUrl -Headers $headers -WebSession $global:dpaSession
+}
