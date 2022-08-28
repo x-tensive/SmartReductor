@@ -16,9 +16,7 @@ Import-Module $dpaModule -DisableNameChecking
 Import-Module $enterpriseStructModule -DisableNameChecking
 
 DPA-Login $url $userName $userPassword
-
-$dpaHost = DPA-GetHost
-Write-Host $dpaHost.name $dpaHost.dpaHostVersion
+Write-Host $global:dpaHostName $global:dpaHostVersion
 
 EnterpriseStruct-Update
 
