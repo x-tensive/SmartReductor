@@ -1,11 +1,11 @@
 {
-    "name": "Самое главное предприятие",
+    "name": "Smart Reductor",
     "sites": [
         {
-            "name": "Цех 2",
+            "name": "area 2",
             "departments": [
                 {
-                    "name": "Подразделение Цеха 2",
+                    "name": "department 1",
                     "departments": [
                         {
                             "name": "department 2",
@@ -22,25 +22,29 @@
                             ],
                             "storageZones": [
                                 {
-                                    "name": "storage 1"
+                                    "name": "storage 1",
+                                    "address": "a1"
                                 },
                                 {
-                                    "name": "storage 2"
+                                    "name": "storage 2",
+                                    "address": "a2"
                                 },
                                 {
-                                    "name": "storage 3"
+                                    "name": "storage 3",
+                                    "address": "a3"
                                 }
                             ]
                         }
                     ],
                     "workCenters": [
                         {
-                            "name": "ВиртуальныйSUB"
+                            "name": "virtual SUB"
                         }
                     ],
                     "storageZones": [
                         {
-                            "name": "Склад 2 Цеха"
+                            "name": "Stock 2 main area",
+                            "address": "x1"
                         }
                     ]
                 }

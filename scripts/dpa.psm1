@@ -89,6 +89,24 @@ function DPA-GetEnterpriseStruct([Int32] $parentTypeId, [string] $parentId)
     return Invoke-RestMethod -Method "Get" -Uri $getStructUrl -Headers $headers -WebSession $global:dpaSession
 }
 
+function DPA-WorkCenter-create($departmentId, [string] $name)
+{
+    $removeUrl = $global:dpaApi + "/DpaEnterpriseStrusture/createEquipment"
+    $headers = @{ Cookie = $global:dpaCookie }
+    
+    $bodyData = @{
+        departmentId = $departmentId
+        name = $name
+        serverId = 0
+        driverIdentifier = "00000000-0000-0000-0000-000000000000"
+        equipmentGroupIds = @()
+	    equipmentGroupNames = $null
+    } | ConvertTo-Json
+    $body = [System.Text.Encoding]::UTF8.GetBytes($bodyData)
+
+    return Invoke-RestMethod -Method "Post" -Uri $removeUrl -Headers $headers -Body $body  -ContentType "application/json" -WebSession $global:dpaSession
+}
+
 function DPA-WorkCenter-remove($id)
 {
     $removeUrl = $global:dpaApi + "/DpaEnterpriseStrusture/removeEquipment/" + $id
@@ -97,12 +115,27 @@ function DPA-WorkCenter-remove($id)
     return Invoke-RestMethod -Method "Post" -Uri $removeUrl -Headers $headers -WebSession $global:dpaSession
 }
 
+function DPA-StorageZone-create($departmentId, [string] $name, [string] $address)
+{
+    $removeUrl = $global:dpaApi + "/storageZone"
+    $headers = @{ Cookie = $global:dpaCookie }
+    
+    $bodyData = @{
+        IdDepartament = $departmentId
+        name = $name
+        address = $address
+    } | ConvertTo-Json
+    $body = [System.Text.Encoding]::UTF8.GetBytes($bodyData)
+
+    return Invoke-RestMethod -Method "Post" -Uri $removeUrl -Headers $headers -Body $body  -ContentType "application/json" -WebSession $global:dpaSession
+}
+
 function DPA-StorageZone-remove($id)
 {
-    $removeUrl = $global:dpaApi + "/DpaEnterpriseStrusture/removeStorageZone/" + $id
+    $removeUrl = $global:dpaApi + "/storageZone/" + $id
     $headers = @{ Cookie = $global:dpaCookie }
 
-    return Invoke-RestMethod -Method "Post" -Uri $removeUrl -Headers $headers -WebSession $global:dpaSession
+    return Invoke-RestMethod -Method "Delete" -Uri $removeUrl -Headers $headers -WebSession $global:dpaSession
 }
 
 function DPA-Department-create($siteId, $parentDepartmentId, [string] $name)

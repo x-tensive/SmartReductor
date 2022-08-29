@@ -204,19 +204,31 @@ function EnterpriseStructure-GenerateRemoveActions-enterprise($enterpriseCfg, [r
     }
 }
 
-function EnterpriseStructure-GenerateCreateActions-workCenter($workCenterCfg, [ref] $actions)
+function EnterpriseStructure-GenerateCreateActions-workCenter($departmentCfg, $workCenterCfg, [ref] $actions)
 {
     $actions.Value += @{
         actionName = "CreateWorkCenter"
         cfg = $workCenterCfg
+        departmentCfg = $departmentCfg
+        execute = {
+            param($action)
+            $workCenter = DPA-WorkCenter-create $action.departmentCfg.id $action.cfg.name
+            $action.cfg.id = $workCenter.id
+        }
     }
 }
 
-function EnterpriseStructure-GenerateCreateActions-storageZone($storageZoneCfg, [ref] $actions)
+function EnterpriseStructure-GenerateCreateActions-storageZone($departmentCfg, $storageZoneCfg, [ref] $actions)
 {
     $actions.Value += @{
         actionName = "CreateStorageZone"
         cfg = $storageZoneCfg
+        departmentCfg = $departmentCfg
+        execute = {
+            param($action)
+            $storageZone = DPA-StorageZone-create $action.departmentCfg.id $action.cfg.name $action.cfg.address
+            $action.cfg.id = $storageZone.id
+        }
     }
 }
 
@@ -237,10 +249,10 @@ function EnterpriseStructure-GenerateCreateActions-department($siteCfg, $parentD
         EnterpriseStructure-GenerateCreateActions-department $siteCfg $departmentCfg $subDepartmentCfg $actions
     }
     foreach ($workCenterCfg in $departmentCfg.workCenters) {
-        EnterpriseStructure-GenerateCreateActions-workCenter $workCenterCfg $actions
+        EnterpriseStructure-GenerateCreateActions-workCenter $departmentCfg $workCenterCfg $actions
     }
     foreach ($storageZoneCfg in $departmentCfg.storageZones) {
-        EnterpriseStructure-GenerateCreateActions-storageZone $storageZoneCfg $actions
+        EnterpriseStructure-GenerateCreateActions-storageZone $departmentCfg $storageZoneCfg $actions
     }
 }
 
@@ -277,7 +289,7 @@ function EnterpriseStructure-GenerateCreateActions-enterprise($enterpriseCfg, [r
     }
 }
 
-function EnterpriseStructure-GenerateUpdateActions-workCenters([ref] $workCentersCfg, [ref] $existentWorkCentersCfg, [ref] $actions)
+function EnterpriseStructure-GenerateUpdateActions-workCenters($departmentCfg, [ref] $workCentersCfg, [ref] $existentWorkCentersCfg, [ref] $actions)
 {
     foreach ($existentWorkCenterCfg in $existentWorkCentersCfg.Value) {
         $workCenterCfg = $workCentersCfg.Value | where { $_.name -eq $existentWorkCenterCfg.name }
@@ -295,12 +307,12 @@ function EnterpriseStructure-GenerateUpdateActions-workCenters([ref] $workCenter
 
     foreach ($workCenterCfg in $workCentersCfg.Value) {
         if (-not $workCenterCfg.ContainsKey("id")) {
-            EnterpriseStructure-GenerateCreateActions-workCenter $workCenterCfg $actions
+            EnterpriseStructure-GenerateCreateActions-workCenter $departmentCfg $workCenterCfg $actions
         }
     }
 }
 
-function EnterpriseStructure-GenerateUpdateActions-storageZones([ref] $storageZonesCfg, [ref] $existentStorageZonesCfg, [ref] $actions)
+function EnterpriseStructure-GenerateUpdateActions-storageZones($departmentCfg, [ref] $storageZonesCfg, [ref] $existentStorageZonesCfg, [ref] $actions)
 {
     foreach ($existentStorageZoneCfg in $existentStorageZonesCfg.Value) {
         $storageZoneCfg = $storageZonesCfg.Value | where { $_.name -eq $existentStorageZoneCfg.name }
@@ -318,7 +330,7 @@ function EnterpriseStructure-GenerateUpdateActions-storageZones([ref] $storageZo
 
     foreach ($storageZoneCfg in $storageZonesCfg.Value) {
         if (-not $storageZoneCfg.ContainsKey("id")) {
-            EnterpriseStructure-GenerateCreateActions-storageZone $storageZoneCfg $actions
+            EnterpriseStructure-GenerateCreateActions-storageZone $departmentCfg $storageZoneCfg $actions
         }
     }
 }
@@ -337,8 +349,8 @@ function EnterpriseStructure-GenerateUpdateActions-departments($siteCfg, $parent
         if ($existentDepartmentCfg) {
             $departmentCfg.id = $existentDepartmentCfg.id
             EnterpriseStructure-GenerateUpdateActions-departments $siteCfg $departmentCfg ([ref]$departmentCfg.departments) ([ref]$existentDepartmentCfg.departments) $actions
-            EnterpriseStructure-GenerateUpdateActions-workCenters ([ref]$departmentCfg.workCenters) ([ref]$existentDepartmentCfg.workCenters) $actions
-            EnterpriseStructure-GenerateUpdateActions-storageZones ([ref]$departmentCfg.storageZones) ([ref]$existentDepartmentCfg.storageZones) $actions
+            EnterpriseStructure-GenerateUpdateActions-workCenters $departmentCfg ([ref]$departmentCfg.workCenters) ([ref]$existentDepartmentCfg.workCenters) $actions
+            EnterpriseStructure-GenerateUpdateActions-storageZones $departmentCfg ([ref]$departmentCfg.storageZones) ([ref]$existentDepartmentCfg.storageZones) $actions
         }
     }
 
@@ -422,7 +434,7 @@ function EnterpriseStructure-ExecuteUpdateActions([ref] $updateActions)
 
         Write-Host " ..." -NoNewline
 
-        $action.execute.Invoke($action)
+        $action.execute.Invoke($action) > $null
 
         Write-Host "OK" -Foreground green
     }
