@@ -46,7 +46,7 @@ function DPA-Login([string] $url, [string] $userName, [string] $password)
     $loginBody = @{
         UserName = $userName
         Password = $password
-    } | ConvertTo-Json
+    } | ConvertTo-Json -Depth 100
 
     $result = Invoke-WebRequest -Method "Post" -Uri $loginUrl -Body $loginBody -ContentType "application/json" -SessionVariable "session"
     
@@ -105,7 +105,7 @@ function DPA-WorkCenter-create($departmentId, [string] $name)
         driverIdentifier = "00000000-0000-0000-0000-000000000000"
         equipmentGroupIds = @()
 	    equipmentGroupNames = $null
-    } | ConvertTo-Json
+    } | ConvertTo-Json -Depth 100
     $body = [System.Text.Encoding]::UTF8.GetBytes($bodyData)
 
     return Invoke-RestMethod -Method "Post" -Uri $removeUrl -Headers $headers -Body $body  -ContentType "application/json" -WebSession $global:dpaSession
@@ -128,7 +128,7 @@ function DPA-StorageZone-create($departmentId, [string] $name, [string] $address
         IdDepartament = $departmentId
         name = $name
         address = $address
-    } | ConvertTo-Json
+    } | ConvertTo-Json -Depth 100
     $body = [System.Text.Encoding]::UTF8.GetBytes($bodyData)
 
     return Invoke-RestMethod -Method "Post" -Uri $removeUrl -Headers $headers -Body $body  -ContentType "application/json" -WebSession $global:dpaSession
@@ -154,7 +154,7 @@ function DPA-Department-create($siteId, $parentDepartmentId, [string] $name)
     if ($parentDepartmentId) {
         $bodyRaw.ownerDepartmentId = $parentDepartmentId
     }
-    $bodyData = $bodyRaw | ConvertTo-Json
+    $bodyData = $bodyRaw | ConvertTo-Json -Depth 100
     $body = [System.Text.Encoding]::UTF8.GetBytes($bodyData)
 
     return Invoke-RestMethod -Method "Post" -Uri $removeUrl -Headers $headers -Body $body  -ContentType "application/json" -WebSession $global:dpaSession
@@ -176,7 +176,7 @@ function DPA-Site-create($enterpriseId, [string] $name)
     $bodyData = @{
         enterpriseId = $enterpriseId
         name = $name
-    } | ConvertTo-Json
+    } | ConvertTo-Json -Depth 100
     $body = [System.Text.Encoding]::UTF8.GetBytes($bodyData)
 
     return Invoke-RestMethod -Method "Post" -Uri $removeUrl -Headers $headers -Body $body  -ContentType "application/json" -WebSession $global:dpaSession
@@ -197,7 +197,7 @@ function DPA-Enterprise-create([string] $name)
     
     $bodyData = @{
         name = $name
-    } | ConvertTo-Json
+    } | ConvertTo-Json -Depth 100
     $body = [System.Text.Encoding]::UTF8.GetBytes($bodyData)
 
     return Invoke-RestMethod -Method "Post" -Uri $removeUrl -Headers $headers -Body $body -ContentType "application/json" -WebSession $global:dpaSession
@@ -221,7 +221,7 @@ function DPA-ShiftScheduleTemplate-getAll()
     $headers = @{ Cookie = $global:dpaCookie }
 
     $bodyData = @{
-    } | ConvertTo-Json
+    } | ConvertTo-Json -Depth 100
     $body = [System.Text.Encoding]::UTF8.GetBytes($bodyData)
 
     return Invoke-RestMethod -Method "Post" -Uri $getAllUrl -Headers $headers -Body $body -ContentType "application/json" -WebSession $global:dpaSession
@@ -229,10 +229,10 @@ function DPA-ShiftScheduleTemplate-getAll()
 
 function DPA-ShiftScheduleTemplate-get($id)
 {
-    $updateUrl = $global:dpaApi + "/schedule/getScheduleTemplateRecord/" + $id
+    $getUrl = $global:dpaApi + "/schedule/getScheduleTemplateRecord/" + $id
     $headers = @{ Cookie = $global:dpaCookie }
 
-    return Invoke-RestMethod -Method "Post" -Uri $updateUrl -Headers $headers -WebSession $global:dpaSession
+    return Invoke-RestMethod -Method "Post" -Uri $getUrl -Headers $headers -WebSession $global:dpaSession
 }
 
 function DPA-ShiftScheduleTemplate-update($template)
@@ -240,7 +240,7 @@ function DPA-ShiftScheduleTemplate-update($template)
     $updateUrl = $global:dpaApi + "/schedule/saveScheduleTemplateRecord"
     $headers = @{ Cookie = $global:dpaCookie }
 
-    $bodyData = $template | ConvertTo-Json
+    $bodyData = $template | ConvertTo-Json -Depth 100
     $body = [System.Text.Encoding]::UTF8.GetBytes($bodyData)
 
     return Invoke-RestMethod -Method "Post" -Uri $updateUrl -Headers $headers -Body $body -ContentType "application/json" -WebSession $global:dpaSession
@@ -249,6 +249,45 @@ function DPA-ShiftScheduleTemplate-update($template)
 function DPA-ShiftScheduleTemplate-remove($id)
 {
     $removeUrl = $global:dpaApi + "/referenceBook/removeReferenceBookRecord/ScheduleTemplate/" + $id
+    $headers = @{ Cookie = $global:dpaCookie }
+
+    return Invoke-RestMethod -Method "Post" -Uri $removeUrl -Headers $headers -WebSession $global:dpaSession
+}
+
+function DPA-Shifts-getAll()
+{
+    $getAllUrl = $global:dpaApi + "/referenceBook/getReferenceBookDatas/ShiftName"
+    $headers = @{ Cookie = $global:dpaCookie }
+
+    $bodyData = @{
+    } | ConvertTo-Json -Depth 100
+    $body = [System.Text.Encoding]::UTF8.GetBytes($bodyData)
+
+    return Invoke-RestMethod -Method "Post" -Uri $getAllUrl -Headers $headers -Body $body -ContentType "application/json" -WebSession $global:dpaSession
+}
+
+function DPA-Shift-get($id)
+{
+    $getUrl = $global:dpaApi + "/referenceBook/getReferenceBookRecord/ShiftName/" + $id
+    $headers = @{ Cookie = $global:dpaCookie }
+
+    return Invoke-RestMethod -Method "Get" -Uri $getUrl -Headers $headers -WebSession $global:dpaSession
+}
+
+function DPA-Shift-update($shift)
+{
+    $updateUrl = $global:dpaApi + "/referenceBook/saveReferenceBookRecord"
+    $headers = @{ Cookie = $global:dpaCookie }
+
+    $bodyData = $shift | ConvertTo-Json -Depth 100
+    $body = [System.Text.Encoding]::UTF8.GetBytes($bodyData)
+
+    return Invoke-RestMethod -Method "Post" -Uri $updateUrl -Headers $headers -Body $body -ContentType "application/json" -WebSession $global:dpaSession
+}
+
+function DPA-Shift-remove($id)
+{
+    $removeUrl = $global:dpaApi + "/referenceBook/removeReferenceBookRecord/ShiftName/" + $id
     $headers = @{ Cookie = $global:dpaCookie }
 
     return Invoke-RestMethod -Method "Post" -Uri $removeUrl -Headers $headers -WebSession $global:dpaSession

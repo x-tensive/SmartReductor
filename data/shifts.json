@@ -1,0 +1,27 @@
+[
+    {
+        "name": "Nonworking hours",
+        "color": "#808080",
+        "isWorkingTime": false
+    },
+    {
+        "name": "First shift",
+        "color": "#00FF00",
+        "isWorkingTime": true
+    },
+    {
+        "name": "Second shift",
+        "color": "#00FFFF",
+        "isWorkingTime": true
+    },
+    {
+        "name": "Third shift",
+        "color": "#0000FF",
+        "isWorkingTime": true
+    },
+    {
+        "name": "Lunch break",
+        "color": "#f0cf3e",
+        "isWorkingTime": false
+    }
+]
