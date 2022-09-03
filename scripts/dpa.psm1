@@ -77,6 +77,10 @@ function DPA-GetHost()
     return Invoke-RestMethod -Method "Get" -Uri $getHostUrl -Headers $headers -WebSession $global:dpaSession
 }
 
+#
+# Enterprise structure
+#
+
 function DPA-GetEnterpriseStruct([Int32] $parentTypeId, [string] $parentId)
 {
     if ((DPA-version-lowerThan "5.8.0.0")) {
@@ -196,12 +200,55 @@ function DPA-Enterprise-create([string] $name)
     } | ConvertTo-Json
     $body = [System.Text.Encoding]::UTF8.GetBytes($bodyData)
 
-    return Invoke-RestMethod -Method "Post" -Uri $removeUrl -Headers $headers -Body $body  -ContentType "application/json" -WebSession $global:dpaSession
+    return Invoke-RestMethod -Method "Post" -Uri $removeUrl -Headers $headers -Body $body -ContentType "application/json" -WebSession $global:dpaSession
 }
 
 function DPA-Enterprise-remove($id)
 {
     $removeUrl = $global:dpaApi + "/DpaEnterpriseStrusture/removeEnterprise/" + $id
+    $headers = @{ Cookie = $global:dpaCookie }
+
+    return Invoke-RestMethod -Method "Post" -Uri $removeUrl -Headers $headers -WebSession $global:dpaSession
+}
+
+#
+# Shifts
+#
+
+function DPA-ShiftScheduleTemplate-getAll()
+{
+    $getAllUrl = $global:dpaApi + "/referenceBook/getReferenceBookDatas/ScheduleTemplate"
+    $headers = @{ Cookie = $global:dpaCookie }
+
+    $bodyData = @{
+    } | ConvertTo-Json
+    $body = [System.Text.Encoding]::UTF8.GetBytes($bodyData)
+
+    return Invoke-RestMethod -Method "Post" -Uri $getAllUrl -Headers $headers -Body $body -ContentType "application/json" -WebSession $global:dpaSession
+}
+
+function DPA-ShiftScheduleTemplate-get($id)
+{
+    $updateUrl = $global:dpaApi + "/schedule/getScheduleTemplateRecord/" + $id
+    $headers = @{ Cookie = $global:dpaCookie }
+
+    return Invoke-RestMethod -Method "Post" -Uri $updateUrl -Headers $headers -WebSession $global:dpaSession
+}
+
+function DPA-ShiftScheduleTemplate-update($template)
+{
+    $updateUrl = $global:dpaApi + "/schedule/saveScheduleTemplateRecord"
+    $headers = @{ Cookie = $global:dpaCookie }
+
+    $bodyData = $template | ConvertTo-Json
+    $body = [System.Text.Encoding]::UTF8.GetBytes($bodyData)
+
+    return Invoke-RestMethod -Method "Post" -Uri $updateUrl -Headers $headers -Body $body -ContentType "application/json" -WebSession $global:dpaSession
+}
+
+function DPA-ShiftScheduleTemplate-remove($id)
+{
+    $removeUrl = $global:dpaApi + "/referenceBook/removeReferenceBookRecord/ScheduleTemplate/" + $id
     $headers = @{ Cookie = $global:dpaCookie }
 
     return Invoke-RestMethod -Method "Post" -Uri $removeUrl -Headers $headers -WebSession $global:dpaSession
