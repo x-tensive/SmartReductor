@@ -78,6 +78,18 @@ function DPA-GetHost()
 }
 
 #
+# Enums
+#
+
+function DPA-ScheduleTemplateType-getEnumValues()
+{
+    $getEnumUrl = $global:dpaApi + "/schedule/getEnumValues/ScheduleTemplateType"
+    $headers = @{ Cookie = $global:dpaCookie }
+    
+    return Invoke-RestMethod -Method "Get" -Uri $getEnumUrl -Headers $headers -WebSession $global:dpaSession
+}
+
+#
 # Enterprise structure
 #
 
@@ -215,7 +227,7 @@ function DPA-Enterprise-remove($id)
 # Shifts
 #
 
-function DPA-ShiftScheduleTemplate-getAll()
+function DPA-ShiftScheduleTemplates-getAll()
 {
     $getAllUrl = $global:dpaApi + "/referenceBook/getReferenceBookDatas/ScheduleTemplate"
     $headers = @{ Cookie = $global:dpaCookie }

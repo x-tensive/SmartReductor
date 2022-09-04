@@ -461,4 +461,6 @@ function EnterpriseStruct-Update()
     Write-Host "enterprise struct EXECUTE UPDATE ACTIONS" -Foreground green
     Write-Host
     EnterpriseStructure-ExecuteUpdateActions ([ref] $updateActions)
+
+    $global:enterprise = $enterpriseCfg
 }

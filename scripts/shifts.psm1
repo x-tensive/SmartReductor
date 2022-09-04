@@ -1,22 +1,6 @@
 $ErrorActionPreference = "Stop"
 
-function ShiftScheduleTemplates-Clear()
-{
-    $oldTemplates = DPA-ShiftScheduleTemplate-getAll
-    foreach ($item in $oldTemplates) {
-        if ($item.isSystemScheduleTemplate) {
-            # $template = DPA-ShiftScheduleTemplate-get $item.id
-            # $template.isUndeletable = $false
-            # DPA-ShiftScheduleTemplate-update $template
-            continue
-        }
-        Write-Host "Remove " -NoNewLine -Foreground yellow
-        Write-Host "$($item.id):$($item.name)"
-        DPA-ShiftScheduleTemplate-remove $item.id
-    }
-}
-
-function Shifts-Configuration-DumpShifts($shiftsCfg)
+function Shifts-Configuration-Dump($shiftsCfg)
 {
    foreach ($shiftCfg in $shiftsCfg) {
         $workingTitle = "non working"
@@ -29,14 +13,14 @@ function Shifts-ReadConfiguration()
 {
     $shiftsCfgFileName = $PSScriptRoot + "/../data/shifts.json"
     $shiftsCfg = Get-Content $shiftsCfgFileName | Out-String | ConvertFrom-Json -AsHashtable
-    Shifts-Configuration-DumpShifts $shiftsCfg
+    Shifts-Configuration-Dump $shiftsCfg
     return $shiftsCfg;
 }
 
 function Shifts-Fetch()
 {
     $existentCfg = DPA-Shifts-getAll
-    Shifts-Configuration-DumpShifts $existentCfg
+    Shifts-Configuration-Dump $existentCfg
     return $existentCfg
 }
 
@@ -47,7 +31,7 @@ function Shifts-ExecuteUpdate($shiftsCfg, $existentCfg)
         if (-not $shiftCfg) {
             Write-Host "Remove" -NoNewLine -Foreground yellow
             Write-Host (" " + $existentShiftCfg.id + ":" + $existentShiftCfg.name)
-            DPA-Shift-remove $existentShiftCfg.id
+            DPA-Shift-remove $existentShiftCfg.id > $null
         }
     }
 
@@ -59,7 +43,7 @@ function Shifts-ExecuteUpdate($shiftsCfg, $existentCfg)
             ($shiftDto.fields | where {$_.name -eq "Name"}).value = $shiftCfg.name
             ($shiftDto.fields | where {$_.name -eq "Color"}).value = $shiftCfg.color
             ($shiftDto.fields | where {$_.name -eq "IsWorkingTime"}).value = $shiftCfg.isWorkingTime
-            DPA-Shift-update $shiftDto
+            DPA-Shift-update $shiftDto > $null
             $shiftCfg.id = $existentShiftCfg.id
         } else {
             Write-Host ("Create " + $shiftCfg.name)
@@ -67,7 +51,7 @@ function Shifts-ExecuteUpdate($shiftsCfg, $existentCfg)
             ($shiftDto.fields | where {$_.name -eq "Name"}).value = $shiftCfg.name
             ($shiftDto.fields | where {$_.name -eq "Color"}).value = $shiftCfg.color
             ($shiftDto.fields | where {$_.name -eq "IsWorkingTime"}).value = $shiftCfg.isWorkingTime
-            DPA-Shift-update $shiftDto
+            DPA-Shift-update $shiftDto > $null
             $shiftCfg.id = ((DPA-Shifts-getAll) | where { $_.name -eq $shiftCfg.name }).id
         }
     }
@@ -90,8 +74,5 @@ function Shifts-Update()
     Write-Host
     Shifts-ExecuteUpdate $shiftsCfg $existentCfg
 
-    # Write-Host
-    # Write-Host "shift schedule templates CLEAR" -Foreground green
-    # Write-Host
-    # ShiftScheduleTemplates-Clear
+    $global:shifts = $shiftsCfg
 }
