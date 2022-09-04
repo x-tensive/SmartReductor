@@ -89,6 +89,15 @@ function DPA-ScheduleTemplateType-getEnumValues()
     return Invoke-RestMethod -Method "Get" -Uri $getEnumUrl -Headers $headers -WebSession $global:dpaSession
 }
 
+function DPA-ScheduleOwnerType-getEnumValues()
+{
+    $getEnumUrl = $global:dpaApi + "/schedule/getEnumValues/ScheduleOwnerType"
+    $headers = @{ Cookie = $global:dpaCookie }
+    
+    return Invoke-RestMethod -Method "Get" -Uri $getEnumUrl -Headers $headers -WebSession $global:dpaSession
+}
+
+
 #
 # Enterprise structure
 #
@@ -264,6 +273,20 @@ function DPA-ShiftScheduleTemplate-remove($id)
     $headers = @{ Cookie = $global:dpaCookie }
 
     return Invoke-RestMethod -Method "Post" -Uri $removeUrl -Headers $headers -WebSession $global:dpaSession
+}
+
+function DPA-ShiftScheduleTemplate-apply($ownerTypeId, $ownerId, $templateId, $start, $end)
+{
+    $applyUrl = $global:dpaApi + "/Schedule/applyScheduleTemplateToSchedule/" + $ownerTypeId + "/" + $ownerId + "/" + $templateId
+    $headers = @{ Cookie = $global:dpaCookie }
+
+    $bodyData = @{
+        start = $start
+        end = $end
+    } | ConvertTo-Json -Depth 100
+    $body = [System.Text.Encoding]::UTF8.GetBytes($bodyData)
+
+    return Invoke-RestMethod -Method "Post" -Uri $applyUrl -Headers $headers -Body $body -ContentType "application/json" -WebSession $global:dpaSession
 }
 
 function DPA-Shifts-getAll()

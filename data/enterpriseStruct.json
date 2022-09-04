@@ -1,5 +1,8 @@
 {
     "name": "Smart Reductor",
+    "shiftScheduleTemplate": "template 1",
+    "shiftScheduleTemplate_before": 30,
+    "shiftScheduleTemplate_after": 360,
     "sites": [
         {
             "name": "area 2",
@@ -11,7 +14,10 @@
                             "name": "department 2",
                             "workCenters": [
                                 {
-                                    "name": "workCenter 1"
+                                    "name": "workCenter 1",
+                                    "shiftScheduleTemplate": "template 1",
+                                    "shiftScheduleTemplate_before": 30,
+                                    "shiftScheduleTemplate_after": 360
                                 },
                                 {
                                     "name": "workCenter 2"
