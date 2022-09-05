@@ -20,7 +20,8 @@
                                     "shiftScheduleTemplate_after": 360
                                 },
                                 {
-                                    "name": "workCenter 2"
+                                    "name": "workCenter 2",
+                                    "inheritShiftSchedule": true
                                 },
                                 {
                                     "name": "workCenter 3"

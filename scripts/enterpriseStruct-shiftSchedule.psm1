@@ -9,11 +9,19 @@ function EnterpriseStruct-ShiftSchedule-ApplyTemplate([string] $ownerTypeName, $
     DPA-ShiftScheduleTemplate-apply $ownerTypeId $ownerId $templateId $before $after > $null
 }
 
+function EnterpriseStruct-ShiftSchedule-AttachToParent([string] $ownerTypeName, $ownerId)
+{
+    $ownerTypeId = ($global:shifScheduleOwnerTypeValues | where { $_.enum -eq $ownerTypeName }).id
+    DPA-ShiftScheduleTemplate-attachToParent $ownerTypeId $ownerId > $null 2> $null # may fail if already attached to parent
+}
+
 function EnterpriseStruct-ShiftSchedule-Apply([string]$ownerTypeName, $cfg)
 {
     if ($cfg.inheritShiftSchedule) {
-
+        Write-Host "AttachToParent $($cfg.id):$($cfg.name)"
+        EnterpriseStruct-ShiftSchedule-AttachToParent $ownerTypeName $cfg.id
     } elseif ($cfg.shiftScheduleTemplate) {
+        Write-Host "ApplyTemplate $($cfg.id):$($cfg.name) -> $($cfg.shiftScheduleTemplate)"
         EnterpriseStruct-ShiftSchedule-ApplyTemplate $ownerTypeName $cfg.id $cfg.shiftScheduleTemplate $cfg.shiftScheduleTemplate_before $cfg.shiftScheduleTemplate_after
     }
 }

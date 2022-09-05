@@ -289,6 +289,15 @@ function DPA-ShiftScheduleTemplate-apply($ownerTypeId, $ownerId, $templateId, $s
     return Invoke-RestMethod -Method "Post" -Uri $applyUrl -Headers $headers -Body $body -ContentType "application/json" -WebSession $global:dpaSession
 }
 
+function DPA-ShiftScheduleTemplate-attachToParent($ownerTypeId, $ownerId)
+{
+    $applyUrl = $global:dpaApi + "/Schedule/attachScheduleToParent/" + $ownerTypeId + "/" + $ownerId
+    $headers = @{ Cookie = $global:dpaCookie }
+
+    # may fail if already attached to parent
+    return Invoke-RestMethod -Method "Post" -Uri $applyUrl -Headers $headers -WebSession $global:dpaSession -SkipHttpErrorCheck
+}
+
 function DPA-Shifts-getAll()
 {
     $getAllUrl = $global:dpaApi + "/referenceBook/getReferenceBookDatas/ShiftName"
