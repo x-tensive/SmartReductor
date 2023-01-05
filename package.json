@@ -9,11 +9,13 @@
     "build": "tsc"
   },
   "devDependencies": {
+    "@types/chalk": "^2.2.0",
     "@types/node": "^18.11.18",
     "@types/yargs": "^17.0.19",
     "typescript": "^4.9.4"
   },
   "dependencies": {
+    "chalk": "^5.2.0",
     "yargs": "^17.6.2"
   }
 }
