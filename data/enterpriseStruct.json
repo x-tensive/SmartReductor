@@ -8,7 +8,7 @@
             "name": "area 2",
             "departments": [
                 {
-                    "name": "department 1",
+                    "name": "department MAIN",
                     "departments": [
                         {
                             "name": "department 2",
