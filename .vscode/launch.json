@@ -5,11 +5,14 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "PowerShell: Launch Script",
-            "type": "PowerShell",
+            "name": "Node: Launch SmartReductor",
+            "program": "${workspaceFolder}/build/smartReductor.js",
+            "args": [ "import", "enterpriseStruct" ],
             "request": "launch",
-            "script": "${workspaceFolder}/run.ps1 -Url 10.0.0.134",
-            "cwd": "${workspaceFolder}"
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "node"
         }
     ]
 }
