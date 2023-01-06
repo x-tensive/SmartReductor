@@ -7,13 +7,13 @@ yargs(hideBin(process.argv))
     .command({
         command: "import <target> [url] [user] [password]",
         describe: "imports data",
-        handler: (parsed: any) => {
-            const client = dpa.login(parsed.url, parsed.user, parsed.password);
-            console.log(client.getHostName(), client.getHostVersion());
+        handler: async (parsed: any) => {
+            const client = await dpa.login(parsed.url, parsed.user, parsed.password);
+            console.log(await client.getHostName(), await client.getHostVersion());
             try {
                 dpaImport.run(parsed.target, client);
             } finally {
-                client.logout();
+                await client.logout();
             }
         },
         builder: {

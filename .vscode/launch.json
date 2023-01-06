@@ -7,7 +7,13 @@
         {
             "name": "Node: Launch SmartReductor",
             "program": "${workspaceFolder}/build/smartReductor.js",
-            "args": [ "import", "enterpriseStruct" ],
+            "args": [ 
+                "import",
+                "enterpriseStruct",
+                "--url", "http://smartreductor.francecentral.cloudapp.azure.com",
+                "--user", "admin",
+                "--password", "admin"
+            ],
             "request": "launch",
             "skipFiles": [
                 "<node_internals>/**"
