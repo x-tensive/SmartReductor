@@ -1,4 +1,4 @@
-import { dpa, enterpriseStructTypes } from "./dpa.js";
+import { dpa, enterpriseStructTypes } from "../dpa.js";
 
 export class enterpriseStruct {
     private static isContainerType(typeId: number)

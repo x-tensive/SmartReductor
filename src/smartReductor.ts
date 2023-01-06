@@ -2,8 +2,9 @@ import yargs, { CommandBuilder } from "yargs";
 import { hideBin } from "yargs/helpers";
 import chalk from "chalk";
 import { dpa } from "./dpa.js";
-import { enterpriseStruct } from "./enterpriseStruct.js";
-import { importEnterpriseStruct } from "./importEnterpriseStruct.js";
+import { enterpriseStruct } from "./extract/enterpriseStruct.js";
+import { importEnterpriseStruct } from "./import/importEnterpriseStruct.js";
+import { importShiftSchedule } from "./import/importShiftSchedule.js";
 
 const targetBuilder: CommandBuilder = {
     target: {
@@ -11,7 +12,8 @@ const targetBuilder: CommandBuilder = {
         choices: [
             "enterpriseStruct",
             "shiftTemplates",
-            "shifts"
+            "shifts",
+            "shiftSchedule"
         ] as const
     },
     url :{
@@ -42,9 +44,15 @@ yargs(hideBin(process.argv))
                 console.log(chalk.blueBright("IMPORT", parsed.target));
                 if (parsed.target == "enterpriseStruct")
                     await importEnterpriseStruct.run(client);
+                if (parsed.target == "shiftSchedule")
+                    await importShiftSchedule.run(client);
                 else
                     throw "not supported";
-            } finally {
+            }
+            catch (exception) {
+                console.log(chalk.red(exception));
+            }
+            finally {
                 await client.logout();
             }
         },
@@ -61,7 +69,11 @@ yargs(hideBin(process.argv))
                     console.log(JSON.stringify(await enterpriseStruct.fetch(client), undefined, 2));
                 else
                     throw "not supported";
-            } finally {
+            }
+            catch (exception) {
+                console.log(chalk.red(exception));
+            }
+            finally {
                 await client.logout();
             }
         },

@@ -9,7 +9,7 @@
             "program": "${workspaceFolder}/build/smartReductor.js",
             "args": [ 
                 "import",
-                "enterpriseStruct",
+                "shiftSchedule",
                 "--url", "http://smartreductor.francecentral.cloudapp.azure.com",
                 "--user", "admin",
                 "--password", "admin"

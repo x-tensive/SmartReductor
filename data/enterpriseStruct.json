@@ -45,7 +45,7 @@
                     ],
                     "workCenters": [
                         {
-                            "name": "virtual SUB"
+                            "name": "workCenter root"
                         }
                     ],
                     "storageZones": [
