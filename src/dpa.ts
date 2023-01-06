@@ -123,6 +123,76 @@ export class dpa {
         return this.REST_JSON_TRANSACTION("/api/ManageEnterpriseStructure/getDynamicTree/" + parentTypeId + "/" + parentId, "GET", null);
     }
 
+    public async manageEnterpriseStructure_createWorkCenter(departmentId: number, name: string): Promise<any>
+    {
+        return this.REST_JSON_TRANSACTION("/api/ManageEnterpriseStructure/createEquipment", "POST", {
+            departmentId: departmentId,
+            name: name,
+            serverId: 0,
+            driverIdentifier: "00000000-0000-0000-0000-000000000000",
+            equipmentGroupIds: [],
+            equipmentGroupNames: null
+        });
+    }
+
+    public async manageEnterpriseStructure_removeWorkCenter(id: number): Promise<any>
+    {
+        return this.REST_JSON_TRANSACTION("/api/ManageEnterpriseStructure/removeEquipment/" + id, "POST", null);
+    }
+
+    public async manageEnterpriseStructure_createStorageZone(departmentId: number, name: string, address: string): Promise<any>
+    {
+        return this.REST_JSON_TRANSACTION("/api/ManageEnterpriseStructure/createStorageZone", "POST", {
+            departmentId: departmentId,
+            name: name,
+            address: address
+        });
+    }
+
+    public async manageEnterpriseStructure_removeStorageZone(id: number): Promise<any>
+    {
+        return this.REST_JSON_TRANSACTION("/api/ManageEnterpriseStructure/removeStorageZone/" + id, "GET", null);
+    }
+
+    public async manageEnterpriseStructure_createDepartment(siteId: number, parentDepartmentId: number, name: string): Promise<any>
+    {
+        return this.REST_JSON_TRANSACTION("/api/ManageEnterpriseStructure/createDepartment", "POST", {
+            siteId: siteId,
+            name: name,
+            ownerDepartmentId: parentDepartmentId
+        });
+    }
+
+    public async manageEnterpriseStructure_removeDepartment(id: number): Promise<any>
+    {
+        return this.REST_JSON_TRANSACTION("/api/ManageEnterpriseStructure/removeDepartment/" + id, "POST", null);
+    }
+
+    public async manageEnterpriseStructure_createSite(enterpriseId: number, name: string): Promise<any>
+    {
+        return this.REST_JSON_TRANSACTION("/api/ManageEnterpriseStructure/createSite", "POST", {
+            enterpriseId: enterpriseId,
+            name: name
+        });
+    }
+
+    public async manageEnterpriseStructure_removeSite(id: number): Promise<any>
+    {
+        return this.REST_JSON_TRANSACTION("/api/ManageEnterpriseStructure/removeSite/" + id, "POST", null);
+    }
+
+    public async manageEnterpriseStructure_createEnterprise(name: string): Promise<any>
+    {
+        return this.REST_JSON_TRANSACTION("/api/ManageEnterpriseStructure/create", "POST", {
+            name: name
+        });
+    }
+
+    public async manageEnterpriseStructure_removeEnterprise(id: number): Promise<any>
+    {
+        return this.REST_JSON_TRANSACTION("/api/ManageEnterpriseStructure/removeEnterprise/" + id, "POST", null);
+    }
+
     private constructor(url: string, user: string, password: string)
     {
         this.url = url;

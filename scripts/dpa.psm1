@@ -105,7 +105,7 @@ function DPA-ScheduleOwnerType-getEnumValues()
 function DPA-GetEnterpriseStruct([Int32] $parentTypeId, [string] $parentId)
 {
     if ((DPA-version-lowerThan "5.8.0.0")) {
-        $getStructUrl = $global:dpaApi + "/DpaEnterpriseStrusture/getDynamicTree/" + $parentTypeId + "/" + $parentId + "/false"
+        $getStructUrl = $global:dpaApi + "/DpaEnterpriseStructure/getDynamicTree/" + $parentTypeId + "/" + $parentId + "/false"
     } else {
         $getStructUrl = $global:dpaApi + "/ManageEnterpriseStructure/getDynamicTree/" + $parentTypeId + "/" + $parentId
     }
@@ -116,7 +116,7 @@ function DPA-GetEnterpriseStruct([Int32] $parentTypeId, [string] $parentId)
 
 function DPA-WorkCenter-create($departmentId, [string] $name)
 {
-    $removeUrl = $global:dpaApi + "/DpaEnterpriseStrusture/createEquipment"
+    $removeUrl = $global:dpaApi + "/DpaEnterpriseStructure/createEquipment"
     $headers = @{ Cookie = $global:dpaCookie }
     
     $bodyData = @{
@@ -134,7 +134,7 @@ function DPA-WorkCenter-create($departmentId, [string] $name)
 
 function DPA-WorkCenter-remove($id)
 {
-    $removeUrl = $global:dpaApi + "/DpaEnterpriseStrusture/removeEquipment/" + $id
+    $removeUrl = $global:dpaApi + "/DpaEnterpriseStructure/removeEquipment/" + $id
     $headers = @{ Cookie = $global:dpaCookie }
 
     return Invoke-RestMethod -Method "Post" -Uri $removeUrl -Headers $headers -WebSession $global:dpaSession
@@ -165,7 +165,7 @@ function DPA-StorageZone-remove($id)
 
 function DPA-Department-create($siteId, $parentDepartmentId, [string] $name)
 {
-    $removeUrl = $global:dpaApi + "/DpaEnterpriseStrusture/createDepartment"
+    $removeUrl = $global:dpaApi + "/DpaEnterpriseStructure/createDepartment"
     $headers = @{ Cookie = $global:dpaCookie }
     
     $bodyRaw = @{
@@ -183,7 +183,7 @@ function DPA-Department-create($siteId, $parentDepartmentId, [string] $name)
 
 function DPA-Department-remove($id)
 {
-    $removeUrl = $global:dpaApi + "/DpaEnterpriseStrusture/removeDepartment/" + $id
+    $removeUrl = $global:dpaApi + "/DpaEnterpriseStructure/removeDepartment/" + $id
     $headers = @{ Cookie = $global:dpaCookie }
 
     return Invoke-RestMethod -Method "Post" -Uri $removeUrl -Headers $headers -WebSession $global:dpaSession
@@ -191,7 +191,7 @@ function DPA-Department-remove($id)
 
 function DPA-Site-create($enterpriseId, [string] $name)
 {
-    $removeUrl = $global:dpaApi + "/DpaEnterpriseStrusture/createSite"
+    $removeUrl = $global:dpaApi + "/DpaEnterpriseStructure/createSite"
     $headers = @{ Cookie = $global:dpaCookie }
     
     $bodyData = @{
@@ -205,7 +205,7 @@ function DPA-Site-create($enterpriseId, [string] $name)
 
 function DPA-Site-remove($id)
 {
-    $removeUrl = $global:dpaApi + "/DpaEnterpriseStrusture/removeSite/" + $id
+    $removeUrl = $global:dpaApi + "/DpaEnterpriseStructure/removeSite/" + $id
     $headers = @{ Cookie = $global:dpaCookie }
 
     return Invoke-RestMethod -Method "Post" -Uri $removeUrl -Headers $headers -WebSession $global:dpaSession
@@ -213,7 +213,7 @@ function DPA-Site-remove($id)
 
 function DPA-Enterprise-create([string] $name)
 {
-    $removeUrl = $global:dpaApi + "/DpaEnterpriseStrusture/create"
+    $removeUrl = $global:dpaApi + "/DpaEnterpriseStructure/create"
     $headers = @{ Cookie = $global:dpaCookie }
     
     $bodyData = @{
@@ -226,7 +226,7 @@ function DPA-Enterprise-create([string] $name)
 
 function DPA-Enterprise-remove($id)
 {
-    $removeUrl = $global:dpaApi + "/DpaEnterpriseStrusture/removeEnterprise/" + $id
+    $removeUrl = $global:dpaApi + "/DpaEnterpriseStructure/removeEnterprise/" + $id
     $headers = @{ Cookie = $global:dpaCookie }
 
     return Invoke-RestMethod -Method "Post" -Uri $removeUrl -Headers $headers -WebSession $global:dpaSession

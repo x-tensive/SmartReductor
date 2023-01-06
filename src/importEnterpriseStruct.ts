@@ -12,9 +12,8 @@ export class importEnterpriseStruct
             actionName: "RemoveWorkCenter",
             id: workCenterCfg.id,
             name: workCenterCfg.name,
-            execute: (client: dpa, action: any) => {
-                // param($action)
-                // DPA-WorkCenter-remove $action.id
+            execute: async (client: dpa, action: any) => {
+                await client.manageEnterpriseStructure_removeWorkCenter(action.id);
             }
         });
     }
@@ -25,9 +24,8 @@ export class importEnterpriseStruct
             actionName: "RemoveStorageZone",
             id: storageZoneCfg.id,
             name: storageZoneCfg.name,
-            execute: (client: dpa) => {
-                // param($action)
-                // DPA-StorageZone-remove $action.id
+            execute: async (client: dpa, action: any) => {
+                await client.manageEnterpriseStructure_removeStorageZone(action.id);
             }
         });
     }
@@ -41,9 +39,8 @@ export class importEnterpriseStruct
             actionName: "RemoveDepartment",
             id: departmentCfg.id,
             name: departmentCfg.name,
-            execute: (client: dpa) => {
-                // param($action)
-                // DPA-Department-remove $action.id
+            execute: async (client: dpa, action: any) => {
+                await client.manageEnterpriseStructure_removeDepartment(action.id);
             }
         });
     }
@@ -55,9 +52,8 @@ export class importEnterpriseStruct
             actionName: "RemoveSite",
             id: siteCfg.id,
             name: siteCfg.name,
-            execute: (client: dpa) => {
-                // param($action)
-                // DPA-Site-remove $action.id
+            execute: async (client: dpa, action: any) => {
+                await client.manageEnterpriseStructure_removeSite(action.id);
             }
         });
     }
@@ -69,9 +65,8 @@ export class importEnterpriseStruct
             actionName: "RemoveEnterprise",
             id: enterpriseCfg.id,
             name: enterpriseCfg.name,
-            execute: (client: dpa) => {
-                // param($action)
-                // DPA-Enterprise-remove $action.id
+            execute: async (client: dpa, action: any) => {
+                await client.manageEnterpriseStructure_removeEnterprise(action.id);
             }
         });
     }
@@ -82,10 +77,9 @@ export class importEnterpriseStruct
             actionName: "CreateWorkCenter",
             cfg: workCenterCfg,
             departmentCfg: departmentCfg,
-            execute: (client: dpa) => {
-                // param($action)
-                // $workCenter = DPA-WorkCenter-create $action.departmentCfg.id $action.cfg.name
-                // $action.cfg.id = $workCenter.id
+            execute: async (client: dpa, action: any) => {
+                const workCenter = await client.manageEnterpriseStructure_createWorkCenter(action.departmentCfg.id, action.cfg.name);
+                action.cfg.id = workCenter.id;
             }
         });
     }
@@ -96,10 +90,9 @@ export class importEnterpriseStruct
             actionName: "CreateStorageZone",
             cfg: storageZoneCfg,
             departmentCfg: departmentCfg,
-            execute: (client: dpa) => {
-                // param($action)
-                // $storageZone = DPA-StorageZone-create $action.departmentCfg.id $action.cfg.name $action.cfg.address
-                // $action.cfg.id = $storageZone.id
+            execute: async (client: dpa, action: any) => {
+                const storageZone = await client.manageEnterpriseStructure_createStorageZone(action.departmentCfg.id, action.cfg.name, action.cfg.address);
+                action.cfg.id = storageZone.id;
             }
         });
     }
@@ -111,10 +104,9 @@ export class importEnterpriseStruct
             cfg: departmentCfg,
             siteCfg: siteCfg,
             parentDepartmentCfg: parentDepartmentCfg,
-            execute: (client: dpa) => {
-                // param($action)
-                // $department = DPA-Department-create $action.siteCfg.id $action.parentDepartmentCfg.id $action.cfg.name
-                // $action.cfg.id = $department.id
+            execute: async (client: dpa, action: any) => {
+                const department = await client.manageEnterpriseStructure_createDepartment(action.siteCfg.id, action.parentDepartmentCfg?.id, action.cfg.name);
+                action.cfg.id = department.id;
             }
         });
         if (departmentCfg.departments) {
@@ -137,10 +129,9 @@ export class importEnterpriseStruct
             actionName: "CreateSite",
             cfg: siteCfg,
             enterpriseCfg: enterpriseCfg,
-            execute: (client: dpa) => {
-                // param($action)
-                // $site = DPA-Site-create $action.enterpriseCfg.id $action.cfg.name
-                // $action.cfg.id = $site.id
+            execute: async (client: dpa, action: any) => {
+                const site = await client.manageEnterpriseStructure_createSite(action.enterpriseCfg.id, action.cfg.name);
+                action.cfg.id = site.id;
             }
         });
         if (siteCfg.departments) {
@@ -154,10 +145,9 @@ export class importEnterpriseStruct
         actions.push({
             actionName: "CreateEnterprise",
             cfg: enterpriseCfg,
-            execute: (client: dpa) => {
-                // param($action)
-                // $enterprise = DPA-Enterprise-create $action.cfg.name
-                // $action.cfg.id = $enterprise.id
+            execute: async (client: dpa, action: any) => {
+                const enterprise = await client.manageEnterpriseStructure_createEnterprise(action.cfg.name);
+                action.cfg.id = enterprise.id;
             }
         });
         if (enterpriseCfg.sites) {
@@ -286,7 +276,7 @@ export class importEnterpriseStruct
     {
         for (const action of actions) {
             if (action.actionName.startsWith("Remove"))
-                console.log("  ", chalk.yellow(action.actionName + ":"), action.id, action.name);
+                console.log("  ", chalk.yellow(action.actionName + ":"), "[" + action.id + "]", action.name);
             if (action.actionName.startsWith("Create"))
                 console.log("  ", action.actionName + ":", action.cfg.name);
         }
@@ -298,14 +288,35 @@ export class importEnterpriseStruct
         return JSON.parse(buffer.toString());
     }
 
+    private static async executeUpdateActions(client: dpa, updateActions: any[])
+    {
+        for (const action of updateActions) {
+            if (action.actionName.startsWith("Remove"))
+                process.stdout.write("  " + chalk.yellow(action.actionName + ": ") + "[" + action.id + "] " + action.name);
+            if (action.actionName.startsWith("Create"))
+                process.stdout.write("  " + action.actionName + ": " + action.cfg.name);
+
+            process.stdout.write(" ...");
+
+            await action.execute(client, action);
+
+            console.log(chalk.green("OK"));
+        }
+    }
+
     static async run(client: dpa): Promise<void>
     {
         console.log("enterprise struct READ CONFIGURATION");
         const enterpriseCfg = this.readConfig();
+
         console.log("enterprise struct FETCH");
         const existentCfg = await enterpriseStruct.fetch(client);
+
         console.log("enterprise UPDATE ACTIONS");
         const updateActions = this.generateUpdateActions(enterpriseCfg, existentCfg);
         this.dumpUpdateActions(updateActions);
+
+        console.log("enterprise EXECUTE UPDATE ACTIONS");
+        await this.executeUpdateActions(client, updateActions);
     }
 }
