@@ -1,10 +1,7 @@
 import { dpa, enterpriseStructTypes } from "./dpa.js";
-import chalk from "chalk";
 
-export type dpaImportTarget = "enterpriseStruct" | "shiftTemplates" | "shifts";
-
-export class dpaImport {
-    private static enterpriseStruct_IsContainerType(typeId: number)
+export class enterpriseStruct {
+    private static isContainerType(typeId: number)
     {
         if (typeId == enterpriseStructTypes.enterprise) return true;
         if (typeId == enterpriseStructTypes.site) return true;
@@ -14,14 +11,14 @@ export class dpaImport {
         return false;
     }
     
-    private static enterpriseStruct_IsVirtualContainerType(typeId: number)
+    private static isVirtualContainerType(typeId: number)
     {
         if (typeId == enterpriseStructTypes.workCenterContainer) return true;
         if (typeId == enterpriseStructTypes.storageZoneContainer) return true;
         return false;
     }
     
-    private static fetchEnterpriseStructNodeCfg(typeId: number, id: number, name: string, parentNodeCfg: any)
+    private static fetchNodeCfg(typeId: number, id: number, name: string, parentNodeCfg: any)
     {
         let nodeCfg: any = { id: id, name: name };
 
@@ -53,39 +50,26 @@ export class dpaImport {
         return nodeCfg;
     }
 
-    private static async fetchEnterpriseStructureNodes(client: dpa, parentTypeId: number, parentId: number, nodeCfg: any): Promise<void>
+    private static async fetchNodes(client: dpa, parentTypeId: number, parentId: number, nodeCfg: any): Promise<void>
     {
         const nodes = await client.manageEnterpriseStructure_getDynamicTree(parentTypeId, parentId);
         for (const node of nodes) {
             let currentNodeCfg = nodeCfg;
-            const isVirtualContainer = this.enterpriseStruct_IsVirtualContainerType(node.type);
+            const isVirtualContainer = this.isVirtualContainerType(node.type);
             if (!isVirtualContainer)
-                currentNodeCfg = this.fetchEnterpriseStructNodeCfg(node.type, node.id, node.text, nodeCfg);
-            const isContainer = this.enterpriseStruct_IsContainerType(node.type);
+                currentNodeCfg = this.fetchNodeCfg(node.type, node.id, node.text, nodeCfg);
+            const isContainer = this.isContainerType(node.type);
             if (isContainer) 
-                await this.fetchEnterpriseStructureNodes(client, node.type, node.id, currentNodeCfg);
+                await this.fetchNodes(client, node.type, node.id, currentNodeCfg);
         };
     }
 
-    private static async fetchEnterpriseStructure(client: dpa): Promise<any[]>
+    public static async fetch(client: dpa): Promise<any[]>
     {
         let existentCfgContainer = {
             enterprises: []
         };
-        await this.fetchEnterpriseStructureNodes(client, 0, 0, existentCfgContainer);
+        await this.fetchNodes(client, 0, 0, existentCfgContainer);
         return existentCfgContainer.enterprises;
-    }
-
-    private static async importEnterpriseStructure(client: dpa): Promise<void>
-    {
-        console.log("enterprise struct FETCH");
-        const existentCfg = await this.fetchEnterpriseStructure(client);
-    }
-
-    static async run(target: dpaImportTarget, client: dpa): Promise<void>
-    {
-        console.log(chalk.blueBright("IMPORT", target));
-        if (target == "enterpriseStruct")
-            return this.importEnterpriseStructure(client);
     }
 }
