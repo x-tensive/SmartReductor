@@ -1,10 +1,10 @@
-import { dpa, enterpriseStructTypes } from "../dpa.js";
 import chalk from "chalk";
-import { enterpriseStruct } from "../extract/enterpriseStruct.js";
+import { compareShifts } from "../compare/compareShifts.js";
+import { dpa } from "../dpa.js";
+import { shifts } from "../extract/shifts.js";
 import { smartReductorConfig } from "../smartReductorConfig.js";
-import { compareEnterpriseStruct } from "../compare/compareEnterpriseStruct.js";
 
-export class importEnterpriseStruct
+export class importShifts
 {
     private static dumpUpdateActions(actions: any[])
     {
@@ -35,20 +35,20 @@ export class importEnterpriseStruct
             console.log(chalk.green("OK"));
         }
     }
-
+    
     static async run(client: dpa): Promise<void>
     {
-        console.log("enterprise struct READ CONFIGURATION");
-        const enterpriseCfg = smartReductorConfig.readEnterpriseStructConfig();
+        console.log("shifts READ CONFIGURATION");
+        const shiftsCfg = smartReductorConfig.readShiftsConfiguration();
 
-        console.log("enterprise struct FETCH");
-        const existentCfg = await enterpriseStruct.fetch(client);
+        console.log("shifts FETCH");
+        const existentCfg = await shifts.fetch(client);
 
-        console.log("enterprise struct UPDATE ACTIONS");
-        const updateActions = compareEnterpriseStruct.generateUpdateActions(enterpriseCfg, existentCfg);
+        console.log("shifts UPDATE ACTIONS");
+        const updateActions = compareShifts.generateUpdateActions(shiftsCfg, existentCfg);
         this.dumpUpdateActions(updateActions);
 
-        console.log("enterprise struct EXECUTE UPDATE ACTIONS");
+        console.log("shifts EXECUTE UPDATE ACTIONS");
         await this.executeUpdateActions(client, updateActions);
     }
 }

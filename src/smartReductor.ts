@@ -5,6 +5,8 @@ import { dpa } from "./dpa.js";
 import { enterpriseStruct } from "./extract/enterpriseStruct.js";
 import { importEnterpriseStruct } from "./import/importEnterpriseStruct.js";
 import { importShiftSchedule } from "./import/importShiftSchedule.js";
+import { importShifts } from "./import/importShifts.js";
+import { shifts } from "./extract/shifts.js";
 
 const targetBuilder: CommandBuilder = {
     target: {
@@ -44,7 +46,9 @@ yargs(hideBin(process.argv))
                 console.log(chalk.blueBright("IMPORT", parsed.target));
                 if (parsed.target == "enterpriseStruct")
                     await importEnterpriseStruct.run(client);
-                if (parsed.target == "shiftSchedule")
+                else if (parsed.target == "shifts")
+                    await importShifts.run(client);
+                else if (parsed.target == "shiftSchedule")
                     await importShiftSchedule.run(client);
                 else
                     throw "not supported";
@@ -67,6 +71,8 @@ yargs(hideBin(process.argv))
             try {
                 if (parsed.target == "enterpriseStruct")
                     console.log(JSON.stringify(await enterpriseStruct.fetch(client), undefined, 2));
+                else if (parsed.target == "shifts")
+                    console.log(JSON.stringify(await shifts.fetch(client), undefined, 2));
                 else
                     throw "not supported";
             }

@@ -193,6 +193,34 @@ export class dpa {
         return this.REST_JSON_TRANSACTION("/api/ManageEnterpriseStructure/removeEnterprise/" + id, "POST", null);
     }
 
+    public async referenceBook_getShifts(): Promise<any>
+    {
+        return this.REST_JSON_TRANSACTION("/api/ReferenceBook/getReferenceBookDatas/ShiftName", "POST", {});
+    }
+
+    public async referenceBook_createShift(name: string, color: string, isWorkingTime: boolean): Promise<any>
+    {
+        let record = await this.REST_JSON_TRANSACTION("/api/ReferenceBook/getReferenceBookRecord/ShiftName/0", "GET", null);
+        record.fields.find((item: any) => item.name == "Name").value = name;
+        record.fields.find((item: any) => item.name == "Color").value = color;
+        record.fields.find((item: any) => item.name == "IsWorkingTime").value = isWorkingTime;
+        return this.REST_JSON_TRANSACTION("/api/ReferenceBook/saveReferenceBookRecord", "POST", record);
+    }
+
+    public async referenceBook_updateShift(id: number, name: string, color: string, isWorkingTime: boolean): Promise<any>
+    {
+        let record = await this.REST_JSON_TRANSACTION("/api/ReferenceBook/getReferenceBookRecord/ShiftName/" + id, "GET", null);
+        record.fields.find((item: any) => item.name == "Name").value = name;
+        record.fields.find((item: any) => item.name == "Color").value = color;
+        record.fields.find((item: any) => item.name == "IsWorkingTime").value = isWorkingTime;
+        return this.REST_JSON_TRANSACTION("/api/ReferenceBook/saveReferenceBookRecord", "POST", record);
+    }
+
+    public async referenceBook_removeShift(id: number): Promise<any>
+    {
+        return this.REST_JSON_TRANSACTION("/api/ReferenceBook/removeReferenceBookRecord/ShiftName/" + id, "POST", null);
+    }
+
     private constructor(url: string, user: string, password: string)
     {
         this.url = url;
