@@ -11,7 +11,7 @@ yargs(hideBin(process.argv))
             const client = await dpa.login(parsed.url, parsed.user, parsed.password);
             console.log(await client.getHostName(), await client.getHostVersion());
             try {
-                dpaImport.run(parsed.target, client);
+                await dpaImport.run(parsed.target, client);
             } finally {
                 await client.logout();
             }

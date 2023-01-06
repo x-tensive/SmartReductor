@@ -1,4 +1,17 @@
 import http, { IncomingMessage, OutgoingHttpHeaders } from "http";
+import internal from "stream";
+
+export enum enterpriseStructTypes
+{
+    root = 0,
+    enterprise = 1,
+    site = 2,
+    department = 3,
+    workCenter = 4,
+    storageZone = 26,
+    workCenterContainer = 6,
+    storageZoneContainer = 29
+}
 
 interface dpa_CALL_success
 {
@@ -103,6 +116,11 @@ export class dpa {
     public async logout(): Promise<void>
     {
         await this.REST_JSON_CALL("/api/Account/Logout", "POST", null);
+    }
+
+    public async manageEnterpriseStructure_getDynamicTree(parentTypeId: number, parentId: number): Promise<any[]>
+    {
+        return this.REST_JSON_TRANSACTION("/api/ManageEnterpriseStructure/getDynamicTree/" + parentTypeId + "/" + parentId, "GET", null);
     }
 
     private constructor(url: string, user: string, password: string)
