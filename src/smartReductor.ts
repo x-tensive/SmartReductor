@@ -57,8 +57,8 @@ yargs(hideBin(process.argv))
                 else
                     throw "not supported";
             }
-            catch (exception) {
-                console.log(chalk.red(exception));
+            catch (exception: any) {
+                console.log(chalk.red(exception.toString()));
             }
             finally {
                 await client.logout();
@@ -82,8 +82,8 @@ yargs(hideBin(process.argv))
                 else
                     throw "not supported";
             }
-            catch (exception) {
-                console.log(chalk.red(exception));
+            catch (exception: any) {
+                console.log(chalk.red(exception.toString()));
             }
             finally {
                 await client.logout();

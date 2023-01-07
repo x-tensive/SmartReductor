@@ -3,11 +3,16 @@ import { dpa } from "../dpa.js";
 import { shiftTemplates } from "../extract/shiftTemplates.js";
 import { smartReductorConfig } from "../smartReductorConfig.js";
 import { importBase } from "./importBase.js";
+import { importShifts } from "./importShifts.js";
 
 export class importShiftTemplates extends importBase
 {
     static async run(client: dpa): Promise<void>
     {
+        const shiftsImportCfg = await importShifts.prepareCfg(client);
+        if (shiftsImportCfg.updateActions.length)
+            throw "shifts update required!";
+
         console.log("shift templates READ CONFIGURATION");
         const shiftTemplatesCfg = smartReductorConfig.readShiftTemplatesConfiguration();
 
@@ -15,10 +20,10 @@ export class importShiftTemplates extends importBase
         const existentCfg = await shiftTemplates.fetch(client);
 
         console.log("shift templates UPDATE ACTIONS");
-        const updateActions = await compareShiftTemplates.generateUpdateActions(client,  shiftTemplatesCfg, existentCfg);
+        const updateActions = await compareShiftTemplates.generateUpdateActions(client, shiftsImportCfg.shiftsCfg, shiftTemplatesCfg, existentCfg);
         this.dumpUpdateActions(updateActions);
 
-        //console.log("shift templates EXECUTE UPDATE ACTIONS");
-        //await this.executeUpdateActions(client, updateActions);
+        console.log("shift templates EXECUTE UPDATE ACTIONS");
+        await this.executeUpdateActions(client, updateActions);
     }
 }

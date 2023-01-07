@@ -265,19 +265,21 @@ export class dpa {
         return this.REST_JSON_TRANSACTION("/api/schedule/getScheduleTemplateRecord/" + id, "POST", null);
     }
 
-    public async referenceBook_createShiftTemplate(name: string, type: string): Promise<any>
+    public async referenceBook_createShiftTemplate(name: string, type: string, intervals: any[]): Promise<any>
     {
         let record = await this.REST_JSON_TRANSACTION("/api/schedule/getScheduleTemplateRecord/0", "POST", null);
         record.name = name;
         record.templateType = (await this.getShiftTemplateTypes()).byEnum(type)!.id;
+        record.intervals = intervals;
         return this.REST_JSON_TRANSACTION("/api/schedule/saveScheduleTemplateRecord", "POST", record);
     }
 
-    public async referenceBook_updateShiftTemplate(id: number, name: string, type: string): Promise<any>
+    public async referenceBook_updateShiftTemplate(id: number, name: string, type: string, intervals: any[]): Promise<any>
     {
         let record = await this.REST_JSON_TRANSACTION("/api/schedule/getScheduleTemplateRecord/" + id, "POST", null);
         record.name = name;
         record.templateType = (await this.getShiftTemplateTypes()).byEnum(type)!.id;
+        record.intervals = intervals;
         return this.REST_JSON_TRANSACTION("/api/schedule/saveScheduleTemplateRecord", "POST", record);
     }
 

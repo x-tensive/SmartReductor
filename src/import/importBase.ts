@@ -23,7 +23,7 @@ export abstract class importBase
             if (action.actionName.startsWith("Create"))
                 process.stdout.write("  " + action.actionName + ": " + action.cfg.name);
             if (action.actionName.startsWith("Update"))
-                process.stdout.write("  " + action.actionName + ":" + action.cfg.name);
+                process.stdout.write("  " + action.actionName + ": " + action.cfg.name);
 
             process.stdout.write(" ...");
 

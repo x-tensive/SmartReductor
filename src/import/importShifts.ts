@@ -6,7 +6,7 @@ import { importBase } from "./importBase.js";
 
 export class importShifts extends importBase
 {
-    static async run(client: dpa): Promise<void>
+    static async prepareCfg(client: dpa): Promise<{ shiftsCfg: any, updateActions: any[] }>
     {
         console.log("shifts READ CONFIGURATION");
         const shiftsCfg = smartReductorConfig.readShiftsConfiguration();
@@ -16,9 +16,16 @@ export class importShifts extends importBase
 
         console.log("shifts UPDATE ACTIONS");
         const updateActions = compareShifts.generateUpdateActions(shiftsCfg, existentCfg);
-        this.dumpUpdateActions(updateActions);
+
+        return { shiftsCfg: shiftsCfg, updateActions: updateActions };
+    }
+
+    static async run(client: dpa): Promise<void>
+    {
+        const cfg = await this.prepareCfg(client);
+        this.dumpUpdateActions(cfg.updateActions);
 
         console.log("shifts EXECUTE UPDATE ACTIONS");
-        await this.executeUpdateActions(client, updateActions);
+        await this.executeUpdateActions(client, cfg.updateActions);
     }
 }

@@ -19,5 +19,26 @@
                 "shift": "Nonworking hours"
             }
         ] 
+    },
+    {
+        "name": "Work day, one shift",
+        "type": "Day",
+        "intervals": [
+            {
+                "start": "00:00:00",
+                "end": "08:00:00",
+                "shift": "Nonworking hours"
+            },
+            {
+                "start": "08:00:00",
+                "end": "16:00:00",
+                "shift": "First shift"
+            },
+            {
+                "start": "16:00:00",
+                "end": "1.00:00:00",
+                "shift": "Nonworking hours"
+            }
+        ] 
     }
 ]
