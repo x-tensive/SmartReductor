@@ -54,6 +54,7 @@ export class dpa {
     private __hostName: string | undefined;
     private __hostVersion: string | undefined;
     private __shiftTemplateTypes: dpaEnum | undefined;
+    private __shiftScheduleOwnerTypes: dpaEnum | undefined;
 
     private CALL(endPoint: string, method: string, headers: OutgoingHttpHeaders, body: any): Promise<dpa_CALL_success>
     {
@@ -150,6 +151,28 @@ export class dpa {
         if (!this.__shiftTemplateTypes)
             this.__shiftTemplateTypes = await this.getEnumValues("ScheduleTemplateType");
         return this.__shiftTemplateTypes;
+    }
+
+    public async getShiftScheduleOwnerTypes(): Promise<dpaEnum>
+    {
+        if (!this.__shiftScheduleOwnerTypes)
+            this.__shiftScheduleOwnerTypes = await this.getEnumValues("ScheduleOwnerType");
+        return this.__shiftScheduleOwnerTypes;
+    }
+
+    public async manageEnterpriseStructure_getSite(id: number): Promise<any>
+    {
+        return this.REST_JSON_TRANSACTION("/api/ManageEnterpriseStructure/getSite/" + id, "GET", null);
+    }
+
+    public async manageEnterpriseStructure_getDepartment(id: number): Promise<any>
+    {
+        return this.REST_JSON_TRANSACTION("/api/ManageEnterpriseStructure/getDepartment/" + id, "GET", null);
+    }
+
+    public async manageEnterpriseStructure_getWorkCenter(id: number): Promise<any>
+    {
+        return this.REST_JSON_TRANSACTION("/api/ManageEnterpriseStructure/getEquipment/" + id, "GET", null);
     }
 
     public async manageEnterpriseStructure_getDynamicTree(parentTypeId: number, parentId: number): Promise<any[]>
@@ -286,6 +309,16 @@ export class dpa {
     public async referenceBook_removeShiftTemplate(id: number): Promise<any>
     {
         return this.REST_JSON_TRANSACTION("/api/ReferenceBook/removeReferenceBookRecord/ScheduleTemplate/" + id, "POST", null);
+    }
+
+    public async applyShiftScheduleTemplate(ownerTypeId: number, ownerId: number, templateId: number, start: string, end: string): Promise<void>
+    {
+        await this.REST_JSON_CALL("/api/schedule/applyScheduleTemplateToSchedule/" + ownerTypeId + "/" + ownerId + "/" + templateId, "POST", { start: start, end: end });
+    }
+
+    public async attachShiftScheduleToParent(ownerTypeId: number, ownerId: number): Promise<void>
+    {
+        await this.REST_JSON_CALL("/api/schedule/attachScheduleToParent/" + ownerTypeId + "/" + ownerId, "POST", null);
     }
 
     private constructor(url: string, user: string, password: string)

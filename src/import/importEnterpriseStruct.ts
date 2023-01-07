@@ -6,7 +6,7 @@ import { importBase } from "./importBase.js";
 
 export class importEnterpriseStruct extends importBase
 {
-    static async run(client: dpa): Promise<void>
+    static async prepareCfg(client: dpa): Promise<{ enterpriseCfg: any, updateActions: any[] }>
     {
         console.log("enterprise struct READ CONFIGURATION");
         const enterpriseCfg = smartReductorConfig.readEnterpriseStructConfig();
@@ -16,9 +16,16 @@ export class importEnterpriseStruct extends importBase
 
         console.log("enterprise struct UPDATE ACTIONS");
         const updateActions = compareEnterpriseStruct.generateUpdateActions(enterpriseCfg, existentCfg);
-        this.dumpUpdateActions(updateActions);
+
+        return { enterpriseCfg: enterpriseCfg, updateActions: updateActions };
+    }
+
+    static async run(client: dpa): Promise<void>
+    {
+        const cfg = await this.prepareCfg(client);
+        this.dumpUpdateActions(cfg.updateActions);
 
         console.log("enterprise struct EXECUTE UPDATE ACTIONS");
-        await this.executeUpdateActions(client, updateActions);
+        await this.executeUpdateActions(client, cfg.updateActions);
     }
 }
