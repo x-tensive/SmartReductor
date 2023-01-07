@@ -2,8 +2,9 @@ import { dpa } from "../dpa";
 import { compareEnterpriseStruct } from "../compare/compareEnterpriseStruct.js";
 import { enterpriseStruct } from "../extract/enterpriseStruct.js";
 import { smartReductorConfig } from "../smartReductorConfig.js";
+import { importBase } from "./importBase.js";
 
-export class importShiftSchedule
+export class importShiftSchedule extends importBase
 {
     static async run(client: dpa): Promise<void>
     {

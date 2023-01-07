@@ -23,6 +23,7 @@ export class compareShifts
         for (const shiftCfg of shiftsCfg) {
             const existentShiftCfg = existentCfg.find((item: any) => item.name == shiftCfg.name);
             if (existentShiftCfg) {
+                shiftCfg.id = existentShiftCfg.id;
                 const isChanged = 
                     existentShiftCfg.name != shiftCfg.name ||
                     existentShiftCfg.color != shiftCfg.color ||
@@ -42,7 +43,8 @@ export class compareShifts
                     actionName: "CreateShift",
                     cfg: shiftCfg,
                     execute: async (client: dpa, action: any) => {
-                        await client.referenceBook_createShift(action.cfg.name, action.cfg.color, action.cfg.isWorkingTime);
+                        const shiftId = await client.referenceBook_createShift(action.cfg.name, action.cfg.color, action.cfg.isWorkingTime);
+                        action.cfg.id = shiftId;
                     }
                 });
             }

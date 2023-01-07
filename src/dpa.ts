@@ -1,5 +1,4 @@
 import http, { IncomingMessage, OutgoingHttpHeaders } from "http";
-import internal from "stream";
 
 export enum enterpriseStructTypes
 {
@@ -19,10 +18,31 @@ interface dpa_CALL_success
     body: Buffer
 }
 
-interface dpa_CALL_error
+export class dpaEnumItem
 {
-    response: IncomingMessage,
-    error: Error
+    readonly id: number;
+    readonly enum: string;
+    readonly name: string;
+
+    constructor(item: any)
+    {
+        this.id = item.id;
+        this.enum = item.enum;
+        this.name = item.name;
+    }
+}
+
+export class dpaEnum
+{
+    readonly data: dpaEnumItem[];
+
+    byName = (_name: string) => this.data.find((item) => item.name == _name);
+    byEnum = (_enum: string) => this.data.find((item) => item.enum == _enum);
+
+    constructor(items: any[])
+    {
+        this.data = items.map((item: any) => new dpaEnumItem(item));
+    }
 }
 
 export class dpa {
@@ -33,6 +53,7 @@ export class dpa {
     private __cookies: any;
     private __hostName: string | undefined;
     private __hostVersion: string | undefined;
+    private __shiftTemplateTypes: dpaEnum | undefined;
 
     private CALL(endPoint: string, method: string, headers: OutgoingHttpHeaders, body: any): Promise<dpa_CALL_success>
     {
@@ -116,6 +137,19 @@ export class dpa {
     public async logout(): Promise<void>
     {
         await this.REST_JSON_CALL("/api/Account/Logout", "POST", null);
+    }
+
+    private async getEnumValues(name: string): Promise<dpaEnum>
+    {
+        const items = await this.REST_JSON_TRANSACTION("/api/data/getEnumValues/" + name, "GET", null);
+        return new dpaEnum(items);
+    }
+
+    public async getShiftTemplateTypes(): Promise<dpaEnum>
+    {
+        if (!this.__shiftTemplateTypes)
+            this.__shiftTemplateTypes = await this.getEnumValues("ScheduleTemplateType");
+        return this.__shiftTemplateTypes;
     }
 
     public async manageEnterpriseStructure_getDynamicTree(parentTypeId: number, parentId: number): Promise<any[]>
@@ -219,6 +253,37 @@ export class dpa {
     public async referenceBook_removeShift(id: number): Promise<any>
     {
         return this.REST_JSON_TRANSACTION("/api/ReferenceBook/removeReferenceBookRecord/ShiftName/" + id, "POST", null);
+    }
+
+    public async referenceBook_getShiftTemplates(): Promise<any>
+    {
+        return this.REST_JSON_TRANSACTION("/api/ReferenceBook/getReferenceBookDatas/ScheduleTemplate", "POST", {});
+    }
+
+    public async referenceBook_getShiftTemplate(id: number): Promise<any>
+    {
+        return this.REST_JSON_TRANSACTION("/api/schedule/getScheduleTemplateRecord/" + id, "POST", null);
+    }
+
+    public async referenceBook_createShiftTemplate(name: string, type: string): Promise<any>
+    {
+        let record = await this.REST_JSON_TRANSACTION("/api/schedule/getScheduleTemplateRecord/0", "POST", null);
+        record.name = name;
+        record.templateType = (await this.getShiftTemplateTypes()).byEnum(type)!.id;
+        return this.REST_JSON_TRANSACTION("/api/schedule/saveScheduleTemplateRecord", "POST", record);
+    }
+
+    public async referenceBook_updateShiftTemplate(id: number, name: string, type: string): Promise<any>
+    {
+        let record = await this.REST_JSON_TRANSACTION("/api/schedule/getScheduleTemplateRecord/" + id, "POST", null);
+        record.name = name;
+        record.templateType = (await this.getShiftTemplateTypes()).byEnum(type)!.id;
+        return this.REST_JSON_TRANSACTION("/api/schedule/saveScheduleTemplateRecord", "POST", record);
+    }
+
+    public async referenceBook_removeShiftTemplate(id: number): Promise<any>
+    {
+        return this.REST_JSON_TRANSACTION("/api/ReferenceBook/removeReferenceBookRecord/ScheduleTemplate/" + id, "POST", null);
     }
 
     private constructor(url: string, user: string, password: string)

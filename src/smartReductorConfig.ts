@@ -13,4 +13,10 @@ export class smartReductorConfig
         const buffer = fs.readFileSync("./data/shifts.json");
         return JSON.parse(buffer.toString());
     }
+
+    public static readShiftTemplatesConfiguration(): any
+    {
+        const buffer = fs.readFileSync("./data/shiftTemplates.json");
+        return JSON.parse(buffer.toString());
+    }
 }

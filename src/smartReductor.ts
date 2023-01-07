@@ -7,6 +7,8 @@ import { importEnterpriseStruct } from "./import/importEnterpriseStruct.js";
 import { importShiftSchedule } from "./import/importShiftSchedule.js";
 import { importShifts } from "./import/importShifts.js";
 import { shifts } from "./extract/shifts.js";
+import { shiftTemplates } from "./extract/shiftTemplates.js";
+import { importShiftTemplates } from "./import/importShiftTemplates.js";
 
 const targetBuilder: CommandBuilder = {
     target: {
@@ -48,6 +50,8 @@ yargs(hideBin(process.argv))
                     await importEnterpriseStruct.run(client);
                 else if (parsed.target == "shifts")
                     await importShifts.run(client);
+                else if (parsed.target == "shiftTemplates")
+                    await importShiftTemplates.run(client);
                 else if (parsed.target == "shiftSchedule")
                     await importShiftSchedule.run(client);
                 else
@@ -73,6 +77,8 @@ yargs(hideBin(process.argv))
                     console.log(JSON.stringify(await enterpriseStruct.fetch(client), undefined, 2));
                 else if (parsed.target == "shifts")
                     console.log(JSON.stringify(await shifts.fetch(client), undefined, 2));
+                else if (parsed.target == "shiftTemplates")
+                    console.log(JSON.stringify(await shiftTemplates.fetch(client), undefined, 2));
                 else
                     throw "not supported";
             }
