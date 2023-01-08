@@ -26,7 +26,7 @@ export class importDowntimeReasons extends importBase
         const existentReasonsCfg = await downtimeReasons.fetch(client);
 
         console.log("downtime reasons UPDATE ACTIONS");
-        const reasonsUpdateActions = compareDowntimeReasons.generateUpdateActions(typesCfg, reasonsCfg, existentReasonsCfg);
+        const reasonsUpdateActions = await compareDowntimeReasons.generateUpdateActions(client, typesCfg, reasonsCfg, existentReasonsCfg);
 
         let updateActions = typesUpdateActions.filter((item) => !item.actionName.startsWith("Remove"));
         updateActions = updateActions.concat(reasonsUpdateActions);

@@ -55,6 +55,7 @@ export class dpa {
     private __hostVersion: string | undefined;
     private __shiftTemplateTypes: dpaEnum | undefined;
     private __shiftScheduleOwnerTypes: dpaEnum | undefined;
+    private __downtimeCategories: dpaEnum | undefined;
 
     private CALL(endPoint: string, method: string, headers: OutgoingHttpHeaders, body: any): Promise<dpa_CALL_success>
     {
@@ -158,6 +159,13 @@ export class dpa {
         if (!this.__shiftScheduleOwnerTypes)
             this.__shiftScheduleOwnerTypes = await this.getEnumValues("ScheduleOwnerType");
         return this.__shiftScheduleOwnerTypes;
+    }
+
+    public async getDowntimeCategories(): Promise<dpaEnum>
+    {
+        if (!this.__downtimeCategories)
+            this.__downtimeCategories = await this.getEnumValues("DowntimeCategory");
+        return this.__downtimeCategories;
     }
 
     public async manageEnterpriseStructure_getSite(id: number): Promise<any>
@@ -340,6 +348,7 @@ export class dpa {
         record.fields.find((item: any) => item.name == "Color").value = color;
         record.fields.find((item: any) => item.name == "ReasonCategory").value = reasonCategory;
         record.fields.find((item: any) => item.name == "ReasonType").value = reasonType;
+        record.fields.find((item: any) => item.name == "ReasonType").fieldTypeModel.entityId = reasonType;
         record.fields.find((item: any) => item.name == "AllowSetInAnalytics").value = allowSetInAnalytics;
         record.fields.find((item: any) => item.name == "AllowSetInOperator").value = allowSetInOperator;
         record.fields.find((item: any) => item.name == "IsImportant").value = isImportant;
@@ -354,6 +363,7 @@ export class dpa {
         record.fields.find((item: any) => item.name == "Color").value = color;
         record.fields.find((item: any) => item.name == "ReasonCategory").value = reasonCategory;
         record.fields.find((item: any) => item.name == "ReasonType").value = reasonType;
+        record.fields.find((item: any) => item.name == "ReasonType").fieldTypeModel.entityId = reasonType;
         record.fields.find((item: any) => item.name == "AllowSetInAnalytics").value = allowSetInAnalytics;
         record.fields.find((item: any) => item.name == "AllowSetInOperator").value = allowSetInOperator;
         record.fields.find((item: any) => item.name == "IsImportant").value = isImportant;
