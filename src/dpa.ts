@@ -311,12 +311,17 @@ export class dpa {
         return this.REST_JSON_TRANSACTION("/api/ReferenceBook/removeReferenceBookRecord/ScheduleTemplate/" + id, "POST", null);
     }
 
-    public async applyShiftScheduleTemplate(ownerTypeId: number, ownerId: number, templateId: number, start: string, end: string): Promise<void>
+    public async shiftSchedule_get(ownerTypeId: number, ownerId: number, trunc: boolean, start: string, end: string): Promise<any>
+    {
+        return this.REST_JSON_TRANSACTION("/api/schedule/getSchedule/" + ownerTypeId + "/" + ownerId + "/" + trunc, "POST", { start: start, end: end });
+    }
+
+    public async shiftSchedule_applyTemplate(ownerTypeId: number, ownerId: number, templateId: number, start: string, end: string): Promise<void>
     {
         await this.REST_JSON_CALL("/api/schedule/applyScheduleTemplateToSchedule/" + ownerTypeId + "/" + ownerId + "/" + templateId, "POST", { start: start, end: end });
     }
 
-    public async attachShiftScheduleToParent(ownerTypeId: number, ownerId: number): Promise<void>
+    public async shiftSchedule_attachToParent(ownerTypeId: number, ownerId: number): Promise<void>
     {
         await this.REST_JSON_CALL("/api/schedule/attachScheduleToParent/" + ownerTypeId + "/" + ownerId, "POST", null);
     }

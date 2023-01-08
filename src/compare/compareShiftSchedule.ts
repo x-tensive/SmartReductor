@@ -2,6 +2,17 @@ import { dpa, enterpriseStructTypes } from "../dpa.js";
 
 export class compareShiftSchedule
 {
+    private static currentDateAddDays(days: number): Date
+    {
+        let date = new Date();
+        date.setDate(date.getDate() + days);
+        date.setHours(0);
+        date.setMinutes(0);
+        date.setSeconds(0);
+        date.setMilliseconds(0);
+        return date;
+    }
+
     private static async applyTemplate(client: dpa, shiftTemplatesCfg: any[], cfg: any, typeName: string)
     {
         if (typeof cfg.shiftSchedule === "undefined")
@@ -11,24 +22,15 @@ export class compareShiftSchedule
         if (typeof cfg.shiftScheduleAfter === "undefined")
             throw "shiftScheduleAfter is undefined";
 
+        
+
         const ownerTypes = await client.getShiftScheduleOwnerTypes();
         const ownerTypeId = ownerTypes.byEnum(typeName)!.id;
-
         const templateId = shiftTemplatesCfg.find((item) => item.name == cfg.shiftSchedule)!.id;
-        const before = new Date();
-        before.setDate(before.getDate() - cfg.shiftScheduleBefore);
-        before.setHours(0);
-        before.setMinutes(0);
-        before.setSeconds(0);
-        before.setMilliseconds(0);
-        const after = new Date();
-        after.setDate(after.getDate() + cfg.shiftScheduleAfter);
-        after.setHours(0);
-        after.setMinutes(0);
-        after.setSeconds(0);
-        after.setMilliseconds(0);
+        const before = this.currentDateAddDays(-cfg.shiftScheduleBefore);
+        const after = this.currentDateAddDays(cfg.shiftScheduleAfter);
         
-        await client.applyShiftScheduleTemplate(ownerTypeId, cfg.id, templateId, before.toISOString(), after.toISOString());
+        await client.shiftSchedule_applyTemplate(ownerTypeId, cfg.id, templateId, before.toISOString(), after.toISOString());
     }
 
     private static async attachToParent(client: dpa, cfg: any, typeName: string)
@@ -36,31 +38,53 @@ export class compareShiftSchedule
         const ownerTypes = await client.getShiftScheduleOwnerTypes();
         const ownerTypeId = ownerTypes.byEnum(typeName)!.id;
 
-        await client.attachShiftScheduleToParent(ownerTypeId, cfg.id, );
+        await client.shiftSchedule_attachToParent(ownerTypeId, cfg.id, );
+    }
+
+    private static async isShiftScheduleInherited(client: dpa, typeName: string, id: number): Promise<boolean>
+    {
+        const ownerTypes = await client.getShiftScheduleOwnerTypes();
+        const ownerTypeId = ownerTypes.byEnum(typeName)!.id;
+        const before = this.currentDateAddDays(-1);
+        const after = this.currentDateAddDays(1);
+
+        const result = await client.shiftSchedule_get(ownerTypeId, id, true, before.toISOString(), after.toISOString());
+
+        return result.scheduleOwnerId != id;
+    }
+
+    private static generateApplyTemplateAction(actionName: string, typeName: string, cfg: any, shiftTemplatesCfg: any[]): any
+    {
+        return {
+            actionName: actionName,
+            cfg: cfg,
+            typeName: typeName,
+            execute: async (client: dpa, action: any) => {
+                await this.applyTemplate(client, shiftTemplatesCfg, action.cfg, action.typeName);
+            }
+        }
+    }
+
+    private static generateAttachToParenteAction(actionName: string, typeName: string, cfg: any): any
+    {
+        return {
+            actionName: actionName,
+            cfg: cfg,
+            typeName: typeName,
+            execute: async (client: dpa, action: any) => {
+                await this.attachToParent(client, action.cfg, action.typeName);
+            }
+        }
     }
 
     public static async generateUpdateActions_workCenter(client: dpa, shiftTemplatesCfg: any[], workCenterCfg: any, actions: any[]): Promise<void>
     {
         if (workCenterCfg.shiftSchedule) {
-            actions.push({
-                actionName: "UpdateWorkCenter",
-                cfg: workCenterCfg,
-                typeName: "Equipment",
-                execute: async (client: dpa, action: any) => {
-                    const site = await this.applyTemplate(client, shiftTemplatesCfg, action.cfg, action.typeName);
-                }
-            });
+            actions.push(this.generateApplyTemplateAction("UpdateWorkCenter", "Equipment", workCenterCfg, shiftTemplatesCfg));
         } else {
-            const workCenter = await client.manageEnterpriseStructure_getWorkCenter(workCenterCfg.id);
-            if (!workCenter.inherit) {
-                actions.push({
-                    actionName: "UpdateWorkCenter",
-                    cfg: workCenterCfg,
-                    typeName: "Equipment",
-                    execute: async (client: dpa, action: any) => {
-                        const site = await this.attachToParent(client, action.cfg, action.typeName);
-                    }
-                });
+            const isInherited = await this.isShiftScheduleInherited(client, "Equipment", workCenterCfg.id);
+            if (!isInherited) {
+                actions.push(this.generateAttachToParenteAction("UpdateWorkCenter", "Equipment", workCenterCfg));
             }
         }
     }
@@ -68,25 +92,11 @@ export class compareShiftSchedule
     public static async generateUpdateActions_department(client: dpa, shiftTemplatesCfg: any[], departmentCfg: any, actions: any[]): Promise<void>
     {
         if (departmentCfg.shiftSchedule) {
-            actions.push({
-                actionName: "UpdateDepartment",
-                cfg: departmentCfg,
-                typeName: "Department",
-                execute: async (client: dpa, action: any) => {
-                    const site = await this.applyTemplate(client, shiftTemplatesCfg, action.cfg, action.typeName);
-                }
-            });
+            actions.push(this.generateApplyTemplateAction("UpdateDepartment", "Department", departmentCfg, shiftTemplatesCfg));
         } else {
-            const department = await client.manageEnterpriseStructure_getDepartment(departmentCfg.id);
-            if (!department.inherit) {
-                actions.push({
-                    actionName: "UpdateDepartment",
-                    cfg: departmentCfg,
-                    typeName: "Department",
-                    execute: async (client: dpa, action: any) => {
-                        const site = await this.attachToParent(client, action.cfg, action.typeName);
-                    }
-                });
+            const isInherited = await this.isShiftScheduleInherited(client, "Department", departmentCfg.id);
+            if (!isInherited) {
+                actions.push(this.generateAttachToParenteAction("UpdateDepartment", "Department", departmentCfg));
             }
         }
 
@@ -103,25 +113,11 @@ export class compareShiftSchedule
     public static async generateUpdateActions_site(client: dpa, shiftTemplatesCfg: any[], siteCfg: any, actions: any[]): Promise<void>
     {
         if (siteCfg.shiftSchedule) {
-            actions.push({
-                actionName: "UpdateSite",
-                cfg: siteCfg,
-                typeName: "Site",
-                execute: async (client: dpa, action: any) => {
-                    const site = await this.applyTemplate(client, shiftTemplatesCfg, action.cfg, action.typeName);
-                }
-            });
+            actions.push(this.generateApplyTemplateAction("UpdateSite", "Site", siteCfg, shiftTemplatesCfg));
         } else {
-            const site = await client.manageEnterpriseStructure_getSite(siteCfg.id);
-            if (!site.inherit) {
-                actions.push({
-                    actionName: "UpdateSite",
-                    cfg: siteCfg,
-                    typeName: "Site",
-                    execute: async (client: dpa, action: any) => {
-                        const site = await this.attachToParent(client, action.cfg, action.typeName);
-                    }
-                });
+            const isInherited = await this.isShiftScheduleInherited(client, "Site", siteCfg.id);
+            if (!isInherited) {
+                actions.push(this.generateAttachToParenteAction("UpdateSite", "Site", siteCfg));
             }
         }
 
@@ -135,14 +131,7 @@ export class compareShiftSchedule
     {
         let actions: any[] = [];
 
-        actions.push({
-            actionName: "UpdateEnterprise",
-            cfg: enterpriseStructCfg,
-            typeName: "Enterprise",
-            execute: async (client: dpa, action: any) => {
-                const site = await this.applyTemplate(client, shiftTemplatesCfg, action.cfg, action.typeName);
-            }
-        });
+        actions.push(this.generateApplyTemplateAction("UpdateEnterprise", "Enterprise", enterpriseStructCfg, shiftTemplatesCfg));
 
         if (enterpriseStructCfg.sites) {
             for (const siteCfg of enterpriseStructCfg.sites)
