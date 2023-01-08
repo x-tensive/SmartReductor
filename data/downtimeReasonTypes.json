@@ -1,0 +1,11 @@
+[
+    { "name": "Malfunction" },
+    { "name": "Technology" },
+    { "name": "Service" },
+    { "name": "Repairs" },
+    { "name": "Planning" },
+    { "name": "Break" },
+    { "name": "Logistics" },
+    { "name": "Adjustment" },
+    { "name": "Short downtime" }
+]

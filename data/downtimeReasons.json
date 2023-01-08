@@ -1,0 +1,260 @@
+[
+    {
+        "name": "Undefined",
+        "color": "#8b8b8b",
+        "reasonCategory": "unscheduled",
+        "reasonType": "Malfunction",
+        "allowSetInAnalytics": false,
+        "allowSetInOperator": false,
+        "isImportant": false,
+        "sortOrder": 10
+    },
+    {
+        "name": "Change parts",
+        "color": "#6B8E23",
+        "reasonCategory": "scheduled",
+        "reasonType": "Technology",
+        "allowSetInAnalytics": true,
+        "allowSetInOperator": true,
+        "isImportant": false,
+        "sortOrder": 20
+    },
+    {
+        "name": "Part quality control",
+        "color": "#DB7093",
+        "reasonCategory": "scheduled",
+        "reasonType": "Technology",
+        "allowSetInAnalytics": true,
+        "allowSetInOperator": true,
+        "isImportant": false,
+        "sortOrder": 30
+    },
+    {
+        "name": "Cleaning",
+        "color": "#1E90FF",
+        "reasonCategory": "scheduled",
+        "reasonType": "Service",
+        "allowSetInAnalytics": true,
+        "allowSetInOperator": true,
+        "isImportant": false,
+        "sortOrder": 40
+    },
+    {
+        "name": "Maintenance",
+        "color": "#9ACD32",
+        "reasonCategory": "scheduled",
+        "reasonType": "Service",
+        "allowSetInAnalytics": false,
+        "allowSetInOperator": false,
+        "isImportant": false,
+        "sortOrder": 50
+    },
+    {
+        "name": "Innovation",
+        "color": "#31DADA",
+        "reasonCategory": "scheduled",
+        "reasonType": "Service",
+        "allowSetInAnalytics": false,
+        "allowSetInOperator": false,
+        "isImportant": false,
+        "sortOrder": 60
+    },
+    {
+        "name": "Scheduled preventive maintenance",
+        "color": "#32CD32",
+        "reasonCategory": "scheduled",
+        "reasonType": "Repairs",
+        "allowSetInAnalytics": true,
+        "allowSetInOperator": true,
+        "isImportant": false,
+        "sortOrder": 70
+    },
+    {
+        "name": "Lack of job",
+        "color": "#E6E6FA",
+        "reasonCategory": "scheduled",
+        "reasonType": "Planning",
+        "allowSetInAnalytics": true,
+        "allowSetInOperator": true,
+        "isImportant": false,
+        "sortOrder": 80
+    },
+    {
+        "name": "Dinner",
+        "color": "#008080",
+        "reasonCategory": "scheduled",
+        "reasonType": "Break",
+        "allowSetInAnalytics": true,
+        "allowSetInOperator": true,
+        "isImportant": false,
+        "sortOrder": 90
+    },
+    {
+        "name": "Repairs",
+        "color": "#800000",
+        "reasonCategory": "unscheduled",
+        "reasonType": "Repairs",
+        "allowSetInAnalytics": true,
+        "allowSetInOperator": true,
+        "isImportant": false,
+        "sortOrder": 100
+    },
+    {
+        "name": "Tool missing",
+        "color": "#00008B",
+        "reasonCategory": "unscheduled",
+        "reasonType": "Logistics",
+        "allowSetInAnalytics": true,
+        "allowSetInOperator": true,
+        "isImportant": false,
+        "sortOrder": 110
+    },
+    {
+        "name": "Lack of blanks",
+        "color": "#DC143C",
+        "reasonCategory": "unscheduled",
+        "reasonType": "Malfunction",
+        "allowSetInAnalytics": true,
+        "allowSetInOperator": true,
+        "isImportant": false,
+        "sortOrder": 120
+    },
+    {
+        "name": "Break",
+        "color": "#BC8F8F",
+        "reasonCategory": "unscheduled",
+        "reasonType": "Break",
+        "allowSetInAnalytics": false,
+        "allowSetInOperator": false,
+        "isImportant": false,
+        "sortOrder": 130
+    },
+    {
+        "name": "Break between shifts",
+        "color": "#806060",
+        "reasonCategory": "unscheduled",
+        "reasonType": "Break",
+        "allowSetInAnalytics": false,
+        "allowSetInOperator": false,
+        "isImportant": false,
+        "sortOrder": 140
+    },
+    {
+        "name": "Lack of CP",
+        "color": "#C71585",
+        "reasonCategory": "unscheduled",
+        "reasonType": "Technology",
+        "allowSetInAnalytics": true,
+        "allowSetInOperator": true,
+        "isImportant": false,
+        "sortOrder": 150
+    },
+    {
+        "name": "Errors in CP",
+        "color": "#9400D3",
+        "reasonCategory": "unscheduled",
+        "reasonType": "Technology",
+        "allowSetInAnalytics": true,
+        "allowSetInOperator": true,
+        "isImportant": false,
+        "sortOrder": 160
+    },
+    {
+        "name": "Electrician (power)",
+        "color": "#FFD700",
+        "reasonCategory": "unscheduled",
+        "reasonType": "Malfunction",
+        "allowSetInAnalytics": true,
+        "allowSetInOperator": true,
+        "isImportant": false,
+        "sortOrder": 170
+    },
+    {
+        "name": "Electronics",
+        "color": "#00FA9A",
+        "reasonCategory": "unscheduled",
+        "reasonType": "Malfunction",
+        "allowSetInAnalytics": true,
+        "allowSetInOperator": true,
+        "isImportant": false,
+        "sortOrder": 180
+    },
+    {
+        "name": "Mechanics",
+        "color": "#696969",
+        "reasonCategory": "unscheduled",
+        "reasonType": "Malfunction",
+        "allowSetInAnalytics": true,
+        "allowSetInOperator": true,
+        "isImportant": false,
+        "sortOrder": 190
+    },
+    {
+        "name": "Hydraulics",
+        "color": "#00FFFF",
+        "reasonCategory": "unscheduled",
+        "reasonType": "Malfunction",
+        "allowSetInAnalytics": true,
+        "allowSetInOperator": true,
+        "isImportant": false,
+        "sortOrder": 200
+    },
+    {
+        "name": "Accident (reason unknown)",
+        "color": "#FF0000",
+        "reasonCategory": "unscheduled",
+        "reasonType": "Malfunction",
+        "allowSetInAnalytics": true,
+        "allowSetInOperator": true,
+        "isImportant": false,
+        "sortOrder": 210
+    },
+    {
+        "name": "Waiting for setup",
+        "color": "#7B68EE",
+        "reasonCategory": "unscheduled",
+        "reasonType": "Adjustment",
+        "allowSetInAnalytics": true,
+        "allowSetInOperator": true,
+        "isImportant": false,
+        "sortOrder": 220
+    },
+    {
+        "name": "Setting up another machine",
+        "color": "#FF8C00",
+        "reasonCategory": "unscheduled",
+        "reasonType": "Adjustment",
+        "allowSetInAnalytics": true,
+        "allowSetInOperator": true,
+        "isImportant": false,
+        "sortOrder": 230
+    },
+    {
+        "name": "Adjustment",
+        "color": "#4B0082",
+        "reasonCategory": "unscheduled",
+        "reasonType": "Adjustment",
+        "allowSetInAnalytics": false,
+        "allowSetInOperator": false,
+        "isImportant": false,
+        "sortOrder": 240
+    },
+    {
+        "name": "Short downtime",
+        "color": "#ff6347",
+        "reasonType": "Short downtime",
+        "allowSetInAnalytics": false,
+        "allowSetInOperator": false,
+        "isImportant": false,
+        "sortOrder": 250
+    },
+    {
+        "name": "Short adjustment",
+        "color": "#7602c9",
+        "reasonType": "Adjustment",
+        "allowSetInAnalytics": false,
+        "allowSetInOperator": false,
+        "isImportant": false,
+        "sortOrder": 260
+    }
+]

@@ -19,4 +19,16 @@ export class smartReductorConfig
         const buffer = fs.readFileSync("./data/shiftTemplates.json");
         return JSON.parse(buffer.toString());
     }
+
+    public static readDowntimeReasonTypesConfiguration(): any
+    {
+        const buffer = fs.readFileSync("./data/downtimeReasonTypes.json");
+        return JSON.parse(buffer.toString());
+    }
+
+    public static readDowntimeReasonsConfiguration(): any
+    {
+        const buffer = fs.readFileSync("./data/downtimeReasons.json");
+        return JSON.parse(buffer.toString());
+    }
 }

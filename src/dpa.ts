@@ -311,6 +311,61 @@ export class dpa {
         return this.REST_JSON_TRANSACTION("/api/ReferenceBook/removeReferenceBookRecord/ScheduleTemplate/" + id, "POST", null);
     }
 
+    public async referenceBook_getDowntimeReasonTypes(): Promise<any>
+    {
+        return this.REST_JSON_TRANSACTION("/api/ReferenceBook/getReferenceBookDatas/ReferenceBookOfDowntimeReasonType", "POST", {});
+    }
+
+    public async referenceBook_createDowntimeReasonType(name: string): Promise<any>
+    {
+        let record = await this.REST_JSON_TRANSACTION("/api/referenceBook/getReferenceBookRecord/ReferenceBookOfDowntimeReasonType/0", "GET", null);
+        record.fields.find((item: any) => item.name == "Name").value = name;
+        return this.REST_JSON_TRANSACTION("/api/referenceBook/saveReferenceBookRecord", "POST", record);
+    }
+
+    public async referenceBook_removeDowntimeReasonType(id: number): Promise<any>
+    {
+        return this.REST_JSON_TRANSACTION("/api/referenceBook/removeReferenceBookRecord/ReferenceBookOfDowntimeReasonType/" + id, "POST", null);
+    }
+
+    public async referenceBook_getDowntimeReasons(): Promise<any>
+    {
+        return this.REST_JSON_TRANSACTION("/api/ReferenceBook/getReferenceBookDatas/ReferenceBookReasonsOfDowntime", "POST", {});
+    }
+
+    public async referenceBook_createDowntimeReason(name: string, color: string, reasonCategory: number, reasonType: number, allowSetInAnalytics: boolean, allowSetInOperator: boolean, isImportant: boolean, sortOrder: number): Promise<any>
+    {
+        let record = await this.REST_JSON_TRANSACTION("/api/referenceBook/getReferenceBookRecord/ReferenceBookReasonsOfDowntime/0", "GET", null);
+        record.fields.find((item: any) => item.name == "Name").value = name;
+        record.fields.find((item: any) => item.name == "Color").value = color;
+        record.fields.find((item: any) => item.name == "ReasonCategory").value = reasonCategory;
+        record.fields.find((item: any) => item.name == "ReasonType").value = reasonType;
+        record.fields.find((item: any) => item.name == "AllowSetInAnalytics").value = allowSetInAnalytics;
+        record.fields.find((item: any) => item.name == "AllowSetInOperator").value = allowSetInOperator;
+        record.fields.find((item: any) => item.name == "IsImportant").value = isImportant;
+        record.fields.find((item: any) => item.name == "SortOrder").value = sortOrder;
+        return this.REST_JSON_TRANSACTION("/api/referenceBook/saveReferenceBookRecord", "POST", record);
+    }
+
+    public async referenceBook_updateDowntimeReason(id: number, name: string, color: string, reasonCategory: number, reasonType: number, allowSetInAnalytics: boolean, allowSetInOperator: boolean, isImportant: boolean, sortOrder: number): Promise<any>
+    {
+        let record = await this.REST_JSON_TRANSACTION("/api/referenceBook/getReferenceBookRecord/ReferenceBookReasonsOfDowntime/" + id, "GET", null);
+        record.fields.find((item: any) => item.name == "Name").value = name;
+        record.fields.find((item: any) => item.name == "Color").value = color;
+        record.fields.find((item: any) => item.name == "ReasonCategory").value = reasonCategory;
+        record.fields.find((item: any) => item.name == "ReasonType").value = reasonType;
+        record.fields.find((item: any) => item.name == "AllowSetInAnalytics").value = allowSetInAnalytics;
+        record.fields.find((item: any) => item.name == "AllowSetInOperator").value = allowSetInOperator;
+        record.fields.find((item: any) => item.name == "IsImportant").value = isImportant;
+        record.fields.find((item: any) => item.name == "SortOrder").value = sortOrder;
+        return this.REST_JSON_TRANSACTION("/api/referenceBook/saveReferenceBookRecord", "POST", record);
+    }
+
+    public async referenceBook_removeDowntimeReason(id: number): Promise<any>
+    {
+        return this.REST_JSON_TRANSACTION("/api/referenceBook/removeReferenceBookRecord/ReferenceBookReasonsOfDowntime/" + id, "POST", null);
+    }
+
     public async shiftSchedule_get(ownerTypeId: number, ownerId: number, trunc: boolean, start: string, end: string): Promise<any>
     {
         return this.REST_JSON_TRANSACTION("/api/schedule/getSchedule/" + ownerTypeId + "/" + ownerId + "/" + trunc, "POST", { start: start, end: end });

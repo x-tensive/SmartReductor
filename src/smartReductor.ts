@@ -9,6 +9,9 @@ import { importShifts } from "./import/importShifts.js";
 import { shifts } from "./extract/shifts.js";
 import { shiftTemplates } from "./extract/shiftTemplates.js";
 import { importShiftTemplates } from "./import/importShiftTemplates.js";
+import { downtimeReasonTypes } from "./extract/downtimeReasonTypes.js";
+import { downtimeReasons } from "./extract/downtimeReasons.js";
+import { importDowntimeReasons } from "./import/importDowntimeReasons.js";
 
 const targetBuilder: CommandBuilder = {
     target: {
@@ -17,7 +20,9 @@ const targetBuilder: CommandBuilder = {
             "enterpriseStruct",
             "shiftTemplates",
             "shifts",
-            "shiftSchedule"
+            "shiftSchedule",
+            "downtimeReasonTypes",
+            "downtimeReasons"
         ] as const
     },
     url :{
@@ -54,6 +59,8 @@ yargs(hideBin(process.argv))
                     await importShiftTemplates.run(client);
                 else if (parsed.target == "shiftSchedule")
                     await importShiftSchedule.run(client);
+                else if (parsed.target == "downtimeReasons")
+                    await importDowntimeReasons.run(client);
                 else
                     throw "not supported";
             }
@@ -79,6 +86,10 @@ yargs(hideBin(process.argv))
                     console.log(JSON.stringify(await shifts.fetch(client), undefined, 2));
                 else if (parsed.target == "shiftTemplates")
                     console.log(JSON.stringify(await shiftTemplates.fetch(client), undefined, 2));
+                else if (parsed.target == "downtimeReasonTypes")
+                    console.log(JSON.stringify(await downtimeReasonTypes.fetch(client), undefined, 2));
+                else if (parsed.target == "downtimeReasons")
+                    console.log(JSON.stringify(await downtimeReasons.fetch(client), undefined, 2));
                 else
                     throw "not supported";
             }
