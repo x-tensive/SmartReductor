@@ -498,6 +498,11 @@ export class dpa {
         return this.REST_JSON_TRANSACTION("/api/availableReason/detachReasonsFromParent/" + ownerTypeId + "/" + ownerId + "/" + reasonType, "POST", null);
     }
 
+    public async availableReason_updateAvailableReasons(ownerTypeId: number, ownerId: number, reasonType: number, reasonIds: number[]): Promise<any>
+    {
+        return this.REST_JSON_TRANSACTION("/api/availableReason/updateAvailableReasons/" + ownerTypeId + "/" + ownerId + "/" + reasonType, "POST", reasonIds);
+    }
+
     private constructor(url: string, user: string, password: string)
     {
         this.url = url;

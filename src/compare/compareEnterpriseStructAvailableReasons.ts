@@ -2,6 +2,26 @@ import { dpa } from "../dpa";
 
 export class compareEnterpriseStructAvailableReasons
 {
+    private static getTargetReasons(targetCfg: any, reasons: any[]): any[]
+    {
+        if (targetCfg == "all")
+            return reasons;
+        return targetCfg.map((name: string) => reasons.find((item: any) => item.name == name));
+    }
+
+    private static areSameReasons(reasons1: any[], reasons2: any[]): boolean
+    {
+        for (const reason of reasons1) {
+            if (!reasons2.find((item: any) => item.name == reason.name))
+                return false;
+        }
+        for (const reason of reasons2) {
+            if (!reasons1.find((item: any) => item.name == reason.name))
+                return false;
+        }
+        return true;
+    }
+
     private static async generateUpdateActions_configurationType(client: dpa, type: number, cfg: any, reasonType: number, allowInherit: boolean, targetCfg: any, reasons: any[], actions: any[]): Promise<void>
     {
         const inherit = targetCfg == "inherit" || !targetCfg;
@@ -10,18 +30,20 @@ export class compareEnterpriseStructAvailableReasons
         
         const currentCfg = await client.availableReason_getAllReasons(type, cfg.id, reasonType);
         
-        if (inherit && !currentCfg.useParentReasons) {
-            actions.push({
-                actionName: "UpdateAttachToParent",
-                cfg: cfg,
-                execute: async (client: dpa, action: any) => {
-                    await client.availableReason_attachReasonsToParent(type, action.cfg.id, reasonType);
-                }
-            });
+        if (inherit) {
+            if (!currentCfg.useParentReasons) {
+                actions.push({
+                    actionName: "UpdateAttachToParent",
+                    cfg: cfg,
+                    execute: async (client: dpa, action: any) => {
+                        await client.availableReason_attachReasonsToParent(type, action.cfg.id, reasonType);
+                    }
+                });
+            }
             return;
         }
 
-        if (!inherit && currentCfg.useParentReasons) {
+        if (currentCfg.useParentReasons) {
             actions.push({
                 actionName: "UpdateDetachFromParent",
                 cfg: cfg,
@@ -30,13 +52,29 @@ export class compareEnterpriseStructAvailableReasons
                 }
             });
         }
+
+        const targetReasons = this.getTargetReasons(targetCfg, reasons);
+        const currentReasons = currentCfg.reasons
+            .filter((item: any) => item.isEnabled)
+            .map((item: any) => ({ name: item.reasonName }));
+        if (this.areSameReasons(targetReasons, currentReasons))
+            return;
+        
+        actions.push({
+            actionName: "UpdateAvailableReasons",
+            cfg: cfg,
+            reasonIds: targetReasons.map((item: any) => item.id),
+            execute: async (client: dpa, action: any) => {
+                await client.availableReason_updateAvailableReasons(type, action.cfg.id, reasonType, action.reasonIds);
+            }
+        });
     }
     
     private static async generateUpdateActions_configuration(client: dpa, type: number, cfg: any, allowInherit: boolean, downtimeReasons: any[], operationRunSuspendReasons: any[], overtimeReasons: any[], underproductionReasons: any[], actions: any[]): Promise<void>
     {
         await this.generateUpdateActions_configurationType(client, type, cfg, 1, allowInherit, cfg.availableDowntimeReasons, downtimeReasons, actions);
-        await this.generateUpdateActions_configurationType(client, type, cfg, 2, allowInherit, cfg.availableOperationRunSuspendReasons, operationRunSuspendReasons, actions);
-        await this.generateUpdateActions_configurationType(client, type, cfg, 3, allowInherit, cfg.availableOvertimeReasons, overtimeReasons, actions);
+        await this.generateUpdateActions_configurationType(client, type, cfg, 3, allowInherit, cfg.availableOperationRunSuspendReasons, operationRunSuspendReasons, actions);
+        await this.generateUpdateActions_configurationType(client, type, cfg, 2, allowInherit, cfg.availableOvertimeReasons, overtimeReasons, actions);
         await this.generateUpdateActions_configurationType(client, type, cfg, 4, allowInherit, cfg.availableUnderproductionReasons, underproductionReasons, actions);
     }
 
