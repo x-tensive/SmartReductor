@@ -483,6 +483,21 @@ export class dpa {
         await this.REST_JSON_CALL("/api/schedule/attachScheduleToParent/" + ownerTypeId + "/" + ownerId, "POST", null);
     }
 
+    public async availableReason_getAllReasons(ownerTypeId: number, ownerId: number, reasonType: number): Promise<any>
+    {
+        return this.REST_JSON_TRANSACTION("/api/availableReason/getAllReasons/" + ownerTypeId + "/" + ownerId + "/" + reasonType, "GET", null);
+    }
+
+    public async availableReason_attachReasonsToParent(ownerTypeId: number, ownerId: number, reasonType: number): Promise<any>
+    {
+        return this.REST_JSON_TRANSACTION("/api/availableReason/attachReasonsToParent/" + ownerTypeId + "/" + ownerId + "/" + reasonType, "POST", null);
+    }
+
+    public async availableReason_detachReasonsFromParent(ownerTypeId: number, ownerId: number, reasonType: number): Promise<any>
+    {
+        return this.REST_JSON_TRANSACTION("/api/availableReason/detachReasonsFromParent/" + ownerTypeId + "/" + ownerId + "/" + reasonType, "POST", null);
+    }
+
     private constructor(url: string, user: string, password: string)
     {
         this.url = url;

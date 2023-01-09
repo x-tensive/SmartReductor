@@ -3,9 +3,16 @@
     "shiftSchedule": "template 1",
     "shiftScheduleBefore": 30,
     "shiftScheduleAfter": 360,
+    "availableDowntimeReasons": "all",
+    "availableOperationRunSuspendReasons": "all",
+    "availableOvertimeReasons": "all",
+    "availableUnderproductionReasons": "all",
     "sites": [
         {
             "name": "area 2",
+            "availableDowntimeReasons": "all",
+            "availableOperationRunSuspendReasons": "inherit",
+            "availableOvertimeReasons": [ "Incorrect rate" ],
             "departments": [
                 {
                     "name": "department MAIN",

@@ -8,7 +8,7 @@ import { importBase } from "./importBase.js";
 
 export class importDowntimeReasons extends importBase
 {
-    static async prepareCfg(client: dpa): Promise<{ typesCfg: any, updateActions: any[] }>
+    static async prepareCfg(client: dpa): Promise<{ typesCfg: any, reasonsCfg: any, updateActions: any[] }>
     {
         console.log("downtime reason types READ CONFIGURATION");
         const typesCfg = smartReductorConfig.readDowntimeReasonTypesConfiguration();
@@ -32,7 +32,7 @@ export class importDowntimeReasons extends importBase
         updateActions = updateActions.concat(reasonsUpdateActions);
         updateActions = updateActions.concat(typesUpdateActions.filter((item) => item.actionName.startsWith("Remove")));
 
-        return { typesCfg: typesCfg, updateActions: updateActions };
+        return { typesCfg: typesCfg, reasonsCfg: reasonsCfg, updateActions: updateActions };
     }
 
     static async run(client: dpa): Promise<void>

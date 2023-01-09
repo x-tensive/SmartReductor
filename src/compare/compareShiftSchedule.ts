@@ -22,8 +22,6 @@ export class compareShiftSchedule
         if (typeof cfg.shiftScheduleAfter === "undefined")
             throw "shiftScheduleAfter is undefined";
 
-        
-
         const ownerTypes = await client.getShiftScheduleOwnerTypes();
         const ownerTypeId = ownerTypes.byEnum(typeName)!.id;
         const templateId = shiftTemplatesCfg.find((item) => item.name == cfg.shiftSchedule)!.id;
@@ -77,7 +75,7 @@ export class compareShiftSchedule
         }
     }
 
-    public static async generateUpdateActions_workCenter(client: dpa, shiftTemplatesCfg: any[], workCenterCfg: any, actions: any[]): Promise<void>
+    private static async generateUpdateActions_workCenter(client: dpa, shiftTemplatesCfg: any[], workCenterCfg: any, actions: any[]): Promise<void>
     {
         if (workCenterCfg.shiftSchedule) {
             actions.push(this.generateApplyTemplateAction("UpdateWorkCenter", "Equipment", workCenterCfg, shiftTemplatesCfg));
@@ -89,7 +87,7 @@ export class compareShiftSchedule
         }
     }
 
-    public static async generateUpdateActions_department(client: dpa, shiftTemplatesCfg: any[], departmentCfg: any, actions: any[]): Promise<void>
+    private static async generateUpdateActions_department(client: dpa, shiftTemplatesCfg: any[], departmentCfg: any, actions: any[]): Promise<void>
     {
         if (departmentCfg.shiftSchedule) {
             actions.push(this.generateApplyTemplateAction("UpdateDepartment", "Department", departmentCfg, shiftTemplatesCfg));
@@ -110,7 +108,7 @@ export class compareShiftSchedule
         }
     }
 
-    public static async generateUpdateActions_site(client: dpa, shiftTemplatesCfg: any[], siteCfg: any, actions: any[]): Promise<void>
+    private static async generateUpdateActions_site(client: dpa, shiftTemplatesCfg: any[], siteCfg: any, actions: any[]): Promise<void>
     {
         if (siteCfg.shiftSchedule) {
             actions.push(this.generateApplyTemplateAction("UpdateSite", "Site", siteCfg, shiftTemplatesCfg));

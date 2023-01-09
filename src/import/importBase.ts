@@ -7,11 +7,11 @@ export abstract class importBase
     {
         for (const action of actions) {
             if (action.actionName.startsWith("Remove"))
-                console.log("  ", chalk.yellow(action.actionName + ":"), "[" + action.id + "]", action.name);
+                console.log("  " + chalk.yellow(action.actionName + ": ") + "[" + action.id + "] " + action.name);
             if (action.actionName.startsWith("Create"))
-                console.log("  ", action.actionName + ":", action.cfg.name);
+                console.log("  " + action.actionName + ": " + action.cfg.name);
             if (action.actionName.startsWith("Update"))
-                console.log("  ", action.actionName + ":", action.cfg.name);
+                console.log("  " + action.actionName + ": " + action.cfg.name);
         }
     }
 

@@ -18,6 +18,7 @@ import { overtimeReasons } from "./extract/overtimeReasons.js";
 import { importOvertimeReasons } from "./import/importOvertimeReasons.js";
 import { underproductionReasons } from "./extract/underproductionReasons.js";
 import { importUnderproductionReasons } from "./import/importUnderproductionReasons.js";
+import { importEnterpriseStructAvailableReasons } from "./import/importEnterpriseStructAvailableReasons.js";
 
 const targetBuilder: CommandBuilder = {
     target: {
@@ -31,7 +32,8 @@ const targetBuilder: CommandBuilder = {
             "downtimeReasons",
             "operationRunSuspendReasons",
             "overtimeReasons",
-            "underproductionReasons"
+            "underproductionReasons",
+            "enterpriseStructAvailableReasons"
         ] as const
     },
     url :{
@@ -76,6 +78,8 @@ yargs(hideBin(process.argv))
                     await importOvertimeReasons.run(client);
                 else if (parsed.target == "underproductionReasons")
                     await importUnderproductionReasons.run(client);
+                else if (parsed.target == "enterpriseStructAvailableReasons")
+                    await importEnterpriseStructAvailableReasons.run(client);
                 else
                     throw "not supported";
             }
