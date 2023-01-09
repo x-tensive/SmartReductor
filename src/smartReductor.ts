@@ -16,6 +16,8 @@ import { operationRunSuspendReasons } from "./extract/operationRunSuspendReasons
 import { importOperationRunSuspendReasons } from "./import/importOperationRunSuspendReasons.js";
 import { overtimeReasons } from "./extract/overtimeReasons.js";
 import { importOvertimeReasons } from "./import/importOvertimeReasons.js";
+import { underproductionReasons } from "./extract/underproductionReasons.js";
+import { importUnderproductionReasons } from "./import/importUnderproductionReasons.js";
 
 const targetBuilder: CommandBuilder = {
     target: {
@@ -28,7 +30,8 @@ const targetBuilder: CommandBuilder = {
             "downtimeReasonTypes",
             "downtimeReasons",
             "operationRunSuspendReasons",
-            "overtimeReasons"
+            "overtimeReasons",
+            "underproductionReasons"
         ] as const
     },
     url :{
@@ -71,6 +74,8 @@ yargs(hideBin(process.argv))
                     await importOperationRunSuspendReasons.run(client);
                 else if (parsed.target == "overtimeReasons")
                     await importOvertimeReasons.run(client);
+                else if (parsed.target == "underproductionReasons")
+                    await importUnderproductionReasons.run(client);
                 else
                     throw "not supported";
             }
@@ -104,6 +109,8 @@ yargs(hideBin(process.argv))
                     console.log(JSON.stringify(await operationRunSuspendReasons.fetch(client), undefined, 2));
                 else if (parsed.target == "overtimeReasons")
                     console.log(JSON.stringify(await overtimeReasons.fetch(client), undefined, 2));
+                else if (parsed.target == "underproductionReasons")
+                    console.log(JSON.stringify(await underproductionReasons.fetch(client), undefined, 2));
                 else
                     throw "not supported";
             }

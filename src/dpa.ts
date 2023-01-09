@@ -440,6 +440,34 @@ export class dpa {
         return this.REST_JSON_TRANSACTION("/api/referenceBook/removeReferenceBookRecord/ReferenceBookReasonsOfOvertime/" + id, "POST", null);
     }
 
+    public async referenceBook_getUnderproductionReasons(): Promise<any>
+    {
+        return this.REST_JSON_TRANSACTION("/api/ReferenceBook/getReferenceBookDatas/UnderproductionReason", "POST", {});
+    }
+
+    public async referenceBook_createUnderproductionReason(name: string, color: string, sortOrder: number): Promise<any>
+    {
+        let record = await this.REST_JSON_TRANSACTION("/api/referenceBook/getReferenceBookRecord/UnderproductionReason/0", "GET", null);
+        record.fields.find((item: any) => item.name == "Name").value = name;
+        record.fields.find((item: any) => item.name == "Color").value = color;
+        record.fields.find((item: any) => item.name == "SortOrder").value = sortOrder;
+        return this.REST_JSON_TRANSACTION("/api/referenceBook/saveReferenceBookRecord", "POST", record);
+    }
+
+    public async referenceBook_updateUnderproductionReason(id: number, name: string, color: string, sortOrder: number): Promise<any>
+    {
+        let record = await this.REST_JSON_TRANSACTION("/api/referenceBook/getReferenceBookRecord/UnderproductionReason/" + id, "GET", null);
+        record.fields.find((item: any) => item.name == "Name").value = name;
+        record.fields.find((item: any) => item.name == "Color").value = color;
+        record.fields.find((item: any) => item.name == "SortOrder").value = sortOrder;
+        return this.REST_JSON_TRANSACTION("/api/referenceBook/saveReferenceBookRecord", "POST", record);
+    }
+
+    public async referenceBook_removeUnderproductionReason(id: number): Promise<any>
+    {
+        return this.REST_JSON_TRANSACTION("/api/referenceBook/removeReferenceBookRecord/UnderproductionReason/" + id, "POST", null);
+    }
+
     public async shiftSchedule_get(ownerTypeId: number, ownerId: number, trunc: boolean, start: string, end: string): Promise<any>
     {
         return this.REST_JSON_TRANSACTION("/api/schedule/getSchedule/" + ownerTypeId + "/" + ownerId + "/" + trunc, "POST", { start: start, end: end });

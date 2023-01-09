@@ -9,7 +9,7 @@
             "program": "${workspaceFolder}/build/smartReductor.js",
             "args": [ 
                 "import",
-                "overtimeReasons",
+                "underproductionReasons",
                 "--url", "http://smartreductor.francecentral.cloudapp.azure.com",
                 "--user", "admin",
                 "--password", "admin"
