@@ -1,0 +1,16 @@
+[
+    {
+        "code": "RS-OFFTIME",
+        "name": "Off time",
+        "color": "#6B8E23",
+        "isAdditionalTime": false,
+        "sortOrder": 10
+    },
+    {
+        "code": "RS-BREAK",
+        "name": "Break",
+        "color": "#DB7093",
+        "isAdditionalTime": false,
+        "sortOrder": 20
+    }
+]

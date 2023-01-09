@@ -31,4 +31,16 @@ export class smartReductorConfig
         const buffer = fs.readFileSync("./data/downtimeReasons.json");
         return JSON.parse(buffer.toString());
     }
+
+    public static readOperationRunSuspendReasonsConfiguration(): any
+    {
+        const buffer = fs.readFileSync("./data/operationRunSuspendReasons.json");
+        return JSON.parse(buffer.toString());
+    }
+
+    public static readOvertimeReasonsConfiguration(): any
+    {
+        const buffer = fs.readFileSync("./data/overtimeReasons.json");
+        return JSON.parse(buffer.toString());
+    }
 }

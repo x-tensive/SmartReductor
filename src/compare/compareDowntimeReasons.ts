@@ -27,7 +27,7 @@ export class compareDowntimeReasons
         const allowSetInAnalytics = (cfg: any): boolean => cfg.allowSetInAnalytics ?? false;
         const allowSetInOperator = (cfg: any): boolean => cfg.allowSetInOperator ?? false;
         const isImportant = (cfg: any): boolean => cfg.isImportant ?? false;
-        const sortOrder = (cfg: any): number => cfg.sortOrder ?? false;
+        const sortOrder = (cfg: any): number => cfg.sortOrder ?? 0;
     
         for (const reasonCfg of reasonsCfg) {
             const existentReasonCfg = existentCfg.find((item: any) => item.name == reasonCfg.name);

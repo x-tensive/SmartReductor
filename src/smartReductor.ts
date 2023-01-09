@@ -12,6 +12,10 @@ import { importShiftTemplates } from "./import/importShiftTemplates.js";
 import { downtimeReasonTypes } from "./extract/downtimeReasonTypes.js";
 import { downtimeReasons } from "./extract/downtimeReasons.js";
 import { importDowntimeReasons } from "./import/importDowntimeReasons.js";
+import { operationRunSuspendReasons } from "./extract/operationRunSuspendReasons.js";
+import { importOperationRunSuspendReasons } from "./import/importOperationRunSuspendReasons.js";
+import { overtimeReasons } from "./extract/overtimeReasons.js";
+import { importOvertimeReasons } from "./import/importOvertimeReasons.js";
 
 const targetBuilder: CommandBuilder = {
     target: {
@@ -22,7 +26,9 @@ const targetBuilder: CommandBuilder = {
             "shifts",
             "shiftSchedule",
             "downtimeReasonTypes",
-            "downtimeReasons"
+            "downtimeReasons",
+            "operationRunSuspendReasons",
+            "overtimeReasons"
         ] as const
     },
     url :{
@@ -61,6 +67,10 @@ yargs(hideBin(process.argv))
                     await importShiftSchedule.run(client);
                 else if (parsed.target == "downtimeReasons")
                     await importDowntimeReasons.run(client);
+                else if (parsed.target == "operationRunSuspendReasons")
+                    await importOperationRunSuspendReasons.run(client);
+                else if (parsed.target == "overtimeReasons")
+                    await importOvertimeReasons.run(client);
                 else
                     throw "not supported";
             }
@@ -90,6 +100,10 @@ yargs(hideBin(process.argv))
                     console.log(JSON.stringify(await downtimeReasonTypes.fetch(client), undefined, 2));
                 else if (parsed.target == "downtimeReasons")
                     console.log(JSON.stringify(await downtimeReasons.fetch(client), undefined, 2));
+                else if (parsed.target == "operationRunSuspendReasons")
+                    console.log(JSON.stringify(await operationRunSuspendReasons.fetch(client), undefined, 2));
+                else if (parsed.target == "overtimeReasons")
+                    console.log(JSON.stringify(await overtimeReasons.fetch(client), undefined, 2));
                 else
                     throw "not supported";
             }
