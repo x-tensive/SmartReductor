@@ -503,6 +503,16 @@ export class dpa {
         return this.REST_JSON_TRANSACTION("/api/availableReason/updateAvailableReasons/" + ownerTypeId + "/" + ownerId + "/" + reasonType, "POST", reasonIds);
     }
 
+    public async settings_getGroups(): Promise<any>
+    {
+        return this.REST_JSON_TRANSACTION("/api/settings/getGroups", "GET", null);
+    }
+
+    public async settings_saveSettings(settings: any[]): Promise<any>
+    {
+        return this.REST_JSON_TRANSACTION("/api/settings/saveSettings", "POST", settings);
+    }
+
     private constructor(url: string, user: string, password: string)
     {
         this.url = url;

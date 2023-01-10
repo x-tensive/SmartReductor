@@ -49,4 +49,10 @@ export class smartReductorConfig
         const buffer = fs.readFileSync("./data/underproductionReasons.json");
         return JSON.parse(buffer.toString());
     }
+
+    public static readSettingsConfiguration(): any
+    {
+        const buffer = fs.readFileSync("./data/settings.json");
+        return JSON.parse(buffer.toString());
+    }
 }

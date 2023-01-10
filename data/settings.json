@@ -1,0 +1,23 @@
+[
+    {
+        "name": "Reason filtration",
+        "settings": [
+            {
+                "name": "Downtime reason filtration",
+                "value": true 
+            },
+            {
+                "name": "Overtime reason filtration",
+                "value": false 
+            },
+            {
+                "name": "Operation run suspend reason filtration",
+                "value": true 
+            },
+            {
+                "name": "Underproduction reason filtration",
+                "value": true 
+            }
+        ]
+    }
+]
