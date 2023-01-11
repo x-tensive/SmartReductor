@@ -468,6 +468,30 @@ export class dpa {
         return this.REST_JSON_TRANSACTION("/api/referenceBook/removeReferenceBookRecord/UnderproductionReason/" + id, "POST", null);
     }
 
+    public async referenceBook_getWorkCenterGroups(): Promise<any>
+    {
+        return this.REST_JSON_TRANSACTION("/api/ReferenceBook/getReferenceBookDatas/ReferenceBookOfGroupOfWorkingCenters", "POST", {});
+    }
+
+    public async referenceBook_createWorkCenterGroup(name: string): Promise<any>
+    {
+        let record = await this.REST_JSON_TRANSACTION("/api/referenceBook/getReferenceBookRecord/ReferenceBookOfGroupOfWorkingCenters/0", "GET", null);
+        record.fields.find((item: any) => item.name == "Name").value = name;
+        return this.REST_JSON_TRANSACTION("/api/referenceBook/saveReferenceBookRecord", "POST", record);
+    }
+
+    public async referenceBook_updateWorkCenterGroup(id: number, name: string): Promise<any>
+    {
+        let record = await this.REST_JSON_TRANSACTION("/api/referenceBook/getReferenceBookRecord/ReferenceBookOfGroupOfWorkingCenters/" + id, "GET", null);
+        record.fields.find((item: any) => item.name == "Name").value = name;
+        return this.REST_JSON_TRANSACTION("/api/referenceBook/saveReferenceBookRecord", "POST", record);
+    }
+
+    public async referenceBook_removeWorkCenterGroup(id: number): Promise<any>
+    {
+        return this.REST_JSON_TRANSACTION("/api/referenceBook/removeReferenceBookRecord/ReferenceBookOfGroupOfWorkingCenters/" + id, "POST", null);
+    }
+
     public async shiftSchedule_get(ownerTypeId: number, ownerId: number, trunc: boolean, start: string, end: string): Promise<any>
     {
         return this.REST_JSON_TRANSACTION("/api/schedule/getSchedule/" + ownerTypeId + "/" + ownerId + "/" + trunc, "POST", { start: start, end: end });

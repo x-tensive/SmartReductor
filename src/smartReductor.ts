@@ -21,6 +21,8 @@ import { importUnderproductionReasons } from "./import/importUnderproductionReas
 import { importEnterpriseStructAvailableReasons } from "./import/importEnterpriseStructAvailableReasons.js";
 import { importSettings } from "./import/importSettings.js";
 import { settings } from "./extract/settings.js";
+import { workCenterGroups } from "./extract/workCenterGroups.js";
+import { importWorkCenterGroups } from "./import/importWorkCenterGroups.js";
 
 const targetBuilder: CommandBuilder = {
     target: {
@@ -36,7 +38,8 @@ const targetBuilder: CommandBuilder = {
             "overtimeReasons",
             "underproductionReasons",
             "enterpriseStructAvailableReasons",
-            "settings"
+            "settings",
+            "workCenterGroups"
         ] as const
     },
     url :{
@@ -85,6 +88,8 @@ yargs(hideBin(process.argv))
                     await importEnterpriseStructAvailableReasons.run(client);
                 else if (parsed.target == "settings")
                     await importSettings.run(client);
+                else if (parsed.target == "workCenterGroups")
+                    await importWorkCenterGroups.run(client);
                 else
                     throw "not supported";
             }
@@ -122,6 +127,8 @@ yargs(hideBin(process.argv))
                     console.log(JSON.stringify(await underproductionReasons.fetch(client), undefined, 2));
                 else if (parsed.target == "settings")
                     console.log(JSON.stringify(await settings.fetch(client), undefined, 2));
+                else if (parsed.target == "workCenterGroups")
+                    console.log(JSON.stringify(await workCenterGroups.fetch(client), undefined, 2));
                 else
                     throw "not supported";
             }

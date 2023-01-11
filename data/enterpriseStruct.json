@@ -3,7 +3,7 @@
     "shiftSchedule": "template 1",
     "shiftScheduleBefore": 30,
     "shiftScheduleAfter": 360,
-    "availableDowntimeReasons": "all",
+    "availableDowntimeReasons": ["Change parts","Dinner","Repairs"],
     "availableOperationRunSuspendReasons": "all",
     "availableOvertimeReasons": "all",
     "availableUnderproductionReasons": "all",

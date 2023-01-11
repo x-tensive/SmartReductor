@@ -55,4 +55,10 @@ export class smartReductorConfig
         const buffer = fs.readFileSync("./data/settings.json");
         return JSON.parse(buffer.toString());
     }
+
+    public static readWorkCenterGroupsConfiguration(): any
+    {
+        const buffer = fs.readFileSync("./data/workCenterGroups.json");
+        return JSON.parse(buffer.toString());
+    }
 }
