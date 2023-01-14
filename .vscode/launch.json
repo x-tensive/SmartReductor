@@ -3,7 +3,7 @@
     "configurations": [
         {
             "name": "Node: Launch SmartReductor",
-            "program": "${workspaceFolder}/build/smartReductor.js",
+            "program": "${workspaceFolder}/bin/smartReductor.js",
             "args": [ 
                 "import",
                 "workCenterProps",
