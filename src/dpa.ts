@@ -200,6 +200,11 @@ export class dpa {
         });
     }
 
+    public async manageEnterpriseStructure_updateWorkCenter(instance: any): Promise<any>
+    {
+        return this.REST_JSON_TRANSACTION("/api/ManageEnterpriseStructure/saveEquipment", "POST", instance);
+    }
+
     public async manageEnterpriseStructure_removeWorkCenter(id: number): Promise<any>
     {
         return this.REST_JSON_TRANSACTION("/api/ManageEnterpriseStructure/removeEquipment/" + id, "POST", null);

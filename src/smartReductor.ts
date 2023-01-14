@@ -23,6 +23,7 @@ import { importSettings } from "./import/importSettings.js";
 import { settings } from "./extract/settings.js";
 import { workCenterGroups } from "./extract/workCenterGroups.js";
 import { importWorkCenterGroups } from "./import/importWorkCenterGroups.js";
+import { importWorkCenterProps } from "./import/importWorkCenterProps.js";
 
 const targetBuilder: CommandBuilder = {
     target: {
@@ -39,7 +40,8 @@ const targetBuilder: CommandBuilder = {
             "underproductionReasons",
             "enterpriseStructAvailableReasons",
             "settings",
-            "workCenterGroups"
+            "workCenterGroups",
+            "workCenterProps"
         ] as const
     },
     url :{
@@ -90,6 +92,8 @@ yargs(hideBin(process.argv))
                     await importSettings.run(client);
                 else if (parsed.target == "workCenterGroups")
                     await importWorkCenterGroups.run(client);
+                else if (parsed.target == "workCenterProps")
+                    await importWorkCenterProps.run(client);
                 else
                     throw "not supported";
             }

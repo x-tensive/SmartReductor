@@ -6,7 +6,7 @@
             "program": "${workspaceFolder}/build/smartReductor.js",
             "args": [ 
                 "import",
-                "workCenterGroups",
+                "workCenterProps",
                 "--url", "http://smartreductor.francecentral.cloudapp.azure.com",
                 "--user", "admin",
                 "--password", "admin"
