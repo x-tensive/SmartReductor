@@ -6,7 +6,7 @@ import { importBase } from "./importBase.js";
 
 export class importWorkCenterGroups extends importBase
 {
-    static async prepareCfg(client: dpa): Promise<{ groupsCfg: any, updateActions: any[] }>
+    static async prepareCfg(client: dpa): Promise<{ groupsCfg: workCenterGroupCfg[], updateActions: any[] }>
     {
         console.log("workCenter groups READ CONFIGURATION");
         const groupsCfg = smartReductorConfig.readWorkCenterGroupsConfiguration();

@@ -2,19 +2,19 @@ import fs from "fs";
 
 export class smartReductorConfig
 {
-    public static readEnterpriseStructConfig(): any
+    public static readEnterpriseStructConfig(): enterpriseCfg
     {
         const buffer = fs.readFileSync("./data/enterpriseStruct.json");
         return JSON.parse(buffer.toString());
     }
 
-    public static readShiftsConfiguration(): any
+    public static readShiftsConfiguration(): shiftCfg[]
     {
         const buffer = fs.readFileSync("./data/shifts.json");
         return JSON.parse(buffer.toString());
     }
 
-    public static readShiftTemplatesConfiguration(): any
+    public static readShiftTemplatesConfiguration(): shiftTemplateCfg[]
     {
         const buffer = fs.readFileSync("./data/shiftTemplates.json");
         return JSON.parse(buffer.toString());
@@ -56,7 +56,7 @@ export class smartReductorConfig
         return JSON.parse(buffer.toString());
     }
 
-    public static readWorkCenterGroupsConfiguration(): any
+    public static readWorkCenterGroupsConfiguration(): workCenterGroupCfg[]
     {
         const buffer = fs.readFileSync("./data/workCenterGroups.json");
         return JSON.parse(buffer.toString());

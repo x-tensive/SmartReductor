@@ -13,7 +13,7 @@ export class compareShiftSchedule
         return date;
     }
 
-    private static async applyTemplate(client: dpa, shiftTemplatesCfg: any[], cfg: any, typeName: string)
+    private static async applyTemplate(client: dpa, shiftTemplatesCfg: shiftTemplateCfg[], cfg: shiftScheduleOwnerCfg, typeName: string)
     {
         if (typeof cfg.shiftSchedule === "undefined")
             throw "shiftSchedule is undefined";
@@ -24,19 +24,19 @@ export class compareShiftSchedule
 
         const ownerTypes = await client.getShiftScheduleOwnerTypes();
         const ownerTypeId = ownerTypes.byEnum(typeName)!.id;
-        const templateId = shiftTemplatesCfg.find((item) => item.name == cfg.shiftSchedule)!.id;
+        const templateId = shiftTemplatesCfg.find((item) => item.name == cfg.shiftSchedule)!.id!;
         const before = this.currentDateAddDays(-cfg.shiftScheduleBefore);
         const after = this.currentDateAddDays(cfg.shiftScheduleAfter);
         
-        await client.shiftSchedule_applyTemplate(ownerTypeId, cfg.id, templateId, before.toISOString(), after.toISOString());
+        await client.shiftSchedule_applyTemplate(ownerTypeId, cfg.id!, templateId, before.toISOString(), after.toISOString());
     }
 
-    private static async attachToParent(client: dpa, cfg: any, typeName: string)
+    private static async attachToParent(client: dpa, cfg: shiftScheduleOwnerCfg, typeName: string)
     {
         const ownerTypes = await client.getShiftScheduleOwnerTypes();
         const ownerTypeId = ownerTypes.byEnum(typeName)!.id;
 
-        await client.shiftSchedule_attachToParent(ownerTypeId, cfg.id, );
+        await client.shiftSchedule_attachToParent(ownerTypeId, cfg.id!);
     }
 
     private static async isShiftScheduleInherited(client: dpa, typeName: string, id: number): Promise<boolean>
@@ -51,7 +51,7 @@ export class compareShiftSchedule
         return result.scheduleOwnerId != id;
     }
 
-    private static generateApplyTemplateAction(actionName: string, typeName: string, cfg: any, shiftTemplatesCfg: any[]): any
+    private static generateApplyTemplateAction(actionName: string, typeName: string, cfg: shiftScheduleOwnerCfg, shiftTemplatesCfg: shiftTemplateCfg[]): any
     {
         return {
             actionName: actionName,
@@ -63,7 +63,7 @@ export class compareShiftSchedule
         }
     }
 
-    private static generateAttachToParenteAction(actionName: string, typeName: string, cfg: any): any
+    private static generateAttachToParenteAction(actionName: string, typeName: string, cfg: shiftScheduleOwnerCfg): any
     {
         return {
             actionName: actionName,
@@ -75,24 +75,24 @@ export class compareShiftSchedule
         }
     }
 
-    private static async generateUpdateActions_workCenter(client: dpa, shiftTemplatesCfg: any[], workCenterCfg: any, actions: any[]): Promise<void>
+    private static async generateUpdateActions_workCenter(client: dpa, shiftTemplatesCfg: shiftTemplateCfg[], workCenterCfg: workCenterCfg, actions: any[]): Promise<void>
     {
         if (workCenterCfg.shiftSchedule) {
             actions.push(this.generateApplyTemplateAction("UpdateWorkCenter", "Equipment", workCenterCfg, shiftTemplatesCfg));
         } else {
-            const isInherited = await this.isShiftScheduleInherited(client, "Equipment", workCenterCfg.id);
+            const isInherited = await this.isShiftScheduleInherited(client, "Equipment", workCenterCfg.id!);
             if (!isInherited) {
                 actions.push(this.generateAttachToParenteAction("UpdateWorkCenter", "Equipment", workCenterCfg));
             }
         }
     }
 
-    private static async generateUpdateActions_department(client: dpa, shiftTemplatesCfg: any[], departmentCfg: any, actions: any[]): Promise<void>
+    private static async generateUpdateActions_department(client: dpa, shiftTemplatesCfg: shiftTemplateCfg[], departmentCfg: departmentCfg, actions: any[]): Promise<void>
     {
         if (departmentCfg.shiftSchedule) {
             actions.push(this.generateApplyTemplateAction("UpdateDepartment", "Department", departmentCfg, shiftTemplatesCfg));
         } else {
-            const isInherited = await this.isShiftScheduleInherited(client, "Department", departmentCfg.id);
+            const isInherited = await this.isShiftScheduleInherited(client, "Department", departmentCfg.id!);
             if (!isInherited) {
                 actions.push(this.generateAttachToParenteAction("UpdateDepartment", "Department", departmentCfg));
             }
@@ -108,12 +108,12 @@ export class compareShiftSchedule
         }
     }
 
-    private static async generateUpdateActions_site(client: dpa, shiftTemplatesCfg: any[], siteCfg: any, actions: any[]): Promise<void>
+    private static async generateUpdateActions_site(client: dpa, shiftTemplatesCfg: shiftTemplateCfg[], siteCfg: siteCfg, actions: any[]): Promise<void>
     {
         if (siteCfg.shiftSchedule) {
             actions.push(this.generateApplyTemplateAction("UpdateSite", "Site", siteCfg, shiftTemplatesCfg));
         } else {
-            const isInherited = await this.isShiftScheduleInherited(client, "Site", siteCfg.id);
+            const isInherited = await this.isShiftScheduleInherited(client, "Site", siteCfg.id!);
             if (!isInherited) {
                 actions.push(this.generateAttachToParenteAction("UpdateSite", "Site", siteCfg));
             }
@@ -125,14 +125,14 @@ export class compareShiftSchedule
         }
     }
 
-    public static async generateUpdateActions(client: dpa, shiftTemplatesCfg: any[], enterpriseStructCfg: any): Promise<any[]>
+    public static async generateUpdateActions(client: dpa, shiftTemplatesCfg: shiftTemplateCfg[], enterpriseCfg: enterpriseCfg): Promise<any[]>
     {
         let actions: any[] = [];
 
-        actions.push(this.generateApplyTemplateAction("UpdateEnterprise", "Enterprise", enterpriseStructCfg, shiftTemplatesCfg));
+        actions.push(this.generateApplyTemplateAction("UpdateEnterprise", "Enterprise", enterpriseCfg, shiftTemplatesCfg));
 
-        if (enterpriseStructCfg.sites) {
-            for (const siteCfg of enterpriseStructCfg.sites)
+        if (enterpriseCfg.sites) {
+            for (const siteCfg of enterpriseCfg.sites)
                 await this.generateUpdateActions_site(client, shiftTemplatesCfg, siteCfg, actions);
         }
 

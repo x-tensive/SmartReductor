@@ -7,7 +7,7 @@ import { importShifts } from "./importShifts.js";
 
 export class importShiftTemplates extends importBase
 {
-    static async prepareCfg(client: dpa, shiftsCfg: any): Promise<{ shiftTemplatesCfg: any, updateActions: any[] }>
+    static async prepareCfg(client: dpa, shiftsCfg: any): Promise<{ shiftTemplatesCfg: shiftTemplateCfg[], updateActions: any[] }>
     {
         console.log("shift templates READ CONFIGURATION");
         const shiftTemplatesCfg = smartReductorConfig.readShiftTemplatesConfiguration();

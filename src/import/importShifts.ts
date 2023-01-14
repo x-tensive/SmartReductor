@@ -6,7 +6,7 @@ import { importBase } from "./importBase.js";
 
 export class importShifts extends importBase
 {
-    static async prepareCfg(client: dpa): Promise<{ shiftsCfg: any, updateActions: any[] }>
+    static async prepareCfg(client: dpa): Promise<{ shiftsCfg: shiftCfg[], updateActions: any[] }>
     {
         console.log("shifts READ CONFIGURATION");
         const shiftsCfg = smartReductorConfig.readShiftsConfiguration();

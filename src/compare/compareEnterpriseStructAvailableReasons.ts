@@ -22,13 +22,13 @@ export class compareEnterpriseStructAvailableReasons
         return true;
     }
 
-    private static async generateUpdateActions_configurationType(client: dpa, type: number, cfg: any, reasonType: number, allowInherit: boolean, targetCfg: any, reasons: any[], actions: any[]): Promise<void>
+    private static async generateUpdateActions_configurationType(client: dpa, type: number, cfg: availableReasonsOwnerCfg, reasonType: number, allowInherit: boolean, targetCfg: any, reasons: any[], actions: any[]): Promise<void>
     {
         const inherit = targetCfg == "inherit" || !targetCfg;
         if (inherit && !allowInherit)
             throw "inheritance is not allowed";
         
-        const currentCfg = await client.availableReason_getAllReasons(type, cfg.id, reasonType);
+        const currentCfg = await client.availableReason_getAllReasons(type, cfg.id!, reasonType);
         
         if (inherit) {
             if (!currentCfg.useParentReasons) {
@@ -70,7 +70,7 @@ export class compareEnterpriseStructAvailableReasons
         });
     }
     
-    private static async generateUpdateActions_configuration(client: dpa, type: number, cfg: any, allowInherit: boolean, downtimeReasons: any[], operationRunSuspendReasons: any[], overtimeReasons: any[], underproductionReasons: any[], actions: any[]): Promise<void>
+    private static async generateUpdateActions_configuration(client: dpa, type: number, cfg: availableReasonsOwnerCfg, allowInherit: boolean, downtimeReasons: any[], operationRunSuspendReasons: any[], overtimeReasons: any[], underproductionReasons: any[], actions: any[]): Promise<void>
     {
         await this.generateUpdateActions_configurationType(client, type, cfg, 1, allowInherit, cfg.availableDowntimeReasons, downtimeReasons, actions);
         await this.generateUpdateActions_configurationType(client, type, cfg, 3, allowInherit, cfg.availableOperationRunSuspendReasons, operationRunSuspendReasons, actions);
@@ -78,12 +78,12 @@ export class compareEnterpriseStructAvailableReasons
         await this.generateUpdateActions_configurationType(client, type, cfg, 4, allowInherit, cfg.availableUnderproductionReasons, underproductionReasons, actions);
     }
 
-    private static async generateUpdateActions_workCenter(client: dpa, workCenterCfg: any, downtimeReasons: any[], operationRunSuspendReasons: any[], overtimeReasons: any[], underproductionReasons: any[], actions: any[]): Promise<void>
+    private static async generateUpdateActions_workCenter(client: dpa, workCenterCfg: workCenterCfg, downtimeReasons: any[], operationRunSuspendReasons: any[], overtimeReasons: any[], underproductionReasons: any[], actions: any[]): Promise<void>
     {
         return this.generateUpdateActions_configuration(client, 4, workCenterCfg, true, downtimeReasons, operationRunSuspendReasons, overtimeReasons, underproductionReasons, actions);
     }
 
-    private static async generateUpdateActions_department(client: dpa, departmentCfg: any, downtimeReasons: any[], operationRunSuspendReasons: any[], overtimeReasons: any[], underproductionReasons: any[], actions: any[]): Promise<void>
+    private static async generateUpdateActions_department(client: dpa, departmentCfg: departmentCfg, downtimeReasons: any[], operationRunSuspendReasons: any[], overtimeReasons: any[], underproductionReasons: any[], actions: any[]): Promise<void>
     {
         await this.generateUpdateActions_configuration(client, 3, departmentCfg, true, downtimeReasons, operationRunSuspendReasons, overtimeReasons, underproductionReasons, actions);
 
@@ -97,7 +97,7 @@ export class compareEnterpriseStructAvailableReasons
         }
     }
 
-    private static async generateUpdateActions_site(client: dpa, siteCfg: any, downtimeReasons: any[], operationRunSuspendReasons: any[], overtimeReasons: any[], underproductionReasons: any[], actions: any[]): Promise<void>
+    private static async generateUpdateActions_site(client: dpa, siteCfg: siteCfg, downtimeReasons: any[], operationRunSuspendReasons: any[], overtimeReasons: any[], underproductionReasons: any[], actions: any[]): Promise<void>
     {
         await this.generateUpdateActions_configuration(client, 2, siteCfg, true, downtimeReasons, operationRunSuspendReasons, overtimeReasons, underproductionReasons, actions);
         
@@ -107,7 +107,7 @@ export class compareEnterpriseStructAvailableReasons
         }
     }
 
-    public static async generateUpdateActions(client: dpa, enterpriseCfg: any, downtimeReasons: any[], operationRunSuspendReasons: any[], overtimeReasons: any[], underproductionReasons: any[]): Promise<any[]>
+    public static async generateUpdateActions(client: dpa, enterpriseCfg: enterpriseCfg, downtimeReasons: any[], operationRunSuspendReasons: any[], overtimeReasons: any[], underproductionReasons: any[]): Promise<any[]>
     {
         let actions: any[] = [];
 

@@ -2,19 +2,19 @@ import { dpa } from "../dpa";
 
 export class compareWorkCenterProps
 {
-    private static get_model = (workCenterCfg: any): string => workCenterCfg.model ?? "";
+    private static get_model = (workCenterCfg: workCenterCfg): string => workCenterCfg.model ?? "";
     
-    private static get_inventoryNumber = (workCenterCfg: any): string => workCenterCfg.inventoryNumber ?? "";
+    private static get_inventoryNumber = (workCenterCfg: workCenterCfg): string => workCenterCfg.inventoryNumber ?? "";
     
-    private static get_description = (workCenterCfg: any): string => workCenterCfg.description ?? "";
+    private static get_description = (workCenterCfg: workCenterCfg): string => workCenterCfg.description ?? "";
     
-    private static get_groups = (workCenterCfg: any, workCenterGroupsCfg: any[]): number[] => {
+    private static get_groups = (workCenterCfg: workCenterCfg, workCenterGroupsCfg: workCenterGroupCfg[]): number[] => {
         return workCenterCfg.groups ?
-            workCenterCfg.groups.map((name: any) => workCenterGroupsCfg.find((g: any) => g.name == name).id) :
+            workCenterCfg.groups.map((name) => workCenterGroupsCfg.find((g) => g.name == name)!.id!) :
             [];
     }
     
-    private static get_counterType = (workCenterCfg: any): number => {
+    private static get_counterType = (workCenterCfg: workCenterCfg): number => {
         if (typeof workCenterCfg.counterType == "undefined")
             return 0;
         if (workCenterCfg.counterType == "CP")
@@ -26,7 +26,7 @@ export class compareWorkCenterProps
         throw "specified counter type is not supported";
     }
 
-    private static get_counterIncrementType = (workCenterCfg: any): number => {
+    private static get_counterIncrementType = (workCenterCfg: workCenterCfg): number => {
         if (typeof workCenterCfg.counterIncrementType == "undefined")
             return 0;
         if (workCenterCfg.counterIncrementType == "diff")
@@ -36,19 +36,19 @@ export class compareWorkCenterProps
         throw "specified counter increment type is not supported";
     }
     
-    private static get_counterDiscreteness = (workCenterCfg: any): number => {
+    private static get_counterDiscreteness = (workCenterCfg: workCenterCfg): number => {
         if (typeof workCenterCfg.counterDiscreteness == "undefined")
             return 1;
         return workCenterCfg.counterDiscreteness;
     }
 
-    private static get_normativeDiscreteness = (workCenterCfg: any): number => {
+    private static get_normativeDiscreteness = (workCenterCfg: workCenterCfg): number => {
         if (typeof workCenterCfg.normativeDiscreteness == "undefined")
             return 1;
         return workCenterCfg.normativeDiscreteness;
     }
 
-    private static get_qualityMark = (workCenterCfg: any): number => {
+    private static get_qualityMark = (workCenterCfg: workCenterCfg): number => {
         if (typeof workCenterCfg.qualityMark == "undefined")
             return 0;
         if (workCenterCfg.qualityMark == "conditionalGood")
@@ -60,19 +60,19 @@ export class compareWorkCenterProps
         throw "specified quality mark is not supported";
     }
 
-    private static get_masterMustComfirmIncompleteJobClose = (workCenterCfg: any): boolean => workCenterCfg.masterMustComfirmIncompleteJobClose ?? false;
+    private static get_masterMustComfirmIncompleteJobClose = (workCenterCfg: workCenterCfg): boolean => workCenterCfg.masterMustComfirmIncompleteJobClose ?? false;
     
-    private static get_masterMustComfirmDisorderedJobStart = (workCenterCfg: any): boolean => workCenterCfg.masterMustComfirmDisorderedJobStart ?? false;
+    private static get_masterMustComfirmDisorderJobStar = (workCenterCfg: workCenterCfg): boolean => workCenterCfg.masterMustComfirmDisorderJobStar ?? false;
 
-    private static get_allowMultipleTasksSimultaneously = (workCenterCfg: any): boolean => workCenterCfg.allowMultipleTasksSimultaneously ?? false;
+    private static get_allowMultipleJobsRun = (workCenterCfg: workCenterCfg): boolean => workCenterCfg.allowMultipleJobsRun ?? false;
 
-    private static get_prohibitedJobStartWhenAnotherJobIsSuspended = (workCenterCfg: any): boolean => workCenterCfg.prohibitedJobStartWhenAnotherJobIsSuspended ?? false;
+    private static get_forbidJobStartWhenAnotherJobIsSuspended = (workCenterCfg: workCenterCfg): boolean => workCenterCfg.forbidJobStartWhenAnotherJobIsSuspended ?? false;
 
-    private static get_allowMultiplePersonalShifts = (workCenterCfg: any): boolean => workCenterCfg.allowMultiplePersonalShifts ?? false;
+    private static get_allowMultiplePersonalShifts = (workCenterCfg: workCenterCfg): boolean => workCenterCfg.allowMultiplePersonalShifts ?? false;
 
-    private static get_useMachineStatisticsOutput = (workCenterCfg: any): boolean => workCenterCfg.useMachineStatisticsOutput ?? false;
+    private static get_useMachineStatisticsOutput = (workCenterCfg: workCenterCfg): boolean => workCenterCfg.useMachineStatisticsOutput ?? false;
     
-    private static get_parseCP = (workCenterCfg: any): number => {
+    private static get_parseCP = (workCenterCfg: workCenterCfg): number => {
         if (typeof workCenterCfg.parseCP == "undefined")
             return 0;
         if (workCenterCfg.parseCP == "none")
@@ -84,7 +84,7 @@ export class compareWorkCenterProps
         throw "specified parse CP is not supported";
     }
 
-    private static get_parseCPsystemName = (workCenterCfg: any): number => {
+    private static get_parseCPsystemName = (workCenterCfg: workCenterCfg): number => {
         if (typeof workCenterCfg.parseCPsystemName == "undefined")
             return 0;
         if (workCenterCfg.parseCPsystemName == "disabled")
@@ -109,7 +109,7 @@ export class compareWorkCenterProps
         return true;
     }
 
-    private static isChanged(workCenterCfg: any, workCenter: any, workCenterGroupsCfg: any[]): boolean
+    private static isChanged(workCenterCfg: workCenterCfg, workCenter: any, workCenterGroupsCfg: workCenterGroupCfg[]): boolean
     {
         if (this.get_model(workCenterCfg) != workCenter.model) return true;
         if (this.get_inventoryNumber(workCenterCfg) != workCenter.inventoryNumber) return true;
@@ -121,9 +121,9 @@ export class compareWorkCenterProps
         if (this.get_normativeDiscreteness(workCenterCfg) != workCenter.normativeReleaseDiscreteness) return true;
         if (this.get_qualityMark(workCenterCfg) != workCenter.releaseQualityMark) return true;
         if (this.get_masterMustComfirmIncompleteJobClose(workCenterCfg) != workCenter.masterMustComfirmIncompleteJobClose) return true;
-        if (this.get_masterMustComfirmDisorderedJobStart(workCenterCfg) != workCenter.masterMustComfirmDisorderedJobStart) return true;
-        if (this.get_allowMultipleTasksSimultaneously(workCenterCfg) != workCenter.allowMultipleTasksSimultaneously) return true;
-        if (this.get_prohibitedJobStartWhenAnotherJobIsSuspended(workCenterCfg) != workCenter.prohibitedJobStartWhenAnotherJobIsSuspended) return true;
+        if (this.get_masterMustComfirmDisorderJobStar(workCenterCfg) != workCenter.masterMustComfirmDisorderedJobStart) return true;
+        if (this.get_allowMultipleJobsRun(workCenterCfg) != workCenter.allowMultipleTasksSimultaneously) return true;
+        if (this.get_forbidJobStartWhenAnotherJobIsSuspended(workCenterCfg) != workCenter.prohibitedJobStartWhenAnotherJobIsSuspended) return true;
         if (this.get_allowMultiplePersonalShifts(workCenterCfg) != workCenter.allowMultiplePersonalShifts) return true;
         if (this.get_useMachineStatisticsOutput(workCenterCfg) != workCenter.useMachineStatisticsOutput) return true;
         if (this.get_parseCP(workCenterCfg) != workCenter.parseNcDataType) return true;
@@ -131,7 +131,7 @@ export class compareWorkCenterProps
         return false;
     }
 
-    private static updateProps(workCenterCfg: any, workCenter: any, workCenterGroupsCfg: any[]): void
+    private static updateProps(workCenterCfg: workCenterCfg, workCenter: any, workCenterGroupsCfg: workCenterGroupCfg[]): void
     {
         workCenter.model = this.get_model(workCenterCfg);
         workCenter.inventoryNumber = this.get_inventoryNumber(workCenterCfg);
@@ -143,18 +143,18 @@ export class compareWorkCenterProps
         workCenter.normativeReleaseDiscreteness = this.get_normativeDiscreteness(workCenterCfg);
         workCenter.releaseQualityMark = this.get_qualityMark(workCenterCfg);
         workCenter.masterMustComfirmIncompleteJobClose = this.get_masterMustComfirmIncompleteJobClose(workCenterCfg);
-        workCenter.masterMustComfirmDisorderedJobStart = this.get_masterMustComfirmDisorderedJobStart(workCenterCfg);
-        workCenter.allowMultipleTasksSimultaneously = this.get_allowMultipleTasksSimultaneously(workCenterCfg);
-        workCenter.prohibitedJobStartWhenAnotherJobIsSuspended = this.get_prohibitedJobStartWhenAnotherJobIsSuspended(workCenterCfg);
+        workCenter.masterMustComfirmDisorderedJobStart = this.get_masterMustComfirmDisorderJobStar(workCenterCfg);
+        workCenter.allowMultipleTasksSimultaneously = this.get_allowMultipleJobsRun(workCenterCfg);
+        workCenter.prohibitedJobStartWhenAnotherJobIsSuspended = this.get_forbidJobStartWhenAnotherJobIsSuspended(workCenterCfg);
         workCenter.allowMultiplePersonalShifts = this.get_allowMultiplePersonalShifts(workCenterCfg);
         workCenter.useMachineStatisticsOutput = this.get_useMachineStatisticsOutput(workCenterCfg);
         workCenter.parseNcDataType = this.get_parseCP(workCenterCfg);
         workCenter.ncSystemNameFormatType = this.get_parseCPsystemName(workCenterCfg);
     }
 
-    private static async generateUpdateActions_workCenter(client: dpa, workCenterCfg: any, workCenterGroupsCfg: any[], actions: any[]): Promise<void>
+    private static async generateUpdateActions_workCenter(client: dpa, workCenterCfg: workCenterCfg, workCenterGroupsCfg: workCenterGroupCfg[], actions: any[]): Promise<void>
     {
-        const workCenter = await client.manageEnterpriseStructure_getWorkCenter(workCenterCfg.id);
+        const workCenter = await client.manageEnterpriseStructure_getWorkCenter(workCenterCfg.id!);
         if (this.isChanged(workCenterCfg, workCenter, workCenterGroupsCfg)) {
             this.updateProps(workCenterCfg, workCenter, workCenterGroupsCfg);
             actions.push({
@@ -167,7 +167,7 @@ export class compareWorkCenterProps
         }
     }
 
-    private static async generateUpdateActions_department(client: dpa, departmentCfg: any, workCenterGroupsCfg: any[], actions: any[]): Promise<void>
+    private static async generateUpdateActions_department(client: dpa, departmentCfg: departmentCfg, workCenterGroupsCfg: workCenterGroupCfg[], actions: any[]): Promise<void>
     {
         if (departmentCfg.departments) {
             for (const subDepartmentCfg of departmentCfg.departments)
@@ -179,14 +179,14 @@ export class compareWorkCenterProps
         }
     }
 
-    private static async generateUpdateActions_site(client: dpa, siteCfg: any, workCenterGroupsCfg: any[], actions: any[]): Promise<void>
+    private static async generateUpdateActions_site(client: dpa, siteCfg: siteCfg, workCenterGroupsCfg: workCenterGroupCfg[], actions: any[]): Promise<void>
     {
         if (siteCfg.departments) {
             for (const departmentCfg of siteCfg.departments)
                 await this.generateUpdateActions_department(client, departmentCfg, workCenterGroupsCfg, actions);
         }
     }
-    public static async generateUpdateActions(client: dpa, enterpriseCfg: any, workCenterGroupsCfg: any[]): Promise<any[]>
+    public static async generateUpdateActions(client: dpa, enterpriseCfg: enterpriseCfg, workCenterGroupsCfg: workCenterGroupCfg[]): Promise<any[]>
     {
         let actions: any[] = [];
 

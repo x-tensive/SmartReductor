@@ -2,7 +2,7 @@ import { dpa } from "../dpa";
 
 export class compareShifts
 {
-    public static generateUpdateActions(shiftsCfg: any, existentCfg: any[]): any[]
+    public static generateUpdateActions(shiftsCfg: shiftCfg[], existentCfg: any[]): any[]
     {
         let actions: any[] = [];
 

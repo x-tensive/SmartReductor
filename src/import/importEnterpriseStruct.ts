@@ -6,7 +6,7 @@ import { importBase } from "./importBase.js";
 
 export class importEnterpriseStruct extends importBase
 {
-    static async prepareCfg(client: dpa): Promise<{ enterpriseCfg: any, updateActions: any[] }>
+    static async prepareCfg(client: dpa): Promise<{ enterpriseCfg: enterpriseCfg, updateActions: any[] }>
     {
         console.log("enterprise struct READ CONFIGURATION");
         const enterpriseCfg = smartReductorConfig.readEnterpriseStructConfig();

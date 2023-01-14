@@ -2,7 +2,7 @@ import { dpa } from "../dpa";
 
 export class compareShiftTemplates
 {
-    private static getIntervals(shiftsCfg: any[], intervalsCfg: any[]): any[]
+    private static getIntervals(shiftsCfg: shiftCfg[], intervalsCfg: any[]): any[]
     {
         return intervalsCfg.map((cfg) => ({
             start: cfg.start,
@@ -36,7 +36,7 @@ export class compareShiftTemplates
         return true;
     }
 
-    public static async generateUpdateActions(client: dpa, shiftsCfg: any[], shiftTemplatesCfg: any, existentCfg: any[]): Promise<any[]>
+    public static async generateUpdateActions(client: dpa, shiftsCfg: shiftCfg[], shiftTemplatesCfg: shiftTemplateCfg[], existentCfg: any[]): Promise<any[]>
     {
         let actions: any[] = [];
 

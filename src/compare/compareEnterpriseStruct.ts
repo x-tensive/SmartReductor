@@ -2,72 +2,72 @@ import { dpa } from "../dpa.js";
 
 export class compareEnterpriseStruct
 {
-    private static generateRemoveActions_workCenter(workCenterCfg: any, actions: any[])
+    private static generateRemoveActions_workCenter(workCenter: any, actions: any[])
     {
         actions.push({
             actionName: "RemoveWorkCenter",
-            id: workCenterCfg.id,
-            name: workCenterCfg.name,
+            id: workCenter.id,
+            name: workCenter.name,
             execute: async (client: dpa, action: any) => {
                 await client.manageEnterpriseStructure_removeWorkCenter(action.id);
             }
         });
     }
 
-    private static generateRemoveActions_storageZone(storageZoneCfg: any, actions: any[])
+    private static generateRemoveActions_storageZone(storageZone: any, actions: any[])
     {
         actions.push({
             actionName: "RemoveStorageZone",
-            id: storageZoneCfg.id,
-            name: storageZoneCfg.name,
+            id: storageZone.id,
+            name: storageZone.name,
             execute: async (client: dpa, action: any) => {
                 await client.manageEnterpriseStructure_removeStorageZone(action.id);
             }
         });
     }
 
-    private static generateRemoveActions_department(departmentCfg: any, actions: any[])
+    private static generateRemoveActions_department(department: any, actions: any[])
     {
-        for (const subDepartmentCfg of departmentCfg.departments) this.generateRemoveActions_department(subDepartmentCfg,  actions);
-        for (const workCenterCfg of departmentCfg.workCenters) this.generateRemoveActions_workCenter(workCenterCfg, actions);
-        for (const storageZoneCfg of departmentCfg.storageZones) this.generateRemoveActions_storageZone(storageZoneCfg, actions);
+        for (const subDepartmentCfg of department.departments) this.generateRemoveActions_department(subDepartmentCfg,  actions);
+        for (const workCenterCfg of department.workCenters) this.generateRemoveActions_workCenter(workCenterCfg, actions);
+        for (const storageZoneCfg of department.storageZones) this.generateRemoveActions_storageZone(storageZoneCfg, actions);
         actions.push({
             actionName: "RemoveDepartment",
-            id: departmentCfg.id,
-            name: departmentCfg.name,
+            id: department.id,
+            name: department.name,
             execute: async (client: dpa, action: any) => {
                 await client.manageEnterpriseStructure_removeDepartment(action.id);
             }
         });
     }
 
-    private static generateRemoveActions_site(siteCfg: any, actions: any[])
+    private static generateRemoveActions_site(site: any, actions: any[])
     {
-        for (const departmentCfg of siteCfg.departments) this.generateRemoveActions_department(departmentCfg,  actions);
+        for (const departmentCfg of site.departments) this.generateRemoveActions_department(departmentCfg,  actions);
         actions.push({
             actionName: "RemoveSite",
-            id: siteCfg.id,
-            name: siteCfg.name,
+            id: site.id,
+            name: site.name,
             execute: async (client: dpa, action: any) => {
                 await client.manageEnterpriseStructure_removeSite(action.id);
             }
         });
     }
 
-    private static generateRemoveActions_enterprise(enterpriseCfg: any, actions: any[])
+    private static generateRemoveActions_enterprise(enterprise: any, actions: any[])
     {
-        for (const siteCfg of enterpriseCfg.sites) this.generateRemoveActions_site(siteCfg, actions);
+        for (const siteCfg of enterprise.sites) this.generateRemoveActions_site(siteCfg, actions);
         actions.push({
             actionName: "RemoveEnterprise",
-            id: enterpriseCfg.id,
-            name: enterpriseCfg.name,
+            id: enterprise.id,
+            name: enterprise.name,
             execute: async (client: dpa, action: any) => {
                 await client.manageEnterpriseStructure_removeEnterprise(action.id);
             }
         });
     }
 
-    private static generateCreateActions_workCenter(departmentCfg: any, workCenterCfg: any, actions: any[])
+    private static generateCreateActions_workCenter(departmentCfg: departmentCfg, workCenterCfg: workCenterCfg, actions: any[])
     {
         actions.push({
             actionName: "CreateWorkCenter",
@@ -80,7 +80,7 @@ export class compareEnterpriseStruct
         });
     }
 
-    private static generateCreateActions_storageZone(departmentCfg: any, storageZoneCfg: any, actions: any[])
+    private static generateCreateActions_storageZone(departmentCfg: departmentCfg, storageZoneCfg: storageZoneCfg, actions: any[])
     {
         actions.push({
             actionName: "CreateStorageZone",
@@ -93,7 +93,7 @@ export class compareEnterpriseStruct
         });
     }
 
-    private static generateCreateActions_department(siteCfg: any, parentDepartmentCfg: any, departmentCfg: any, actions: any[])
+    private static generateCreateActions_department(siteCfg: siteCfg, parentDepartmentCfg: departmentCfg | null, departmentCfg: departmentCfg, actions: any[])
     {
         actions.push({
             actionName: "CreateDepartment",
@@ -119,7 +119,7 @@ export class compareEnterpriseStruct
         }
     }
 
-    private static generateCreateActions_site(enterpriseCfg: any, siteCfg: any, actions: any[])
+    private static generateCreateActions_site(enterpriseCfg: enterpriseCfg, siteCfg: siteCfg, actions: any[])
     {
         actions.push({
             actionName: "CreateSite",
@@ -136,7 +136,7 @@ export class compareEnterpriseStruct
         }
     }
 
-    private static generateCreateActions_enterprise(enterpriseCfg: any, actions: any[])
+    private static generateCreateActions_enterprise(enterpriseCfg: enterpriseCfg, actions: any[])
     {
         actions.push({
             actionName: "CreateEnterprise",
@@ -152,7 +152,7 @@ export class compareEnterpriseStruct
         }
     }
     
-    private static generateUpdateActions_workCenters(departmentCfg: any, workCentersCfg: any[], existentWorkCentersCfg: any[], actions: any[])
+    private static generateUpdateActions_workCenters(departmentCfg: departmentCfg, workCentersCfg: workCenterCfg[] | undefined, existentWorkCentersCfg: any[], actions: any[])
     {
         for (const existentWorkCenterCfg of existentWorkCentersCfg) {
             const workCenterCfg = workCentersCfg?.find((item) => item.name == existentWorkCenterCfg.name);
@@ -174,7 +174,7 @@ export class compareEnterpriseStruct
         }
     }
 
-    private static generateUpdateActions_storageZones(departmentCfg: any, storageZonesCfg: any[], existentStorageZonesCfg: any[], actions: any[])
+    private static generateUpdateActions_storageZones(departmentCfg: departmentCfg, storageZonesCfg: storageZoneCfg[] | undefined, existentStorageZonesCfg: any[], actions: any[])
     {
         for (const existentStorageZoneCfg of existentStorageZonesCfg) {
             const storageZoneCfg = storageZonesCfg?.find((item) => item.name == existentStorageZoneCfg.name);
@@ -196,7 +196,7 @@ export class compareEnterpriseStruct
         }
     }
 
-    private static generateUpdateActions_departments(siteCfg: any, parentDepartmentCfg: any, departmentsCfg: any[], existentDepartmentsCfg: any[], actions: any[])
+    private static generateUpdateActions_departments(siteCfg: any, parentDepartmentCfg: departmentCfg | null, departmentsCfg: departmentCfg[] | undefined, existentDepartmentsCfg: any[], actions: any[])
     {
         for (const existentDepartmentCfg of existentDepartmentsCfg) {
             const departmentCfg = departmentsCfg?.find((item) => item.name == existentDepartmentCfg.name);
@@ -222,7 +222,7 @@ export class compareEnterpriseStruct
         }
     }
 
-    private static generateUpdateActions_sites(enterpriseCfg: any, sitesCfg: any[], existentSitesCfg: any[], actions: any[])
+    private static generateUpdateActions_sites(enterpriseCfg: any, sitesCfg: siteCfg[] | undefined, existentSitesCfg: any[], actions: any[])
     {
         for (const existentSiteCfg of existentSitesCfg) {
             const siteCfg = sitesCfg?.find((item) => item.name == existentSiteCfg.name);
@@ -246,7 +246,7 @@ export class compareEnterpriseStruct
         }
     }
 
-    public static generateUpdateActions(enterpriseCfg: any, existentCfg: any[]): any[]
+    public static generateUpdateActions(enterpriseCfg: enterpriseCfg, existentCfg: any[]): any[]
     {
         let actions: any[] = [];
 

@@ -2,7 +2,7 @@ import { dpa } from "../dpa";
 
 export class compareWorkCenterGroups
 {
-    public static generateUpdateActions(groupsCfg: any, existentCfg: any[]): any[]
+    public static generateUpdateActions(groupsCfg: workCenterGroupCfg[], existentCfg: any[]): any[]
     {
         let actions: any[] = [];
 
