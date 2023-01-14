@@ -2,7 +2,7 @@ import { dpa } from "../dpa";
 
 export class compareDowntimeReasonTypes
 {
-    public static generateUpdateActions(typesCfg: any, existentCfg: any[]): any[]
+    public static generateUpdateActions(typesCfg: downtimeReasonTypeCfg[], existentCfg: any[]): any[]
     {
         let actions: any[] = [];
 

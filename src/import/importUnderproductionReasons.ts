@@ -6,7 +6,7 @@ import { importBase } from "./importBase.js";
 
 export class importUnderproductionReasons extends importBase
 {
-    static async prepareCfg(client: dpa): Promise<{ reasonsCfg: any, updateActions: any[] }>
+    static async prepareCfg(client: dpa): Promise<{ reasonsCfg: underproductionReasonCfg[], updateActions: any[] }>
     {
         console.log("underproduction reasons READ CONFIGURATION");
         const reasonsCfg = smartReductorConfig.readUnderproductionReasonsConfiguration();

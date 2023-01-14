@@ -6,7 +6,7 @@ import { importBase } from "./importBase.js";
 
 export class importSettings extends importBase
 {
-    static async prepareCfg(client: dpa): Promise<{ settingsCfg: any, updateActions: any[] }>
+    static async prepareCfg(client: dpa): Promise<{ settingsCfg: settingGroupCfg[], updateActions: any[] }>
     {
         console.log("settings READ CONFIGURATION");
         const settingsCfg = smartReductorConfig.readSettingsConfiguration();

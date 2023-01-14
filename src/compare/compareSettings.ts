@@ -2,7 +2,7 @@ import { dpa } from "../dpa";
 
 export class compareSettings
 {
-    private static generateUpdateActions_setting(settingCfg: any, existentSetting: any, actions: any[])
+    private static generateUpdateActions_setting(settingCfg: settingCfg, existentSetting: any, actions: any[])
     {
         settingCfg.sid = existentSetting.sid;
         settingCfg.type = existentSetting.type;
@@ -17,7 +17,7 @@ export class compareSettings
         }
     }
 
-    private static generateUpdateActions_group(groupCfg: any, existentGroup: any, actions: any[])
+    private static generateUpdateActions_group(groupCfg: settingGroupCfg, existentGroup: any, actions: any[])
     {
         if (groupCfg.groups) {
             for (const subGroupCfg of groupCfg.groups) {
@@ -34,7 +34,7 @@ export class compareSettings
         }
     }
 
-    public static generateUpdateActions(settingsCfg: any, existentCfg: any[]): any[]
+    public static generateUpdateActions(settingsCfg: settingGroupCfg[], existentCfg: any[]): any[]
     {
         let actions: any[] = [];
 

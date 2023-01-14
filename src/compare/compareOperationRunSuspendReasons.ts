@@ -2,7 +2,7 @@ import { dpa } from "../dpa";
 
 export class compareOperationRunSuspendReasons
 {
-    public static generateUpdateActions(reasonsCfg: any, existentCfg: any[]): any[]
+    public static generateUpdateActions(reasonsCfg: operationRunSuspendReasonCfg[], existentCfg: any[]): any[]
     {
         let actions: any[] = [];
 
@@ -20,8 +20,8 @@ export class compareOperationRunSuspendReasons
             }
         }
 
-        const isAdditionalTime = (cfg: any): boolean => cfg.isImportant ?? false;
-        const sortOrder = (cfg: any): number => cfg.sortOrder ?? false;
+        const isAdditionalTime = (cfg: operationRunSuspendReasonCfg): boolean => cfg.isAdditionalTime ?? false;
+        const sortOrder = (cfg: operationRunSuspendReasonCfg): number => cfg.sortOrder ?? 0;
     
         for (const reasonCfg of reasonsCfg) {
             const existentReasonCfg = existentCfg.find((item: any) => item.name == reasonCfg.name);

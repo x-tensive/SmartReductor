@@ -20,37 +20,37 @@ export class smartReductorConfig
         return JSON.parse(buffer.toString());
     }
 
-    public static readDowntimeReasonTypesConfiguration(): any
+    public static readDowntimeReasonTypesConfiguration(): downtimeReasonTypeCfg[]
     {
         const buffer = fs.readFileSync("./data/downtimeReasonTypes.json");
         return JSON.parse(buffer.toString());
     }
 
-    public static readDowntimeReasonsConfiguration(): any
+    public static readDowntimeReasonsConfiguration(): downtimeReasonCfg[]
     {
         const buffer = fs.readFileSync("./data/downtimeReasons.json");
         return JSON.parse(buffer.toString());
     }
 
-    public static readOperationRunSuspendReasonsConfiguration(): any
+    public static readOperationRunSuspendReasonsConfiguration(): operationRunSuspendReasonCfg[]
     {
         const buffer = fs.readFileSync("./data/operationRunSuspendReasons.json");
         return JSON.parse(buffer.toString());
     }
 
-    public static readOvertimeReasonsConfiguration(): any
+    public static readOvertimeReasonsConfiguration(): overtimeReasonCfg[]
     {
         const buffer = fs.readFileSync("./data/overtimeReasons.json");
         return JSON.parse(buffer.toString());
     }
 
-    public static readUnderproductionReasonsConfiguration(): any
+    public static readUnderproductionReasonsConfiguration(): underproductionReasonCfg[]
     {
         const buffer = fs.readFileSync("./data/underproductionReasons.json");
         return JSON.parse(buffer.toString());
     }
 
-    public static readSettingsConfiguration(): any
+    public static readSettingsConfiguration(): settingGroupCfg[]
     {
         const buffer = fs.readFileSync("./data/settings.json");
         return JSON.parse(buffer.toString());

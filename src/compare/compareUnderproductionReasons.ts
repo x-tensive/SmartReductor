@@ -2,7 +2,7 @@ import { dpa } from "../dpa";
 
 export class compareUnderproductionReasons
 {
-    public static generateUpdateActions(reasonsCfg: any, existentCfg: any[]): any[]
+    public static generateUpdateActions(reasonsCfg: underproductionReasonCfg[], existentCfg: any[]): any[]
     {
         let actions: any[] = [];
 
@@ -20,7 +20,7 @@ export class compareUnderproductionReasons
             }
         }
 
-        const sortOrder = (cfg: any): number => cfg.sortOrder ?? false;
+        const sortOrder = (cfg: underproductionReasonCfg): number => cfg.sortOrder ?? 0;
     
         for (const reasonCfg of reasonsCfg) {
             const existentReasonCfg = existentCfg.find((item: any) => item.name == reasonCfg.name);

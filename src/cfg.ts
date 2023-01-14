@@ -96,3 +96,65 @@ interface shiftTemplateCfg
     type: "Week" | "Day";
     intervals: shiftTemplateIntervalCfg[];
 }
+
+interface downtimeReasonTypeCfg
+{
+    id: number | undefined;
+    name: string;
+}
+
+interface downtimeReasonCfg
+{
+    id: number | undefined;
+    name: string;
+    color: string;
+    reasonCategory: string | undefined;
+    reasonType: string;
+    allowSetInAnalytics: boolean | undefined;
+    allowSetInOperator: boolean | undefined;
+    isImportant: boolean | undefined;
+    sortOrder: number | undefined;
+}
+
+interface operationRunSuspendReasonCfg
+{
+    id: number | undefined;
+    code: string | undefined;
+    name: string;
+    color: string;
+    isAdditionalTime: boolean | undefined;
+    sortOrder: number | undefined;
+}
+
+interface overtimeReasonCfg
+{
+    id: number | undefined;
+    code: string | undefined;
+    name: string;
+    color: string;
+    isAdditionalTime: boolean | undefined;
+    sortOrder: number | undefined;
+}
+
+interface underproductionReasonCfg
+{
+    id: number | undefined;
+    name: string;
+    color: string;
+    sortOrder: number | undefined;
+}
+
+interface settingCfg
+{
+    sid: string | undefined;
+    type: number | undefined;
+    name: string;
+    value: any;
+}
+
+interface settingGroupCfg
+{
+    name: string;
+    groups: settingGroupCfg[] | undefined;
+    settings: settingCfg[] | undefined;
+}

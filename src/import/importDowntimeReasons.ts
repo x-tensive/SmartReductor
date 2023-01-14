@@ -8,7 +8,7 @@ import { importBase } from "./importBase.js";
 
 export class importDowntimeReasons extends importBase
 {
-    static async prepareCfg(client: dpa): Promise<{ typesCfg: any, reasonsCfg: any, updateActions: any[] }>
+    static async prepareCfg(client: dpa): Promise<{ typesCfg: downtimeReasonTypeCfg[], reasonsCfg: downtimeReasonCfg[], updateActions: any[] }>
     {
         console.log("downtime reason types READ CONFIGURATION");
         const typesCfg = smartReductorConfig.readDowntimeReasonTypesConfiguration();

@@ -6,7 +6,7 @@ import { importBase } from "./importBase.js";
 
 export class importOperationRunSuspendReasons extends importBase
 {
-    static async prepareCfg(client: dpa): Promise<{ reasonsCfg: any, updateActions: any[] }>
+    static async prepareCfg(client: dpa): Promise<{ reasonsCfg: operationRunSuspendReasonCfg[], updateActions: any[] }>
     {
         console.log("operation run/suspend reasons READ CONFIGURATION");
         const reasonsCfg = smartReductorConfig.readOperationRunSuspendReasonsConfiguration();

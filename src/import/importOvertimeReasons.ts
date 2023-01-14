@@ -6,7 +6,7 @@ import { importBase } from "./importBase.js";
 
 export class importOvertimeReasons extends importBase
 {
-    static async prepareCfg(client: dpa): Promise<{ reasonsCfg: any, updateActions: any[] }>
+    static async prepareCfg(client: dpa): Promise<{ reasonsCfg: overtimeReasonCfg[], updateActions: any[] }>
     {
         console.log("overtime reasons READ CONFIGURATION");
         const reasonsCfg = smartReductorConfig.readOvertimeReasonsConfiguration();
