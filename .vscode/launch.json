@@ -5,8 +5,8 @@
             "name": "Node: Launch SmartReductor",
             "program": "${workspaceFolder}/bin/smartReductor.js",
             "args": [ 
-                "import",
-                "shiftTemplates",
+                "dump",
+                "workCenterGroups",
                 "--url", "http://smartreductor.francecentral.cloudapp.azure.com",
                 "--user", "admin",
                 "--password", "admin"

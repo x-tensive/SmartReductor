@@ -88,51 +88,51 @@ yargs(hideBin(process.argv))
                 .command(createImportCommandModule(
                     "enterpriseStruct",
                     "import enterprise structure",
-                    importEnterpriseStruct.run))
+                    (client: dpa) => importEnterpriseStruct.run(client)))
                 .command(createImportCommandModule(
                     "shifts",
                     "import shifts",
-                    importShifts.run))
+                    (client: dpa) => importShifts.run(client)))
                 .command(createImportCommandModule(
                     "shiftTemplates",
                     "import shifts templates",
-                    importShiftTemplates.run))
+                    (client: dpa) => importShiftTemplates.run(client)))
                 .command(createImportCommandModule(
                     "shiftSchedule",
                     "import shifts schedule",
-                    importShiftSchedule.run))
+                    (client: dpa) => importShiftSchedule.run(client)))
                 .command(createImportCommandModule(
                     "downtimeReasons",
                     "import downtime reasons",
-                    importDowntimeReasons.run))
+                    (client: dpa) => importDowntimeReasons.run(client)))
                 .command(createImportCommandModule(
                     "operationRunSuspendReasons",
                     "import operationRunSuspend reasons",
-                    importOperationRunSuspendReasons.run))
+                    (client: dpa) => importOperationRunSuspendReasons.run(client)))
                 .command(createImportCommandModule(
                     "overtimeReasons",
                     "import overtime reasons",
-                    importOvertimeReasons.run))
+                    (client: dpa) => importOvertimeReasons.run(client)))
                 .command(createImportCommandModule(
                     "underproductionReasons",
                     "import underproduction reasons",
-                    importUnderproductionReasons.run))
+                    (client: dpa) => importUnderproductionReasons.run(client)))
                 .command(createImportCommandModule(
                     "enterpriseStructAvailableReasons",
                     "import enterpriseStruct available reasons",
-                    importEnterpriseStructAvailableReasons.run))
+                    (client: dpa) => importEnterpriseStructAvailableReasons.run(client)))
                 .command(createImportCommandModule(
                     "settings",
                     "import settings",
-                    importSettings.run))
+                    (client: dpa) => importSettings.run(client)))
                 .command(createImportCommandModule(
                     "workCenterGroups",
                     "import workCenter groups",
-                    importWorkCenterGroups.run))
+                    (client: dpa) => importWorkCenterGroups.run(client)))
                 .command(createImportCommandModule(
                     "workCenterProps",
                     "import workCenter props",
-                    importWorkCenterProps.run));
+                    (client: dpa) => importWorkCenterProps.run(client)));
         }
     })
     .command({
@@ -144,43 +144,43 @@ yargs(hideBin(process.argv))
                 .command(createDumpCommandModule(
                     "enterpriseStruct",
                     "dump enterprise structure",
-                    enterpriseStruct.fetch))
+                    (client: dpa) => enterpriseStruct.fetch(client)))
                 .command(createDumpCommandModule(
                     "shifts",
                     "dump shifts",
-                    shifts.fetch))
+                    (client: dpa) => shifts.fetch(client)))
                 .command(createDumpCommandModule(
                     "shiftTemplates",
                     "dump shifts templates",
-                    shiftTemplates.fetch))
+                    (client: dpa) => shiftTemplates.fetch(client)))
                 .command(createDumpCommandModule(
                     "downtimeReasonTypes",
                     "dump downtime reason types",
-                    downtimeReasonTypes.fetch))
+                    (client: dpa) => downtimeReasonTypes.fetch(client)))
                 .command(createDumpCommandModule(
                     "downtimeReasons",
                     "dump downtime reasons",
-                    downtimeReasons.fetch))
+                    (client: dpa) => downtimeReasons.fetch(client)))
                 .command(createDumpCommandModule(
                     "operationRunSuspendReasons",
                     "dump operationRunSuspend reasons",
-                    operationRunSuspendReasons.fetch))
+                    (client: dpa) => operationRunSuspendReasons.fetch(client)))
                 .command(createDumpCommandModule(
                     "overtimeReasons",
                     "dump overtime reasons",
-                    overtimeReasons.fetch))
+                    (client: dpa) => overtimeReasons.fetch(client)))
                 .command(createDumpCommandModule(
                     "underproductionReasons",
                     "dump underproduction reasons",
-                    underproductionReasons.fetch))
+                    (client: dpa) => underproductionReasons.fetch(client)))
                 .command(createDumpCommandModule(
                     "settings",
                     "dump settings",
-                    settings.fetch))
+                    (client: dpa) => settings.fetch(client)))
                 .command(createDumpCommandModule(
                     "workCenterGroups",
                     "dump workCenter groups",
-                    workCenterGroups.fetch));
+                    (client: dpa) => workCenterGroups.fetch(client)));
         }
     })
     .help()
