@@ -18,6 +18,6 @@ jobs:
     - name: npm ci
       run: npm ci
     - name: set version
-      run: npm version "${{ github.event.release.tag_name }}"
+      run: npm version "${{ github.event.release.tag_name }}" --no-git-tag-version
     - name: build
       run: npm run build
