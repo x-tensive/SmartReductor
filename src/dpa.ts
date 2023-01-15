@@ -74,12 +74,15 @@ export class dpa {
                 });
                 response.on('end', () => {
                     if (response.statusCode && response.statusCode < 400)
-                        resolve({ response: response, body: Buffer.concat(chunks_of_data) });
+                        resolve({
+                            response: response,
+                            body: Buffer.concat(chunks_of_data)
+                        });
                     else
-                        reject({ response: response });
+                        reject(new Error(response.statusCode + " " + response.statusMessage));
                 });
                 response.on("error", (error) => { 
-                    reject({ response: response, error: error });
+                    reject(error);
                 });
             });
             request.write(body);

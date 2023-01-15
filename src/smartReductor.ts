@@ -146,5 +146,7 @@ yargs(hideBin(process.argv))
         builder: targetBuilder
     })
     .help()
+    .showHelpOnFail(false)
+    .demandCommand()
     .strict()
     .argv;
