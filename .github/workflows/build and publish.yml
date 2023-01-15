@@ -11,6 +11,12 @@ jobs:
 
     - name: checkout
       uses: actions/checkout@v3
+    - name: setup node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 16.x
+    - name: npm ci
+      run: npm ci
     - name: patch version
       run: npm version "${{ github.event.release.tag_name }}"
     - name: build
