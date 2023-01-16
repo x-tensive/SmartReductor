@@ -1,3 +1,5 @@
+This is a command line tool that install virtual demo factory codename "SmartReductor". It utilizes [DPA](https://dpa-xt.com) REST API to create, update or delete objects.
+
 [![build and publish](https://github.com/x-tensive/SmartReductor/actions/workflows/build%20and%20publish.yml/badge.svg)](https://github.com/x-tensive/SmartReductor/actions/workflows/build%20and%20publish.yml)
 
 ## Install
