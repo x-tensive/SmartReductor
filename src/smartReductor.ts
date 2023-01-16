@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 
 import fs from "fs";
+import * as url from "url";
+import path from "path";
 import yargs, { CommandBuilder, CommandModule } from "yargs";
 import { hideBin } from "yargs/helpers";
 import chalk from "chalk";
@@ -29,7 +31,9 @@ import { importWorkCenterGroups } from "./import/importWorkCenterGroups.js";
 import { importWorkCenterProps } from "./import/importWorkCenterProps.js";
 import { importAll } from "./import/importAll.js";
 
-const packageJsonContent = fs.readFileSync("./package.json", { encoding: "utf8" });
+const dirName = url.fileURLToPath(new URL(".", import.meta.url));
+const packageJsonFileName = path.join(dirName, "..",  "package.json");
+const packageJsonContent = fs.readFileSync(packageJsonFileName, { encoding: "utf8" });
 const packageJson = JSON.parse(packageJsonContent);
 
 const connectionArgsBuilder: CommandBuilder = {
