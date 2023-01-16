@@ -12,6 +12,12 @@ npm install @xtensive-dpa/smartreductor
 npx smartreductor import all --url <dpahosturl> --user <username> --password <userpassword>
 ```
 
+for instance:
+
+```sh
+npx smartreductor import all --url http://localhost --user admin --password xxx
+```
+
 for a list of other commands and subcommands:
 
 ```sh
