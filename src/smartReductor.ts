@@ -26,6 +26,7 @@ import { settings } from "./extract/settings.js";
 import { workCenterGroups } from "./extract/workCenterGroups.js";
 import { importWorkCenterGroups } from "./import/importWorkCenterGroups.js";
 import { importWorkCenterProps } from "./import/importWorkCenterProps.js";
+import { importAll } from "./import/importAll.js";
 
 const connectionArgsBuilder: CommandBuilder = {
     url :{
@@ -85,6 +86,10 @@ yargs(hideBin(process.argv))
         handler: async (parsed: any) => {},
         builder: function(yargs) {
             return yargs
+                .command(createImportCommandModule(
+                    "all",
+                    "import all data",
+                    (client: dpa) => importAll.run(client)))
                 .command(createImportCommandModule(
                     "enterpriseStruct",
                     "import enterprise structure",
@@ -183,6 +188,7 @@ yargs(hideBin(process.argv))
                     (client: dpa) => workCenterGroups.fetch(client)));
         }
     })
+    .version()
     .help()
     .showHelpOnFail(false)
     .demandCommand()
