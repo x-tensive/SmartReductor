@@ -1,7 +1,7 @@
 {
   "name": "@xtensive-dpa/smartreductor",
   "version": "0.0.1",
-  "description": "",
+  "description": "This is a command line tool that installs virtual demo factory codename \"SmartReductor\"",
   "author": "X-tensive",
   "type": "module",
   "moduleResolution": "node",
