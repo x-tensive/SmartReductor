@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import fs from "fs";
 import yargs, { CommandBuilder, CommandModule } from "yargs";
 import { hideBin } from "yargs/helpers";
 import chalk from "chalk";
@@ -27,6 +28,9 @@ import { workCenterGroups } from "./extract/workCenterGroups.js";
 import { importWorkCenterGroups } from "./import/importWorkCenterGroups.js";
 import { importWorkCenterProps } from "./import/importWorkCenterProps.js";
 import { importAll } from "./import/importAll.js";
+
+const packageJsonContent = fs.readFileSync("./package.json", { encoding: "utf8" });
+const packageJson = JSON.parse(packageJsonContent);
 
 const connectionArgsBuilder: CommandBuilder = {
     url :{
@@ -188,7 +192,7 @@ yargs(hideBin(process.argv))
                     (client: dpa) => workCenterGroups.fetch(client)));
         }
     })
-    .version()
+    .version(packageJson.version)
     .help()
     .showHelpOnFail(false)
     .demandCommand()
