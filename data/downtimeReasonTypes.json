@@ -1,11 +1,11 @@
 [
-    { "name": "Malfunction" },
-    { "name": "Technology" },
-    { "name": "Service" },
-    { "name": "Repairs" },
-    { "name": "Planning" },
-    { "name": "Break" },
-    { "name": "Logistics" },
-    { "name": "Adjustment" },
-    { "name": "Short downtime" }
+    { "name": "Неисправность" },
+    { "name": "Технология" },
+    { "name": "Обслуживание" },
+    { "name": "Ремонт" },
+    { "name": "Планирование" },
+    { "name": "Перерыв" },
+    { "name": "Логистика" },
+    { "name": "Наладка" },
+    { "name": "Короткий простой" }
 ]

@@ -1,14 +1,14 @@
 [
     {
         "code": "RS-OFFTIME",
-        "name": "Off time",
+        "name": "Нерабочее время",
         "color": "#6B8E23",
         "isAdditionalTime": false,
         "sortOrder": 10
     },
     {
         "code": "RS-BREAK",
-        "name": "Break",
+        "name": "Перерыв",
         "color": "#DB7093",
         "isAdditionalTime": false,
         "sortOrder": 20

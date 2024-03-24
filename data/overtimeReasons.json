@@ -1,14 +1,14 @@
 [
     {
         "code": "OT-RATE",
-        "name": "Incorrect rate",
+        "name": "Некорректная норма",
         "color": "#6B8E23",
         "isAdditionalTime": false,
         "sortOrder": 10
     },
     {
         "code": "OT-NOOP",
-        "name": "There is no operation",
+        "name": "Отсутствует операция",
         "color": "#DB7093",
         "isAdditionalTime": false,
         "sortOrder": 20

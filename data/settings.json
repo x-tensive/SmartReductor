@@ -1,21 +1,21 @@
 [
     {
-        "name": "Reason filtration",
+        "name": "Фильтрация причин",
         "settings": [
             {
-                "name": "Downtime reason filtration",
+                "name": "Фильтровать причины простоя",
                 "value": true 
             },
             {
-                "name": "Overtime reason filtration",
+                "name": "Фильтровать причины отклонений",
                 "value": false 
             },
             {
-                "name": "Operation run suspend reason filtration",
+                "name": "Фильтровать причины приостановок операций",
                 "value": true 
             },
             {
-                "name": "Underproduction reason filtration",
+                "name": "Фильтровать причины недопроизводства",
                 "value": true 
             }
         ]

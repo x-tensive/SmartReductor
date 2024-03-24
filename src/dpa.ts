@@ -173,27 +173,27 @@ export class dpa {
 
     public async manageEnterpriseStructure_getSite(id: number): Promise<any>
     {
-        return this.REST_JSON_TRANSACTION("/api/ManageEnterpriseStructure/getSite/" + id, "GET", null);
+        return this.REST_JSON_TRANSACTION("/api/EnterpriseStructManagement/getSite/" + id, "GET", null);
     }
 
     public async manageEnterpriseStructure_getDepartment(id: number): Promise<any>
     {
-        return this.REST_JSON_TRANSACTION("/api/ManageEnterpriseStructure/getDepartment/" + id, "GET", null);
+        return this.REST_JSON_TRANSACTION("/api/EnterpriseStructManagement/getDepartment/" + id, "GET", null);
     }
 
     public async manageEnterpriseStructure_getWorkCenter(id: number): Promise<any>
     {
-        return this.REST_JSON_TRANSACTION("/api/ManageEnterpriseStructure/getEquipment/" + id, "GET", null);
+        return this.REST_JSON_TRANSACTION("/api/EnterpriseStructManagement/getEquipment/" + id, "GET", null);
     }
 
     public async manageEnterpriseStructure_getDynamicTree(parentTypeId: number, parentId: number): Promise<any[]>
     {
-        return this.REST_JSON_TRANSACTION("/api/ManageEnterpriseStructure/getDynamicTree/" + parentTypeId + "/" + parentId, "GET", null);
+        return this.REST_JSON_TRANSACTION("/api/EnterpriseStructManagement/getDynamicTree/" + parentTypeId + "/" + parentId, "GET", null);
     }
 
     public async manageEnterpriseStructure_createWorkCenter(departmentId: number, name: string): Promise<any>
     {
-        return this.REST_JSON_TRANSACTION("/api/ManageEnterpriseStructure/createEquipment", "POST", {
+        return this.REST_JSON_TRANSACTION("/api/EnterpriseStructManagement/createEquipment", "POST", {
             departmentId: departmentId,
             name: name,
             serverId: 0,
@@ -205,17 +205,17 @@ export class dpa {
 
     public async manageEnterpriseStructure_updateWorkCenter(instance: any): Promise<any>
     {
-        return this.REST_JSON_TRANSACTION("/api/ManageEnterpriseStructure/saveEquipment", "POST", instance);
+        return this.REST_JSON_TRANSACTION("/api/EnterpriseStructManagement/saveEquipment", "POST", instance);
     }
 
     public async manageEnterpriseStructure_removeWorkCenter(id: number): Promise<any>
     {
-        return this.REST_JSON_TRANSACTION("/api/ManageEnterpriseStructure/removeEquipment/" + id, "POST", null);
+        return this.REST_JSON_TRANSACTION("/api/EnterpriseStructManagement/removeEquipment/" + id, "POST", null);
     }
 
     public async manageEnterpriseStructure_createStorageZone(departmentId: number, name: string, address: string): Promise<any>
     {
-        return this.REST_JSON_TRANSACTION("/api/ManageEnterpriseStructure/createStorageZone", "POST", {
+        return this.REST_JSON_TRANSACTION("/api/EnterpriseStructManagement/createStorageZone", "POST", {
             departmentId: departmentId,
             name: name,
             address: address
@@ -224,12 +224,12 @@ export class dpa {
 
     public async manageEnterpriseStructure_removeStorageZone(id: number): Promise<any>
     {
-        return this.REST_JSON_TRANSACTION("/api/ManageEnterpriseStructure/removeStorageZone/" + id, "GET", null);
+        return this.REST_JSON_TRANSACTION("/api/EnterpriseStructManagement/removeStorageZone/" + id, "GET", null);
     }
 
     public async manageEnterpriseStructure_createDepartment(siteId: number, parentDepartmentId: number, name: string): Promise<any>
     {
-        return this.REST_JSON_TRANSACTION("/api/ManageEnterpriseStructure/createDepartment", "POST", {
+        return this.REST_JSON_TRANSACTION("/api/EnterpriseStructManagement/createDepartment", "POST", {
             siteId: siteId,
             name: name,
             ownerDepartmentId: parentDepartmentId
@@ -238,12 +238,12 @@ export class dpa {
 
     public async manageEnterpriseStructure_removeDepartment(id: number): Promise<any>
     {
-        return this.REST_JSON_TRANSACTION("/api/ManageEnterpriseStructure/removeDepartment/" + id, "POST", null);
+        return this.REST_JSON_TRANSACTION("/api/EnterpriseStructManagement/removeDepartment/" + id, "POST", null);
     }
 
     public async manageEnterpriseStructure_createSite(enterpriseId: number, name: string): Promise<any>
     {
-        return this.REST_JSON_TRANSACTION("/api/ManageEnterpriseStructure/createSite", "POST", {
+        return this.REST_JSON_TRANSACTION("/api/EnterpriseStructManagement/createSite", "POST", {
             enterpriseId: enterpriseId,
             name: name
         });
@@ -251,19 +251,19 @@ export class dpa {
 
     public async manageEnterpriseStructure_removeSite(id: number): Promise<any>
     {
-        return this.REST_JSON_TRANSACTION("/api/ManageEnterpriseStructure/removeSite/" + id, "POST", null);
+        return this.REST_JSON_TRANSACTION("/api/EnterpriseStructManagement/removeSite/" + id, "POST", null);
     }
 
     public async manageEnterpriseStructure_createEnterprise(name: string): Promise<any>
     {
-        return this.REST_JSON_TRANSACTION("/api/ManageEnterpriseStructure/create", "POST", {
+        return this.REST_JSON_TRANSACTION("/api/EnterpriseStructManagement/create", "POST", {
             name: name
         });
     }
 
     public async manageEnterpriseStructure_removeEnterprise(id: number): Promise<any>
     {
-        return this.REST_JSON_TRANSACTION("/api/ManageEnterpriseStructure/removeEnterprise/" + id, "POST", null);
+        return this.REST_JSON_TRANSACTION("/api/EnterpriseStructManagement/removeEnterprise/" + id, "POST", null);
     }
 
     public async referenceBook_getShifts(): Promise<any>
@@ -291,7 +291,7 @@ export class dpa {
 
     public async referenceBook_removeShift(id: number): Promise<any>
     {
-        return this.REST_JSON_TRANSACTION("/api/ReferenceBook/removeReferenceBookRecord/ShiftName/" + id, "POST", null);
+        return this.REST_JSON_TRANSACTION("/api/ShiftName/" + id + "/delete", "POST", null);
     }
 
     public async referenceBook_getShiftTemplates(): Promise<any>
@@ -381,7 +381,7 @@ export class dpa {
 
     public async referenceBook_removeDowntimeReason(id: number): Promise<any>
     {
-        return this.REST_JSON_TRANSACTION("/api/referenceBook/removeReferenceBookRecord/ReferenceBookReasonsOfDowntime/" + id, "POST", null);
+        return this.REST_JSON_CALL("/api/DowntimeReason/" + id + "/delete", "POST", null);
     }
 
     public async referenceBook_getOperationRunSuspendReasons(): Promise<any>

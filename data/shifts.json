@@ -1,27 +1,22 @@
 [
     {
-        "name": "Nonworking hours",
+        "name": "Нерабочее время",
         "color": "#808080",
         "isWorkingTime": false
     },
     {
-        "name": "First shift",
+        "name": "Первая смена",
         "color": "#00FF00",
         "isWorkingTime": true
     },
     {
-        "name": "Second shift",
+        "name": "Вторая смена",
         "color": "#00FFFF",
         "isWorkingTime": true
     },
     {
-        "name": "Third shift",
+        "name": "Третья смена",
         "color": "#0000FF",
         "isWorkingTime": true
-    },
-    {
-        "name": "Lunch break",
-        "color": "#f0cf3e",
-        "isWorkingTime": false
     }
 ]

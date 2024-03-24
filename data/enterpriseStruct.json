@@ -3,7 +3,7 @@
     "shiftSchedule": "template 1",
     "shiftScheduleBefore": 30,
     "shiftScheduleAfter": 360,
-    "availableDowntimeReasons": ["Change parts","Dinner","Repairs"],
+    "availableDowntimeReasons": ["Смена детали", "Обед", "Ремонт"],
     "availableOperationRunSuspendReasons": "all",
     "availableOvertimeReasons": "all",
     "availableUnderproductionReasons": "all",
@@ -12,7 +12,7 @@
             "name": "area 2",
             "availableDowntimeReasons": "all",
             "availableOperationRunSuspendReasons": "inherit",
-            "availableOvertimeReasons": [ "Incorrect rate" ],
+            "availableOvertimeReasons": [ "Некорректная норма" ],
             "departments": [
                 {
                     "name": "department MAIN",

@@ -7,7 +7,7 @@
             "args": [ 
                 "import",
                 "all",
-                "--url", "http://smartreductor.francecentral.cloudapp.azure.com",
+                "--url", "http://localhost",
                 "--user", "admin",
                 "--password", "admin"
             ],
