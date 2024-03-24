@@ -158,3 +158,12 @@ interface settingGroupCfg
     groups: settingGroupCfg[] | undefined;
     settings: settingCfg[] | undefined;
 }
+
+interface threeDimensionalModelCfg
+{
+    id: number | undefined;
+    name: string;
+    description: string | undefined;
+    fileName: string;
+    data: string;
+}

@@ -29,6 +29,8 @@ import { settings } from "./extract/settings.js";
 import { workCenterGroups } from "./extract/workCenterGroups.js";
 import { importWorkCenterGroups } from "./import/importWorkCenterGroups.js";
 import { importWorkCenterProps } from "./import/importWorkCenterProps.js";
+import { threeDimensionalModels } from "./extract/3DModels.js";
+import { import3DModels } from "./import/import3DModels.js";
 import { importAll } from "./import/importAll.js";
 
 const dirName = url.fileURLToPath(new URL(".", import.meta.url));
@@ -145,7 +147,11 @@ yargs(hideBin(process.argv))
                 .command(createImportCommandModule(
                     "workCenterProps",
                     "import workCenter props",
-                    (client: dpa) => importWorkCenterProps.run(client)));
+                    (client: dpa) => importWorkCenterProps.run(client)))
+                .command(createImportCommandModule(
+                    "3DModels",
+                    "import 3D models",
+                    (client: dpa) => import3DModels.run(client)));
         }
     })
     .command({
@@ -193,7 +199,11 @@ yargs(hideBin(process.argv))
                 .command(createDumpCommandModule(
                     "workCenterGroups",
                     "dump workCenter groups",
-                    (client: dpa) => workCenterGroups.fetch(client)));
+                    (client: dpa) => workCenterGroups.fetch(client)))
+                .command(createDumpCommandModule(
+                    "3DModels",
+                    "dump 3D models",
+                    (client: dpa) => threeDimensionalModels.fetch(client)));
         }
     })
     .version(packageJson.version)

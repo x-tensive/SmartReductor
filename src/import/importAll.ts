@@ -14,6 +14,8 @@ import { importSettings } from "./importSettings.js";
 import { importShifts } from "./importShifts.js";
 import { importUnderproductionReasons } from "./importUnderproductionReasons.js";
 import { importWorkCenterGroups } from "./importWorkCenterGroups.js";
+import { import3DModels } from "./import3DModels.js";
+import { compare3DModels } from "../compare/compare3DModels.js";
 
 export class importAll extends importBase
 {
@@ -135,5 +137,13 @@ export class importAll extends importBase
 
         console.log("workCenter props EXECUTE UPDATE ACTIONS");
         await this.executeUpdateActions(client, workCenterPropsUpdateActions);
+
+        // 3D models
+
+        const import3DModelsCfg = await import3DModels.prepareCfg(client);
+        this.dumpUpdateActions(import3DModelsCfg.updateActions);
+
+        console.log("3D models EXECUTE UPDATE ACTIONS");
+        await this.executeUpdateActions(client, import3DModelsCfg.updateActions);
     }
 }

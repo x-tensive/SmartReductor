@@ -1,4 +1,5 @@
 import http, { IncomingMessage, OutgoingHttpHeaders } from "http";
+import FormData from "form-data";
 
 export enum enterpriseStructTypes
 {
@@ -104,6 +105,17 @@ export class dpa {
     private async REST_JSON_TRANSACTION(endPoint: string, method: string, body: any): Promise<any>
     {
         const result = await this.REST_JSON_CALL(endPoint, method, body);
+        return JSON.parse(result.body.toString());
+    }
+
+    private async REST_JSON_FORM_TRANSACTION(endPoint: string, method: string, form: FormData): Promise<any>
+    {
+        const headers = {
+            ... form.getHeaders(),
+            "Content-Length" : form.getLengthSync(),
+            "Cookie": this.__cookies ? this.__cookies : []
+        };
+        const result = await this.CALL(endPoint, method, headers, form.getBuffer());
         return JSON.parse(result.body.toString());
     }
 
@@ -543,6 +555,37 @@ export class dpa {
     public async settings_saveSettings(settings: any[]): Promise<any>
     {
         return this.REST_JSON_TRANSACTION("/api/settings/saveSettings", "POST", settings);
+    }
+
+    public async threeDimensionalModel_list(): Promise<any>
+    {
+        return this.REST_JSON_TRANSACTION("/api/ThreeDimensionalModel/list", "GET", null);
+    }
+
+    public async threeDimensionalModel_create(name: string, description: string | undefined, fileName: string, data: string): Promise<any>
+    {
+        const form = new FormData();
+        form.append("ThreeDimensionalModel", JSON.stringify({
+            id: 0,
+            name: name,
+            description: description,
+            corrections: {
+                rotation: { x: 0, y: 0, z: 0 }
+            },
+            originalModelFileId: 0,
+            originalModelFileName: fileName,
+            extraFields: {}
+        }));
+        form.append("files", Buffer.from(data, "base64"), {
+            filename: fileName,
+            contentType: "application/octet-stream"
+        });
+        return await this.REST_JSON_FORM_TRANSACTION("/api/ThreeDimensionalModel/create", "POST", form);
+    }
+
+    public async threeDimensionalModel_delete(id: number): Promise<any>
+    {
+        return this.REST_JSON_CALL("/api/ThreeDimensionalModel/" + id + "/delete", "POST", null);
     }
 
     private constructor(url: string, user: string, password: string)

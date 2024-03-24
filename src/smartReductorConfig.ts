@@ -61,4 +61,13 @@ export class smartReductorConfig
         const buffer = fs.readFileSync("./data/workCenterGroups.json");
         return JSON.parse(buffer.toString());
     }
+
+    public static read3DModelsConfiguration(): threeDimensionalModelCfg[]
+    {
+        const buffer = fs.readFileSync("./data/3DModels.json");
+        let models: threeDimensionalModelCfg[] = JSON.parse(buffer.toString());
+        for (let model of models)
+            model.data = fs.readFileSync("./data/3D/" + model.fileName).toString("base64");
+        return models;
+    }
 }

@@ -24,9 +24,14 @@
   },
   "dependencies": {
     "chalk": "^5.2.0",
+    "form-data": "^4.0.0",
     "yargs": "^17.6.2"
   },
-  "files": [ "bin", "data", "src" ],
+  "files": [
+    "bin",
+    "data",
+    "src"
+  ],
   "bin": {
     "smartReductor": "./bin/smartReductor.js"
   }
