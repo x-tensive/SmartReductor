@@ -1,7 +1,14 @@
 [
     {
-        "name": "DPA model",
-        "description": "DPA model",
-        "fileName": "DpaModel.dae"
+        "name": "Nakamura-Tome Super NTMX",
+        "description": "Nakamura-Tome Super NTMX",
+        "fileName": "Nakamura-Tome Super NTMX.dae",
+        "corrections":  {
+            "rotation":     { 
+                "x": 0,
+                "y": 3.141592653589793,
+                "z": 1.5707963267948966
+            }
+        }
     }
 ]

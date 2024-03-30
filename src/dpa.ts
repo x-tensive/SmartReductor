@@ -248,6 +248,11 @@ export class dpa {
         });
     }
 
+    public async manageEnterpriseStructure_updateDepartment(instance: any): Promise<any>
+    {
+        return this.REST_JSON_TRANSACTION("/api/EnterpriseStructManagement/saveDepartment", "POST", instance);
+    }
+
     public async manageEnterpriseStructure_removeDepartment(id: number): Promise<any>
     {
         return this.REST_JSON_TRANSACTION("/api/EnterpriseStructManagement/removeDepartment/" + id, "POST", null);
@@ -562,16 +567,14 @@ export class dpa {
         return this.REST_JSON_TRANSACTION("/api/ThreeDimensionalModel/list", "GET", null);
     }
 
-    public async threeDimensionalModel_create(name: string, description: string | undefined, fileName: string, data: string): Promise<any>
+    public async threeDimensionalModel_create(name: string, description: string | undefined, fileName: string, data: string, corrections: any): Promise<any>
     {
         const form = new FormData();
         form.append("ThreeDimensionalModel", JSON.stringify({
             id: 0,
             name: name,
             description: description,
-            corrections: {
-                rotation: { x: 0, y: 0, z: 0 }
-            },
+            corrections: corrections,
             originalModelFileId: 0,
             originalModelFileName: fileName,
             extraFields: {}
@@ -586,6 +589,40 @@ export class dpa {
     public async threeDimensionalModel_delete(id: number): Promise<any>
     {
         return this.REST_JSON_CALL("/api/ThreeDimensionalModel/" + id + "/delete", "POST", null);
+    }
+
+    public async threeDimensionalModel_attachToWorkCenter(workCenterId: number, modelId: number, modelName: string)
+    {
+        let workCenter = await this.manageEnterpriseStructure_getWorkCenter(workCenterId);
+        workCenter.threeDModelId = modelId;
+        workCenter.threeDModelName = modelName;
+        await this.manageEnterpriseStructure_updateWorkCenter(workCenter);
+    }
+
+    public async threeDimensionalModel_attachToDepartment(departmentId: number, modelId: number, modelName: string)
+    {
+        let department = await this.manageEnterpriseStructure_getDepartment(departmentId);
+        department.threeDModelId = modelId;
+        department.threeDModelName = modelName;
+        await this.manageEnterpriseStructure_updateDepartment(department);
+    }
+
+    public async threeDimensionalModel_detachFromWorkCenter(workCenterId: number)
+    {
+        let workCenter = await this.manageEnterpriseStructure_getWorkCenter(workCenterId);
+        workCenter.threeDModelId = 0;
+        workCenter.threeDModelName = "";
+        await this.manageEnterpriseStructure_updateWorkCenter(workCenter);
+    }
+
+    public async threeDimensionalModel_detachFromDepartment(departmentId: number)
+    {
+        let department = await this.manageEnterpriseStructure_getDepartment(departmentId);
+        department.threeDModelFileId = null;
+        department.threeDModelFileName = null;
+        department.threeDModelId = null;
+        department.threeDModelName = null;
+        await this.manageEnterpriseStructure_updateDepartment(department);
     }
 
     private constructor(url: string, user: string, password: string)

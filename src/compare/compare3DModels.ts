@@ -29,7 +29,7 @@ export class compare3DModels
                     actionName: "Create3DModel",
                     cfg: modelCfg,
                     execute: async (client: dpa, action: any) => {
-                        const model = await client.threeDimensionalModel_create(action.cfg.name, action.cfg.description, action.cfg.fileName, action.cfg.data);
+                        const model = await client.threeDimensionalModel_create(action.cfg.name, action.cfg.description, action.cfg.fileName, action.cfg.data, action.cfg.corrections);
                         action.cfg.id = model.id;
                     }
                 });

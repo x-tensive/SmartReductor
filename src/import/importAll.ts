@@ -145,5 +145,11 @@ export class importAll extends importBase
 
         console.log("3D models EXECUTE UPDATE ACTIONS");
         await this.executeUpdateActions(client, import3DModelsCfg.updateActions);
+
+        const attach3DModelsUpdateActions = await import3DModels.prepareAttachModelsUpdateActions(client, enterpriseStructImportCfg.enterpriseCfg, import3DModelsCfg.modelsCfg);
+        this.dumpUpdateActions(attach3DModelsUpdateActions);
+
+        console.log("attach 3D models EXECUTE UPDATE ACTIONS");
+        await this.executeUpdateActions(client, attach3DModelsUpdateActions);
     }
 }

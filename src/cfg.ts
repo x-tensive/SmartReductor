@@ -36,6 +36,7 @@ interface workCenterCfg extends shiftScheduleOwnerCfg, availableReasonsOwnerCfg
     useMachineStatisticsOutput: boolean | undefined;
     parseCP: "name" | "tags" | "none" | undefined;
     parseCPsystemName: "disabled" | "fanuc1" | "fanuc2" | undefined;
+    threeDModel: string | undefined;
 }
 
 interface storageZoneCfg
@@ -52,6 +53,7 @@ interface departmentCfg extends shiftScheduleOwnerCfg, availableReasonsOwnerCfg
     departments: departmentCfg[] | undefined;
     workCenters: workCenterCfg[] | undefined;
     storageZones: storageZoneCfg[] | undefined;
+    threeDModel: string | undefined;
 }
 
 interface siteCfg extends shiftScheduleOwnerCfg, availableReasonsOwnerCfg

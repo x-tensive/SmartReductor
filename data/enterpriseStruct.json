@@ -22,7 +22,7 @@
                             "workCenters": [
                                 {
                                     "name": "workCenter 1",
-                                    "model": "TEST MODEL",
+                                    "model": "TEST MODEL 1",
                                     "inventoryNumber": "TEST INVENTORY NUMBER",
                                     "description": "TEST DESCRIPTION",
                                     "groups": [ "group1", "group3" ],
@@ -41,13 +41,16 @@
                                     "parseCPsystemName": "disabled",
                                     "shiftSchedule": "template 1",
                                     "shiftScheduleBefore": 30,
-                                    "shiftScheduleAfter": 360
+                                    "shiftScheduleAfter": 360,
+                                    "threeDModel": "Nakamura-Tome Super NTMX"
                                 },
                                 {
-                                    "name": "workCenter 2"
+                                    "name": "workCenter 2",
+                                    "threeDModel": "Nakamura-Tome Super NTMX"
                                 },
                                 {
-                                    "name": "workCenter 3"
+                                    "name": "workCenter 3",
+                                    "threeDModel": "Nakamura-Tome Super NTMX"
                                 }
                             ],
                             "storageZones": [
