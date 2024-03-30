@@ -15,7 +15,7 @@ import { importShifts } from "./importShifts.js";
 import { importUnderproductionReasons } from "./importUnderproductionReasons.js";
 import { importWorkCenterGroups } from "./importWorkCenterGroups.js";
 import { import3DModels } from "./import3DModels.js";
-import { compare3DModels } from "../compare/compare3DModels.js";
+import { import3DModelsAttachments } from "./import3DModelsAttachments.js";
 
 export class importAll extends importBase
 {
@@ -146,10 +146,10 @@ export class importAll extends importBase
         console.log("3D models EXECUTE UPDATE ACTIONS");
         await this.executeUpdateActions(client, import3DModelsCfg.updateActions);
 
-        const attach3DModelsUpdateActions = await import3DModels.prepareAttachModelsUpdateActions(client, enterpriseStructImportCfg.enterpriseCfg, import3DModelsCfg.modelsCfg);
-        this.dumpUpdateActions(attach3DModelsUpdateActions);
+        const import3DModelsAttachmentsCfg = await import3DModelsAttachments.prepareCfg(client, enterpriseStructImportCfg.enterpriseCfg, import3DModelsCfg.modelsCfg);
+        this.dumpUpdateActions(import3DModelsAttachmentsCfg.updateActions);
 
         console.log("attach 3D models EXECUTE UPDATE ACTIONS");
-        await this.executeUpdateActions(client, attach3DModelsUpdateActions);
+        await this.executeUpdateActions(client, import3DModelsAttachmentsCfg.updateActions);
     }
 }

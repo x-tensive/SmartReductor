@@ -12,6 +12,10 @@ export abstract class importBase
                 console.log("  " + action.actionName + ": " + action.cfg.name);
             if (action.actionName.startsWith("Update"))
                 console.log("  " + action.actionName + ": " + action.cfg.name);
+            if (action.actionName.startsWith("Detach"))
+                console.log("  " + action.actionName + ": " + action.cfg.name);
+            if (action.actionName.startsWith("Attach"))
+                console.log("  " + action.actionName + ": " + action.cfg.name);
         }
     }
 
@@ -23,6 +27,10 @@ export abstract class importBase
             if (action.actionName.startsWith("Create"))
                 process.stdout.write("  " + action.actionName + ": " + action.cfg.name);
             if (action.actionName.startsWith("Update"))
+                process.stdout.write("  " + action.actionName + ": " + action.cfg.name);
+            if (action.actionName.startsWith("Detach"))
+                process.stdout.write("  " + action.actionName + ": " + action.cfg.name);
+            if (action.actionName.startsWith("Attach"))
                 process.stdout.write("  " + action.actionName + ": " + action.cfg.name);
 
             process.stdout.write(" ...");
