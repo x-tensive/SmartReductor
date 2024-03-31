@@ -70,4 +70,14 @@ export class smartReductorConfig
             model.data = fs.readFileSync("./data/3D/" + model.fileName).toString("base64");
         return models;
     }
+
+    public static readDashboardsConfiguration(): any[]
+    {
+        const files = fs.readdirSync("./data/dashboards").filter(fn => fn.endsWith(".json"));
+        const dashboards = files.map(f => {
+            const buffer = fs.readFileSync("./data/dashboards/" + f);
+            return JSON.parse(buffer.toString());
+        })
+        return dashboards;
+    }
 }

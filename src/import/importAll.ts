@@ -16,6 +16,7 @@ import { importUnderproductionReasons } from "./importUnderproductionReasons.js"
 import { importWorkCenterGroups } from "./importWorkCenterGroups.js";
 import { import3DModels } from "./import3DModels.js";
 import { import3DModelsAttachments } from "./import3DModelsAttachments.js";
+import { importDashboards } from "./importDashboards.js";
 
 export class importAll extends importBase
 {
@@ -151,5 +152,13 @@ export class importAll extends importBase
 
         console.log("attach 3D models EXECUTE UPDATE ACTIONS");
         await this.executeUpdateActions(client, import3DModelsAttachmentsCfg.updateActions);
+
+        // dashboards
+
+        const importDashboardsCfg = await importDashboards.prepareCfg(client, enterpriseStructImportCfg.enterpriseCfg);
+        this.dumpUpdateActions(importDashboardsCfg.updateActions);
+
+        console.log("dashboards EXECUTE UPDATE ACTIONS");
+        await this.executeUpdateActions(client, importDashboardsCfg.updateActions);
     }
 }

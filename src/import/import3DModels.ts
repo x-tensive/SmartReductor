@@ -3,7 +3,6 @@ import { dpa } from "../dpa.js";
 import { threeDimensionalModels } from "../extract/3DModels.js";
 import { smartReductorConfig } from "../smartReductorConfig.js";
 import { importBase } from "./importBase.js";
-import { importEnterpriseStruct } from "./importEnterpriseStruct.js";
 
 export class import3DModels extends importBase
 {

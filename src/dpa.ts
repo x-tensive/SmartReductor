@@ -625,6 +625,34 @@ export class dpa {
         await this.manageEnterpriseStructure_updateDepartment(department);
     }
 
+    public async dashboards_list(): Promise<any[]>
+    {
+        const result = await this.REST_JSON_TRANSACTION("/api/dashboard/getDashboardRecords", "POST", null);
+        return result.data;
+    }
+
+    public async dashboards_remove(id: number): Promise<void>
+    {
+        await this.REST_JSON_CALL("/api/dashboard/removeDashboard", "POST", id);
+    }
+
+    public async dashboards_update(id: number, cfg: any): Promise<void>
+    {
+    }
+
+    public async dashboards_create(cfg: any): Promise<any>
+    {
+        let body: any = {};
+        body.name = cfg.name;
+        body.isSingle = cfg.isSingle;
+        body.isGlobal = cfg.isGLobal;
+        body.availableToAll = cfg.availableToAll;
+        body.accessGroupIds = cfg.accessGroupIds;
+        body.options = JSON.stringify(cfg.options);
+        const result = await this.REST_JSON_TRANSACTION("/api/dashboard/saveDashboard", "POST", body);
+        return result.id;
+    }
+
     private constructor(url: string, user: string, password: string)
     {
         this.url = url;

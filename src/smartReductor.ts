@@ -32,6 +32,7 @@ import { importWorkCenterProps } from "./import/importWorkCenterProps.js";
 import { threeDimensionalModels } from "./extract/3DModels.js";
 import { import3DModels } from "./import/import3DModels.js";
 import { import3DModelsAttachments } from "./import/import3DModelsAttachments.js";
+import { importDashboards } from "./import/importDashboards.js";
 import { importAll } from "./import/importAll.js";
 
 const dirName = url.fileURLToPath(new URL(".", import.meta.url));
@@ -156,7 +157,11 @@ yargs(hideBin(process.argv))
                 .command(createImportCommandModule(
                     "attach3DModels",
                     "import 3D models attachments",
-                    (client: dpa) => import3DModelsAttachments.run(client)));
+                    (client: dpa) => import3DModelsAttachments.run(client)))
+                .command(createImportCommandModule(
+                    "dashboards",
+                    "import dashboards",
+                    (client: dpa) => importDashboards.run(client)));
         }
     })
     .command({

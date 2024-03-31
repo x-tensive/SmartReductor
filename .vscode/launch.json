@@ -6,7 +6,7 @@
             "program": "${workspaceFolder}/bin/smartReductor.js",
             "args": [ 
                 "import",
-                "all",
+                "dashboards",
                 "--url", "http://localhost",
                 "--user", "admin",
                 "--password", "admin"

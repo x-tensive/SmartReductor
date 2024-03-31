@@ -1,0 +1,127 @@
+{
+    "name": "3D",
+    "isSingle": true,
+    "isGlobal": false,
+    "availableToAll": true,
+    "accessGroupIds": [],
+    "options": {
+        "widget": "mnemonicDashboard",
+        "params": {
+            "department": "department 2",
+            "enableAutoUpdate": true,
+            "autoUpdatePeriod": 60,
+            "shifts": [],
+            "considerWholeShift": false,
+            "showJobTypes": [ 5 ],
+            "mnemonicOptions": {
+                "showMachineStateFrame": true,
+                "showJobStateFrame": true,
+                "showLoadingCylinder": true,
+                "showLoadingCylinderLabel": true,
+                "showLegend": true,
+                "showWorkCenter": true,
+                "showDescription": false,
+                "showModel": true,
+                "showInventoryNumber": false,
+                "showPlannedJobs": true,
+                "showActiveJob": true,
+                "showActiveJobStatus": false,
+                "showActiveOperation": false,
+                "showJobOutput": true,
+                "showOperator": true,
+                "showOutputCurrentShift": true,
+                "activeJobOutputType": 1, 
+                "currentShiftOutputType": 1
+            },
+            "periodType": {
+                "id": 8
+            },
+            "dateDay": "2024-03-28T06:22:40.972Z"
+        },
+        "mnemonicDashboardOptions": {
+            "image_1": {
+                "fileName": "photo_2024-02-09_11-17-43.jpg",
+                "dataUrl": "data:image/jpeg;base64,XXX"
+            },
+            "fontSize": 240,
+            "fontColor": "rgb(32, 33, 36)",
+            "foregroundColor": "rgba(227, 227, 227, 0.48)",
+            "scene": {
+                "width": 1119,
+                "height": 800
+            },
+            "cylinder": {
+                "radius": 7,
+                "height": 100
+            },
+            "equipments_1":[
+                {
+                    "equipmentId": 769,
+                    "equipmentName": "Nakamura-Tome (0010)",
+                    "left": 300,
+                    "top": 450,
+                    "width": 157,
+                    "height": 137,
+                    "rotationAngle": -3.141592653589793,
+                    "cylinderSide": "bottom"
+                }, {
+                    "equipmentId": 1239,
+                    "equipmentName": "Nakamura-Tome (0020)",
+                    "left": 590,
+                    "top": 450,
+                    "width": 155,
+                    "height": 135,
+                    "rotationAngle": -3.141592653589793,
+                    "cylinderSide": "bottom"
+                }, {
+                    "equipmentId": 1242,
+                    "equipmentName": "Nakamura-Tome (0030)",
+                    "left": 380,
+                    "top": 640,
+                    "width": 154,
+                    "height": 134,
+                    "rotationAngle": -3.141592653589793,
+                    "cylinderSide": "bottom"
+                }, {
+                    "equipmentId": 1243,
+                    "equipmentName": "Nakamura-Tome (0040)",
+                    "left": 260,
+                    "top": 180,
+                    "width": 156,
+                    "height": 136,
+                    "rotationAngle": 0,
+                    "cylinderSide": 
+                    "bottom"
+                }, {
+                    "equipmentId": 1244,
+                    "equipmentName": "Nakamura-Tome (0050)",
+                    "left": 450,
+                    "top": 180,
+                    "width": 148,
+                    "height": 138,
+                    "rotationAngle": 0,
+                    "cylinderSide": "bottom"
+                }, {
+                    "equipmentId": 1265,
+                    "equipmentName": "Nakamura-Tome (0060)",
+                    "left": 630,
+                    "top": 180,
+                    "width": 157,
+                    "height": 137,
+                    "rotationAngle": 0,
+                    "cylinderSide": "bottom"
+                }, {
+                    "equipmentId": 13317,
+                    "equipmentName": "Nakamura-Tome (0070)",
+                    "left": 620,
+                    "top": 640,
+                    "width": 151,
+                    "height": 131,
+                    "rotationAngle": -3.141592653589793,
+                    "cylinderSide": "bottom"
+                }
+            ],
+            "lightIntensity": 65
+        }
+    }
+}

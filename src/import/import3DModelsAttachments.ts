@@ -1,7 +1,5 @@
 import { compare3DModelsAttachments } from "../compare/compare3DModelsAttachments.js";
 import { dpa } from "../dpa.js";
-import { threeDimensionalModels } from "../extract/3DModels.js";
-import { smartReductorConfig } from "../smartReductorConfig.js";
 import { importBase } from "./importBase.js";
 import { import3DModels } from "./import3DModels.js";
 import { importEnterpriseStruct } from "./importEnterpriseStruct.js";
