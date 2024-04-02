@@ -10,5 +10,17 @@
                 "z": 1.5707963267948966
             }
         }
+    },
+    {
+        "name": "Department",
+        "description": "Department",
+        "fileName": "department.dae",
+        "corrections":  {
+            "rotation":     { 
+                "x": 0,
+                "y": 0,
+                "z": 1.5707963267948966
+            }
+        }
     }
 ]

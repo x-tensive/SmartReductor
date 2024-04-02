@@ -2,7 +2,7 @@ import { dpa } from "../dpa";
 
 export class compareDashboards
 {
-    public static async generateUpdateActions(client: dpa, dashboardsCfg: any[], existentCfg: any[]): Promise<any[]>
+    public static async generateUpdateActions(client: dpa, dashboardsCfg: any[], existentCfg: any[], enterpriseCfg: enterpriseCfg): Promise<any[]>
     {
         let actions: any[] = [];
 
@@ -29,7 +29,7 @@ export class compareDashboards
                     id: existentDashboardCfg.id,
                     cfg: dashboardCfg,
                     execute: async (client: dpa, action: any) => {
-                        await client.dashboards_update(action.id, action.cfg);
+                        await client.dashboards_update(action.id, action.cfg, enterpriseCfg);
                     }
                 });
             } else {
@@ -37,7 +37,7 @@ export class compareDashboards
                     actionName: "CreateDashboard",
                     cfg: dashboardCfg,
                     execute: async (client: dpa, action: any) => {
-                        const dashboardId = await client.dashboards_create(action.cfg);
+                        const dashboardId = await client.dashboards_create(action.cfg, enterpriseCfg);
                         action.cfg.id = dashboardId;
                     }
                 });

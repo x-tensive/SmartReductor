@@ -1,5 +1,55 @@
 import http, { IncomingMessage, OutgoingHttpHeaders } from "http";
+import fs from "fs";
 import FormData from "form-data";
+
+export function getSites(enterpriseCfg: enterpriseCfg): siteCfg[]
+{
+    let result = new Array<siteCfg>();
+    if (enterpriseCfg && enterpriseCfg.sites)
+        enterpriseCfg.sites.forEach(siteCfg => result.push(siteCfg));
+    return result;
+}
+
+export function getDepartments(enterpriseCfg: enterpriseCfg): departmentCfg[]
+{
+    let result = new Array<departmentCfg>();
+    const __onDepartment = (departmentCfg: departmentCfg): void => {
+        result.push(departmentCfg);
+        if (departmentCfg.departments)
+            departmentCfg.departments.forEach(subDepartmentCfg => __onDepartment(subDepartmentCfg));
+    }
+    getSites(enterpriseCfg).forEach(site => {
+        if (site.departments)
+            site.departments.forEach(departmentCfg => __onDepartment(departmentCfg));
+    });
+    return result;
+}
+
+export function getWorkCenters(enterpriseCfg: enterpriseCfg): workCenterCfg[]
+{
+    let result = new Array<workCenterCfg>();
+    getDepartments(enterpriseCfg).forEach(department => {
+        if (department.workCenters)
+            department.workCenters.forEach(workCenter => result.push(workCenter));
+    });
+    return result;
+}
+
+export function getDepartmentByName(enterpriseCfg: enterpriseCfg, name: string)
+{
+    const department = getDepartments(enterpriseCfg).find(d => d.name == name);
+    if (department)
+        return department;
+    throw "department \"" + name + "\" not found!";
+}
+
+export function getWorkCenterByName(enterpriseCfg: enterpriseCfg, name: string)
+{
+    const workCenter = getWorkCenters(enterpriseCfg).find(d => d.name == name);
+    if (workCenter)
+        return workCenter;
+    throw "workCenter \"" + name + "\" not found!";
+}
 
 export enum enterpriseStructTypes
 {
@@ -636,11 +686,11 @@ export class dpa {
         await this.REST_JSON_CALL("/api/dashboard/removeDashboard", "POST", id);
     }
 
-    public async dashboards_update(id: number, cfg: any): Promise<void>
+    public async dashboards_update(id: number, cfg: any, enterpriseCfg: enterpriseCfg): Promise<void>
     {
     }
 
-    public async dashboards_create(cfg: any): Promise<any>
+    public async dashboards_create(cfg: any, enterpriseCfg: enterpriseCfg): Promise<any>
     {
         let body: any = {};
         body.name = cfg.name;
@@ -648,7 +698,20 @@ export class dpa {
         body.isGlobal = cfg.isGLobal;
         body.availableToAll = cfg.availableToAll;
         body.accessGroupIds = cfg.accessGroupIds;
-        body.options = JSON.stringify(cfg.options);
+
+        let options = { ...cfg.options };
+        if (options.params?.department)
+            options.params.department = getDepartmentByName(enterpriseCfg, options.params?.department).id;
+        if (options.mnemonicDashboardOptions?.equipments)
+            options.mnemonicDashboardOptions.equipments.forEach((e: any) => {
+                const workCenter = getWorkCenterByName(enterpriseCfg, e.workCenter);;
+                e.equipmentId = workCenter.id;
+                e.equipmentName = workCenter.name;
+            });
+        if (options.mnemonicDashboardOptions?.image)
+            options.mnemonicDashboardOptions.image.dataUrl = "data:" + options.mnemonicDashboardOptions.image.mimeType + ";base64," + fs.readFileSync("./data/2D/" + options.mnemonicDashboardOptions.image.fileName).toString("base64");
+        body.options = JSON.stringify(options);
+        
         const result = await this.REST_JSON_TRANSACTION("/api/dashboard/saveDashboard", "POST", body);
         return result.id;
     }

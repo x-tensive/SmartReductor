@@ -16,7 +16,7 @@ export class importDashboards extends importBase
         const existentCfg = await dashboards.fetch(client);
 
         console.log("dashboards UPDATE ACTIONS");
-        const updateActions = await compareDashboards.generateUpdateActions(client, dashboardsCfg, existentCfg);
+        const updateActions = await compareDashboards.generateUpdateActions(client, dashboardsCfg, existentCfg, enterpriseCfg);
 
         return { updateActions: updateActions };
     }
