@@ -284,9 +284,9 @@ export class dpa {
         });
     }
 
-    public async manageEnterpriseStructure_removeStorageZone(id: number): Promise<any>
+    public async manageEnterpriseStructure_removeStorageZone(id: number): Promise<void>
     {
-        return this.REST_JSON_TRANSACTION("/api/EnterpriseStructManagement/removeStorageZone/" + id, "GET", null);
+        await this.REST_JSON_CALL("/api/EnterpriseStructManagement/removeStorageZone/" + id, "GET", null);
     }
 
     public async manageEnterpriseStructure_createDepartment(siteId: number, parentDepartmentId: number, name: string): Promise<any>
@@ -592,9 +592,9 @@ export class dpa {
         return this.REST_JSON_TRANSACTION("/api/availableReason/attachReasonsToParent/" + ownerTypeId + "/" + ownerId + "/" + reasonType, "POST", null);
     }
 
-    public async availableReason_detachReasonsFromParent(ownerTypeId: number, ownerId: number, reasonType: number): Promise<any>
+    public async availableReason_detachReasonsFromParent(ownerTypeId: number, ownerId: number, reasonType: number): Promise<void>
     {
-        return this.REST_JSON_TRANSACTION("/api/availableReason/detachReasonsFromParent/" + ownerTypeId + "/" + ownerId + "/" + reasonType, "POST", null);
+        await this.REST_JSON_CALL("/api/availableReason/detachReasonsFromParent/" + ownerTypeId + "/" + ownerId + "/" + reasonType, "POST", null);
     }
 
     public async availableReason_updateAvailableReasons(ownerTypeId: number, ownerId: number, reasonType: number, reasonIds: number[]): Promise<any>

@@ -9,92 +9,86 @@
     "availableUnderproductionReasons": "all",
     "sites": [
         {
-            "name": "area 2",
+            "name": "Площадка 51",
             "availableDowntimeReasons": "all",
             "availableOperationRunSuspendReasons": "inherit",
             "availableOvertimeReasons": [ "Некорректная норма" ],
             "departments": [
                 {
-                    "name": "department MAIN",
-                    "departments": [
-                        {
-                            "name": "department 2",
-                            "threeDModel": "Department",
-                            "workCenters": [
-                                {
-                                    "name": "workCenter 1",
-                                    "model": "TEST MODEL 1",
-                                    "inventoryNumber": "TEST INVENTORY NUMBER",
-                                    "description": "TEST DESCRIPTION",
-                                    "groups": [ "group1", "group3" ],
-                                    "counterType": "counter",
-                                    "counterIncrementType": "diff",
-                                    "counterDiscreteness": 1,
-                                    "normativeDiscreteness": 1,
-                                    "qualityMark": "good",
-                                    "masterMustComfirmIncompleteJobClose": false,
-                                    "masterMustComfirmDisorderJobStar": false,
-                                    "allowMultipleJobsRun": false,
-                                    "forbidJobStartWhenAnotherJobIsSuspended": false,
-                                    "allowMultiplePersonalShifts": false,
-                                    "useMachineStatisticsOutput": true,
-                                    "parseCP": "name",
-                                    "parseCPsystemName": "disabled",
-                                    "shiftSchedule": "template 1",
-                                    "shiftScheduleBefore": 30,
-                                    "shiftScheduleAfter": 360,
-                                    "threeDModel": "Nakamura-Tome Super NTMX"
-                                },
-                                {
-                                    "name": "workCenter 2",
-                                    "threeDModel": "Nakamura-Tome Super NTMX"
-                                },
-                                {
-                                    "name": "workCenter 3",
-                                    "threeDModel": "Nakamura-Tome Super NTMX"
-                                },
-                                {
-                                    "name": "workCenter 4",
-                                    "threeDModel": "Nakamura-Tome Super NTMX"
-                                },
-                                {
-                                    "name": "workCenter 5",
-                                    "threeDModel": "Nakamura-Tome Super NTMX"
-                                },
-                                {
-                                    "name": "workCenter 6",
-                                    "threeDModel": "Nakamura-Tome Super NTMX"
-                                },
-                                {
-                                    "name": "workCenter 7",
-                                    "threeDModel": "Nakamura-Tome Super NTMX"
-                                }
-                            ],
-                            "storageZones": [
-                                {
-                                    "name": "storage 1",
-                                    "address": "a1"
-                                },
-                                {
-                                    "name": "storage 2",
-                                    "address": "a2"
-                                },
-                                {
-                                    "name": "storage 3",
-                                    "address": "a3"
-                                }
-                            ]
-                        }
-                    ],
+                    "name": "Механическая обработка",
+                    "threeDModel": "Department",
                     "workCenters": [
                         {
-                            "name": "workCenter root"
-                        }
-                    ],
-                    "storageZones": [
+                            "name": "NTMX-1",
+                            "model": "Nakamura-Tome Super NTMX",
+                            "inventoryNumber": "INV-NTMX-1",
+                            "description": "Двухшпиндельный многозадачный токарный центр с двойными 24-инструментальными автоматами ATC, двумя револьверными головками с функциями токарной и фрезерной обработки и одним фрезерным шпинделем с осями Y и B",
+                            "groups": [ "NTMX" ],
+                            "counterType": "counter",
+                            "counterIncrementType": "diff",
+                            "counterDiscreteness": 1,
+                            "normativeDiscreteness": 1,
+                            "qualityMark": "good",
+                            "masterMustComfirmIncompleteJobClose": false,
+                            "masterMustComfirmDisorderJobStar": false,
+                            "allowMultipleJobsRun": false,
+                            "forbidJobStartWhenAnotherJobIsSuspended": false,
+                            "allowMultiplePersonalShifts": false,
+                            "useMachineStatisticsOutput": true,
+                            "parseCP": "name",
+                            "parseCPsystemName": "disabled",
+                            "shiftSchedule": "template 1",
+                            "shiftScheduleBefore": 30,
+                            "shiftScheduleAfter": 360,
+                            "threeDModel": "Nakamura-Tome Super NTMX"
+                        },
                         {
-                            "name": "Stock 2 main area",
-                            "address": "x1"
+                            "name": "NTMX-2",
+                            "model": "Nakamura-Tome Super NTMX",
+                            "inventoryNumber": "INV-NTMX-2",
+                            "description": "Двухшпиндельный многозадачный токарный центр с двойными 24-инструментальными автоматами ATC, двумя револьверными головками с функциями токарной и фрезерной обработки и одним фрезерным шпинделем с осями Y и B",
+                            "groups": [ "NTMX" ],
+                            "threeDModel": "Nakamura-Tome Super NTMX"
+                        },
+                        {
+                            "name": "NTMX-3",
+                            "model": "Nakamura-Tome Super NTMX",
+                            "inventoryNumber": "INV-NTMX-3",
+                            "description": "Двухшпиндельный многозадачный токарный центр с двойными 24-инструментальными автоматами ATC, двумя револьверными головками с функциями токарной и фрезерной обработки и одним фрезерным шпинделем с осями Y и B",
+                            "groups": [ "NTMX" ],
+                            "threeDModel": "Nakamura-Tome Super NTMX"
+                        },
+                        {
+                            "name": "NTMX-4",
+                            "model": "Nakamura-Tome Super NTMX",
+                            "inventoryNumber": "INV-NTMX-4",
+                            "description": "Двухшпиндельный многозадачный токарный центр с двойными 24-инструментальными автоматами ATC, двумя револьверными головками с функциями токарной и фрезерной обработки и одним фрезерным шпинделем с осями Y и B",
+                            "groups": [ "NTMX" ],
+                            "threeDModel": "Nakamura-Tome Super NTMX"
+                        },
+                        {
+                            "name": "NTMX-5",
+                            "model": "Nakamura-Tome Super NTMX",
+                            "inventoryNumber": "INV-NTMX-5",
+                            "description": "Двухшпиндельный многозадачный токарный центр с двойными 24-инструментальными автоматами ATC, двумя револьверными головками с функциями токарной и фрезерной обработки и одним фрезерным шпинделем с осями Y и B",
+                            "groups": [ "NTMX" ],
+                            "threeDModel": "Nakamura-Tome Super NTMX"
+                        },
+                        {
+                            "name": "NTMX-6",
+                            "model": "Nakamura-Tome Super NTMX",
+                            "inventoryNumber": "INV-NTMX-6",
+                            "description": "Двухшпиндельный многозадачный токарный центр с двойными 24-инструментальными автоматами ATC, двумя револьверными головками с функциями токарной и фрезерной обработки и одним фрезерным шпинделем с осями Y и B",
+                            "groups": [ "NTMX" ],
+                            "threeDModel": "Nakamura-Tome Super NTMX"
+                        },
+                        {
+                            "name": "NTMX-7",
+                            "model": "Nakamura-Tome Super NTMX",
+                            "inventoryNumber": "INV-NTMX-7",
+                            "description": "Двухшпиндельный многозадачный токарный центр с двойными 24-инструментальными автоматами ATC, двумя револьверными головками с функциями токарной и фрезерной обработки и одним фрезерным шпинделем с осями Y и B",
+                            "groups": [ "NTMX" ],
+                            "threeDModel": "Nakamura-Tome Super NTMX"
                         }
                     ]
                 }

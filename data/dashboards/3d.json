@@ -1,5 +1,5 @@
 {
-    "name": "3D",
+    "name": "3D - Механическая обработка",
     "isSingle": true,
     "isGlobal": false,
     "availableToAll": true,
@@ -7,7 +7,7 @@
     "options": {
         "widget": "mnemonicDashboard",
         "params": {
-            "department": "department 2",
+            "department": "Механическая обработка",
             "enableAutoUpdate": true,
             "autoUpdatePeriod": 60,
             "shifts": [],
@@ -56,7 +56,7 @@
             },
             "equipments":[
                 {
-                    "workCenter": "workCenter 1",
+                    "workCenter": "NTMX-1",
                     "left": 300,
                     "top": 450,
                     "width": 157,
@@ -64,7 +64,7 @@
                     "rotationAngle": -3.141592653589793,
                     "cylinderSide": "bottom"
                 }, {
-                    "workCenter": "workCenter 2",
+                    "workCenter": "NTMX-2",
                     "left": 590,
                     "top": 450,
                     "width": 155,
@@ -72,7 +72,7 @@
                     "rotationAngle": -3.141592653589793,
                     "cylinderSide": "bottom"
                 }, {
-                    "workCenter": "workCenter 3",
+                    "workCenter": "NTMX-3",
                     "left": 380,
                     "top": 640,
                     "width": 154,
@@ -80,7 +80,7 @@
                     "rotationAngle": -3.141592653589793,
                     "cylinderSide": "bottom"
                 }, {
-                    "workCenter": "workCenter 4",
+                    "workCenter": "NTMX-4",
                     "left": 260,
                     "top": 180,
                     "width": 156,
@@ -88,7 +88,7 @@
                     "rotationAngle": 0,
                     "cylinderSide": "bottom"
                 }, {
-                    "workCenter": "workCenter 5",
+                    "workCenter": "NTMX-5",
                     "left": 450,
                     "top": 180,
                     "width": 148,
@@ -96,7 +96,7 @@
                     "rotationAngle": 0,
                     "cylinderSide": "bottom"
                 }, {
-                    "workCenter": "workCenter 6",
+                    "workCenter": "NTMX-6",
                     "left": 630,
                     "top": 180,
                     "width": 157,
@@ -104,7 +104,7 @@
                     "rotationAngle": 0,
                     "cylinderSide": "bottom"
                 }, {
-                    "workCenter": "workCenter 7",
+                    "workCenter": "NTMX-7",
                     "left": 620,
                     "top": 640,
                     "width": 151,
