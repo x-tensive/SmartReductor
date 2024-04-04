@@ -57,7 +57,7 @@ export class enterpriseStruct {
             let currentNodeCfg = nodeCfg;
             const isVirtualContainer = this.isVirtualContainerType(node.type);
             if (!isVirtualContainer)
-                currentNodeCfg = this.fetchNodeCfg(node.type, node.id, node.text, nodeCfg);
+                currentNodeCfg = this.fetchNodeCfg(node.type, Number(node.id), node.text, nodeCfg);
             const isContainer = this.isContainerType(node.type);
             if (isContainer) 
                 await this.fetchNodes(client, node.type, node.id, currentNodeCfg);
