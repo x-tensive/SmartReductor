@@ -2,7 +2,7 @@ name: build and publish
 
 on:
   release:
-    types: [published]
+    types: [created]
 
 jobs:
   build:
@@ -11,18 +11,17 @@ jobs:
 
     - name: checkout
       uses: actions/checkout@v3
-    - name: setup node.js
-      uses: actions/setup-node@v3
+
+    # publish container image to docker hub
+
+    - name: DOCKER HUB login
+      uses: docker/login-action@v2
       with:
-        node-version: 16.x
-        registry-url: 'https://registry.npmjs.org'
-    - name: npm ci
-      run: npm ci
-    - name: set version
-      run: npm version "${{ github.event.release.tag_name }}" --no-git-tag-version
-    - name: build
-      run: npm run build
-    - name: publish
-      run: npm publish
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+    
+    - name: build and publish container image to DOCKER HUB
+      run: |
+        docker build . -t xtensive/smart-reductor:${{ github.event.release.tag_name }} -t xtensive/smart-reductor
+        docker push xtensive/smart-reductor:${{ github.event.release.tag_name }}
+        docker push xtensive/smart-reductor:latest
