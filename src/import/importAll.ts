@@ -17,6 +17,7 @@ import { importWorkCenterGroups } from "./importWorkCenterGroups.js";
 import { import3DModels } from "./import3DModels.js";
 import { import3DModelsAttachments } from "./import3DModelsAttachments.js";
 import { importDashboards } from "./importDashboards.js";
+import { importDrivers } from "./importDrivers.js";
 
 export class importAll extends importBase
 {
@@ -160,5 +161,13 @@ export class importAll extends importBase
 
         console.log("dashboards EXECUTE UPDATE ACTIONS");
         await this.executeUpdateActions(client, importDashboardsCfg.updateActions);
+
+        // drivers
+
+        const importDriversCfg = await importDrivers.prepareCfg(client);
+        this.dumpUpdateActions(importDriversCfg.updateActions);
+
+        console.log("drivers EXECUTE UPDATE ACTIONS");
+        await this.executeUpdateActions(client, importDriversCfg.updateActions);
     }
 }

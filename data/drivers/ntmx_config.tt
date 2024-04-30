@@ -1,0 +1,553 @@
+<#@ template language="C#" hostspecific="true" #>
+<#@ assembly name="System.Core" #>
+
+<#@ import namespace="Newtonsoft.Json" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Reflection" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Text.RegularExpressions" #>
+<#@ import namespace="Xtensive.DPA.Contracts" #>
+<#@ import namespace="Xtensive.DPA.EventManager" #>
+<#@ import namespace="Xtensive.Project109.Host.DPA" #>
+
+<#@ import namespace="Xtensive.Project109.Host.DPA.Knowledge.Scripts.Siemens" #>
+
+<#
+	var driverInfo = T4GeneratorMono.GetParameterValue<DriverInfo>(this.Host, "driverInfo");
+	var configuration = T4GeneratorMono.GetParameterValue<OpcUaDriverConfigurationInfo>(this.Host, "configuration");
+	var driver = T4GeneratorMono.GetParameterValue<T4DriverData>(this.Host, "driver");
+#>
+
+<?xml version="1.0"?>
+<#
+	var channels = driver.Device.Children.Where(x => x.Class == DriverDeviceClass.Channel).ToArray();
+		
+	var driverId = Guid.NewGuid();
+		
+	var axes = channels.SelectMany(chan => chan.Children.Where(x => x.Class == DriverDeviceClass.Axis)).ToArray();
+	var spindles = channels.SelectMany(chan => chan.Children.Where(x => x.Class == DriverDeviceClass.Spindle)).ToArray();
+	
+	var renderSnapshotEx = new Action<SnapshotTemplate, DpaSnapshotType>((snapshot, snType) => { 
+#>
+			<snapshot type="<#= snType #>" identifier="<#= snapshot.Id #>" name="<#= snapshot.Name #>">
+				<snapshotConfiguration>
+					<readPeriod><#=snapshot.ReadPeriod#></readPeriod>	
+					<readTimeout><#=snapshot.ReadTimeout#></readTimeout>
+					<snapshotItemDescriptors>
+<#
+	foreach (var snItem in snapshot.Items) {
+#>
+						<snapshotItemDescriptor name="<#=snItem.Key#>" nodeRoute="<#=snItem.Value#>" />
+<#
+	}
+#>
+					</snapshotItemDescriptors>
+				</snapshotConfiguration>
+			</snapshot>
+<#
+	});
+	
+	var renderSnapshot = new Action<SnapshotTemplate>(snapshot => { 
+		renderSnapshotEx(snapshot, DpaSnapshotType.OpcUaSubscription);
+	});	
+	
+	
+	var stateTemplateList = new Dictionary<string, StateTemplate>();
+	stateTemplateList.Add(EventInfoConsts.AxisLoad, new StateTemplate(EventInfoConsts.AxisLoad, EventInfoConsts.AxisLoad_AxisLoad, EventInfoConsts.AxisLoad_HighLoad){ 
+		IndicatorNames=new string[] {"Axis load {0}, %" }
+	} );
+	stateTemplateList.Add("Axis position", new StateTemplate("Axis position", "position"){ IndicatorNames=new string[] {"Axis position {0}" } } );
+	stateTemplateList.Add(EventInfoConsts.FeedRate, new StateTemplate(EventInfoConsts.FeedRate, EventInfoConsts.FeedRate_Actual){ IndicatorNames=new string[] {"Feedrate {0}, mm/min" } } );
+	stateTemplateList.Add(EventInfoConsts.FeedRateOverrider, new StateTemplate(EventInfoConsts.FeedRateOverrider, EventInfoConsts.FeedRateOverrider_Override){ IndicatorNames=new string[] {"Feedrate override {0}, %" } } );
+	stateTemplateList.Add(EventInfoConsts.RapidTraverseOverride, new StateTemplate(EventInfoConsts.RapidTraverseOverride, EventInfoConsts.RapidTraverseOverride_Override){ IndicatorNames=new string[] {"Rapid traverse override {0}, %" } });
+	stateTemplateList.Add(EventInfoConsts.SpindleLoad, new StateTemplate(EventInfoConsts.SpindleLoad, EventInfoConsts.SpindleLoad_Load, EventInfoConsts.SpindleLoad_High){ IndicatorNames=new string[] {"Spindle load {0}, %" } } );
+	stateTemplateList.Add(EventInfoConsts.SpindleOverride, new StateTemplate(EventInfoConsts.SpindleOverride, EventInfoConsts.SpindleOverride_Override){ IndicatorNames=new string[] {"Spindle override {0}, %" } } );
+	stateTemplateList.Add(EventInfoConsts.SpindleSpeed, new StateTemplate(EventInfoConsts.SpindleSpeed, EventInfoConsts.SpindleSpeed_Speed){ IndicatorNames=new string[] {"Spindle speed {0}, rpm" } } );
+	stateTemplateList.Add(EventInfoConsts.MachineStatistics, new StateTemplate(
+		EventInfoConsts.MachineStatistics,
+		EventInfoConsts.MachineStatistics_TotalNumberOfMachinedParts,
+		EventInfoConsts.MachineStatistics_PowerOnPeriod,
+		EventInfoConsts.MachineStatistics_AutomaticOperationTime,
+		EventInfoConsts.MachineStatistics_CuttingTime) {
+		EntityName = "MachineStatisticsEvent",
+		EntityFields = new string[] { "TotalNumberOfMachinedParts", "PowerOnPeriod", "AutomaticOperationTime", "CuttingTime" }
+	});
+			
+	stateTemplateList.Add(EventInfoConsts.CurrentFrame, new StateTemplate(EventInfoConsts.CurrentFrame, EventInfoConsts.CurrentFrame_FrameNumber, EventInfoConsts.CurrentFrame_FrameText){ 
+		IndicatorNames= new string[] {"Current frame number {0}", "Current frame text {0}" } 
+	});
+	
+	stateTemplateList.Add(EventInfoConsts.MachineMode, new StateTemplate(EventInfoConsts.MachineMode, EventInfoConsts.MachineMode_Mode){
+		EntityName = "MachineModeEvent",
+		EntityFields = new string[] { "Mode" }
+	});
+	stateTemplateList.Add(EventInfoConsts.NCProgram, new StateTemplate(EventInfoConsts.NCProgram, EventInfoConsts.NCProgram_MainProgram, EventInfoConsts.NCProgram_Status){
+		EntityName = "NCProgramEvent",
+		EntityFields = new string[] { "MainProgram", "Status" }
+	});
+	stateTemplateList.Add(EventInfoConsts.NCSubProgram, new StateTemplate(EventInfoConsts.NCSubProgram, EventInfoConsts.NCSubProgram_Subprogram){
+			EntityName = "NCSubProgramEvent",
+			EntityFields = new string[] { "SubProgram" }
+	});
+	stateTemplateList.Add(EventInfoConsts.MachineState, new StateTemplate(EventInfoConsts.MachineState, EventInfoConsts.MachineState_State){
+		EntityName = "MachineStateEvent",
+		EntityFields = new string[] { "Type" }
+	});
+	
+	var simpleStateList = new List<SimpleDriverState>();
+	var axisSnapshotTempalte = new List<SnapshotTemplate>();
+	{
+		foreach (var a in axes) {
+			var snapshot = new SnapshotTemplate(string.Format("Axis {0}",  a.Name));
+			axisSnapshotTempalte.Add(snapshot);
+			var channel = a.GetAttributeValue("Channel").ToString();
+			
+			snapshot.Items.Add("coord",          string.Format("/CNC/channels/{0}/axes/{1}/coord", channel, a.Name));
+			snapshot.Items.Add("coordCmd",       string.Format("/CNC/channels/{0}/axes/{1}/coordCmd", channel, a.Name));
+			snapshot.Items.Add("speed",          string.Format("/CNC/channels/{0}/axes/{1}/speed", channel, a.Name));
+			snapshot.Items.Add("speedCmd",       string.Format("/CNC/channels/{0}/axes/{1}/speedCmd", channel, a.Name));
+			snapshot.Items.Add("speedOvrActive", string.Format("/CNC/channels/{0}/axes/{1}/speedOvrActive", channel, a.Name));
+			snapshot.Items.Add("speedOvr",       string.Format("/CNC/channels/{0}/axes/{1}/speedOvr", channel, a.Name));
+			snapshot.Items.Add("load",           string.Format("/CNC/channels/{0}/axes/{1}/load", channel, a.Name));
+			snapshot.Items.Add("activeCmd",      string.Format("/CNC/channels/{0}/axes/{1}/activeCmd", channel, a.Name));
+			snapshot.Items.Add("activeMove",     string.Format("/CNC/channels/{0}/axes/{1}/activeMove", channel, a.Name));
+			
+			simpleStateList.Add(new SimpleDriverState(stateTemplateList["Axis position"], snapshot, a) {
+					SnapshotFields = new string[] { "coord" },
+					Transforms = new string[] {"operationType=\"Round\" operationValue=\"2\""}
+				});
+			simpleStateList.Add(new SimpleDriverState(stateTemplateList[EventInfoConsts.AxisLoad], snapshot, a) {
+					SnapshotFields = new string[] { "load", "load" },
+					Transforms = new string[] {"operationType=\"Round\" operationValue=\"2\"", "operationType=\"AbsGreater\" operationValue=\"85.0\""}
+				});
+		}
+		foreach (var s in spindles) {
+			var snapshot = new SnapshotTemplate(string.Format("Spindle {0}",  s.Name));
+			axisSnapshotTempalte.Add(snapshot);
+			var channel = s.GetAttributeValue("Channel").ToString();
+			
+			snapshot.Items.Add("speed",          string.Format("/CNC/channels/{0}/spindles/{1}/speed", channel, s.Name));
+			snapshot.Items.Add("speedCmd",       string.Format("/CNC/channels/{0}/spindles/{1}/speedCmd", channel, s.Name));
+			snapshot.Items.Add("load",           string.Format("/CNC/channels/{0}/spindles/{1}/load", channel, s.Name));
+			snapshot.Items.Add("activeCmd",      string.Format("/CNC/channels/{0}/spindles/{1}/activeCmd", channel, s.Name));
+			snapshot.Items.Add("activeRotation", string.Format("/CNC/channels/{0}/spindles/{1}/activeRotation", channel, s.Name));
+			
+			simpleStateList.Add(new SimpleDriverState(stateTemplateList[EventInfoConsts.SpindleLoad], snapshot, s) {
+				SnapshotFields = new string[] { "load", "load" },
+				Transforms = new string[] {"operationType=\"Round\" operationValue=\"0\"", "operationType=\"AbsGreater\" operationValue=\"85.0\""}
+			});
+			simpleStateList.Add(new SimpleDriverState(stateTemplateList[EventInfoConsts.SpindleSpeed], snapshot, s) { 
+				SnapshotFields = new string[] { "speed" } ,
+				Transforms = new string[] {"operationType=\"Round\" operationValue=\"2\"" }
+			} );
+		}		
+	}
+	
+	var otherSnapshotTemplate = new List<SnapshotTemplate>();
+		
+	var channelSnapshotTempalte = new List<SnapshotTemplate>();
+	{
+		foreach (var chan in channels) {
+			var snapshot = new SnapshotTemplate("Channel "+ chan.Name);
+			channelSnapshotTempalte.Add(snapshot);
+			
+			snapshot.Items.Add("feedrateCmd",               string.Format("/CNC/channels/{0}/feedrateCmd", chan.Name));
+			snapshot.Items.Add("feedrateOvrActive",         string.Format("/CNC/channels/{0}/feedrateOvrActive", chan.Name));
+			snapshot.Items.Add("feedrateOvr",               string.Format("/CNC/channels/{0}/feedrateOvr", chan.Name));
+			snapshot.Items.Add("feedrateEffective",         string.Format("/CNC/channels/{0}/feedrateEffective", chan.Name));
+			
+			snapshot.Items.Add("rapidTraverseOvrActive",    string.Format("/CNC/channels/{0}/rapidTraverseOvrActive", chan.Name));
+			snapshot.Items.Add("rapidTraverseOvr",          string.Format("/CNC/channels/{0}/rapidTraverseOvr", chan.Name));
+			snapshot.Items.Add("rapidTraverseOvrEffective", string.Format("/CNC/channels/{0}/rapidTraverseOvrEffective", chan.Name));
+			
+			snapshot.Items.Add("spindleSpeedCmd",           string.Format("/CNC/channels/{0}/spindleSpeedCmd", chan.Name));
+			snapshot.Items.Add("spindleSpeedOvrActive",     string.Format("/CNC/channels/{0}/spindleSpeedOvrActive", chan.Name));
+			snapshot.Items.Add("spindleSpeedOvr",           string.Format("/CNC/channels/{0}/spindleSpeedOvr", chan.Name));
+			snapshot.Items.Add("spindleSpeedEffective",     string.Format("/CNC/channels/{0}/spindleSpeedEffective", chan.Name));
+			
+			snapshot.Items.Add("isCutting",                 string.Format("/CNC/channels/{0}/isCutting", chan.Name));
+			snapshot.Items.Add("isRapidTraverse",           string.Format("/CNC/channels/{0}/isRapidTraverse", chan.Name));
+			snapshot.Items.Add("cBlockNum",                 string.Format("/CNC/channels/{0}/cBlockNum", chan.Name));
+			snapshot.Items.Add("cBlockTxt",                 string.Format("/CNC/channels/{0}/cBlockTxt", chan.Name));
+			snapshot.Items.Add("cBlockCom",                 string.Format("/CNC/channels/{0}/cBlockCom", chan.Name));
+			snapshot.Items.Add("cBlockBusy",                string.Format("/CNC/channels/{0}/cBlockBusy", chan.Name));
+			snapshot.Items.Add("cBlockErr",                 string.Format("/CNC/channels/{0}/cBlockErr", chan.Name));
+			snapshot.Items.Add("mode",                      string.Format("/CNC/channels/{0}/mode", chan.Name));
+			snapshot.Items.Add("programStatus",             string.Format("/CNC/channels/{0}/programStatus", chan.Name));
+			snapshot.Items.Add("programName",               string.Format("/CNC/channels/{0}/programName", chan.Name));
+			
+//			simpleStateList.Add(new SimpleDriverState(stateTemplateList[EventInfoConsts.FeedRate], sn, chan) { 
+//				SnapshotFields = new string[] { "actFeedRateIpo" } ,
+//				Transforms = new string[] {"operationType=\"Round\" operationValue=\"0\"" }
+//			} );
+
+			simpleStateList.Add(new SimpleDriverState(stateTemplateList[EventInfoConsts.SpindleOverride], snapshot, chan) { 
+				SnapshotFields = new string[] { "spindleSpeedOvr" },
+				Transforms = new string[] {"operationType=\"Round\" operationValue=\"2\"" }
+			} );
+			
+			simpleStateList.Add(new SimpleDriverState(stateTemplateList[EventInfoConsts.RapidTraverseOverride], snapshot, chan) { 
+				SnapshotFields = new string[] { "rapidTraverseOvr" } ,
+				Transforms = new string[] {"operationType=\"Round\" operationValue=\"2\"" }
+			} );
+			
+			simpleStateList.Add(new SimpleDriverState(stateTemplateList[EventInfoConsts.FeedRateOverrider], snapshot, chan) { 
+				SnapshotFields = new string[] { "feedrateOvr" } ,
+				Transforms = new string[] {"operationType=\"Round\" operationValue=\"2\"" }
+			} );			
+			
+			simpleStateList.Add(new SimpleDriverState(stateTemplateList[EventInfoConsts.CurrentFrame], snapshot, chan) { 
+				SnapshotFields = new string[] { "cBlockNum", "cBlockTxt" } 
+			} );			
+		}		
+	}
+
+	
+#><root xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://x-tensive.com/dpa/driver-config">
+	<driver type="<#= configuration.Type #>" identifier="<#= driverId #>" name="<#= configuration.Name #>">
+		<device>
+			<opcUa mainChannel="<#= configuration.MainChannel #>">
+				<keepAliveIntervalMs><#= configuration.KeepAliveIntervalMs #></keepAliveIntervalMs>
+				<sessionTimeoutMs><#= configuration.SessionTimeoutMs #></sessionTimeoutMs>
+				<maxReconnectionIntervalMs><#= configuration.MaxReconnectionIntervalMs #></maxReconnectionIntervalMs>
+				<operationTimeoutMs><#= configuration.OperationTimeoutMs #></operationTimeoutMs>
+				<programDownloadConfig>
+					<PerChannel>
+						<opcUaProgramDownloadPerChannel>
+							<Channel xsi:nil="true" />
+							<Config>
+								<ByScript>
+									<content>
+<![CDATA[
+using System;
+using System.Text;
+using System.Threading.Tasks;
+using Xtensive.DPA.Contracts;
+using Xtensive.DPA.OPCUA;
+
+namespace Xtensive.DPA.Server
+{
+    internal class EmulDownloadScript : Xtensive.DPA.Protocols.IProgramDownloadScript
+    {
+        public async Task<DownloadProgramResponseInfo> Download(int channel, string programName, IOpcUaClient client)
+        {
+            var pathParent = string.Format("CNC/channels/CHAN{0}/fs", channel);
+            var pathChild = string.Format("CNC/channels/CHAN{0}/fs/download", channel);
+
+            var nodeParent = await client.GetNodeByRoute(pathParent);
+            var nodeMethod = await client.GetNodeByRoute(pathChild);
+            
+            var result = await client.Invoke(nodeParent, nodeMethod, new object[] { programName});
+            return new DownloadProgramResponseInfo() {
+                Data = Encoding.UTF8.GetBytes((string)result[0]),
+                Format = FileFormat.PlainTextUTF8
+            };            
+        }
+    }
+}]]>
+									</content>
+								</ByScript>
+							</Config>
+						</opcUaProgramDownloadPerChannel>
+					</PerChannel>
+				</programDownloadConfig>
+				<programRenameConfig />
+				<programUploadConfig>
+					<PerChannel>
+						<opcUaProgramUploadPerChannel>
+							<Channel xsi:nil="true" />
+							<Config>
+								<ByScript>
+									<content>
+<![CDATA[
+using System.Text;
+using System.Threading.Tasks;
+using Xtensive.DPA.OPCUA;
+
+namespace Xtensive.DPA.Server
+{
+    internal class EmulUploadScript : Protocols.IProgramUploadScript
+    {
+        public async Task Upload(int channel, string programName, byte[] content, IOpcUaClient client)
+        {
+            var pathParent = string.Format("CNC/channels/CHAN{0}/fs", channel);
+            var pathChild = string.Format("CNC/channels/CHAN{0}/fs/upload", channel);
+
+            var nodeParent = await client.GetNodeByRoute(pathParent);
+            var nodeMethod = await client.GetNodeByRoute(pathChild);
+
+            await client.Invoke(nodeParent, nodeMethod, new object[] { programName, Encoding.UTF8.GetString(content) });
+        }
+    }
+}
+]]>
+									</content>
+								</ByScript>
+							</Config>
+						</opcUaProgramUploadPerChannel>
+					</PerChannel>
+				</programUploadConfig>
+			</opcUa>
+		</device>
+		<snapshots><#
+		foreach (var snapshot in axisSnapshotTempalte)
+			renderSnapshot(snapshot);
+		foreach (var snapshot in channelSnapshotTempalte)
+			renderSnapshot(snapshot);
+		foreach (var snapshot in otherSnapshotTemplate)
+			renderSnapshot(snapshot);
+#>
+		</snapshots>
+	</driver>
+	<states><#
+	foreach (var st in stateTemplateList) { #>
+		<state identifier="<#= st.Value.Id #>" name="<#= st.Key #>">
+			<stateItems><#
+			foreach (var item in st.Value.Items) { #>
+				<stateItem name="<#= item #>" /> <#
+			}#>
+			</stateItems>
+		</state><#}#>
+	</states>
+	<driverStates><#
+	foreach (var ss in simpleStateList)	{ #>
+		<driverState driverIdentifier="<#= driverId #>" identifier="<#= ss.Id #>" stateIdentifier="<#= ss.StateTemplate.Id #>" isActive="true" deviceClass="<#= ss.Device.Class #>" deviceNumber="<#= ss.Device.Number #>" publish="true">
+			<stateTriggers>
+				<stateTrigger triggerIdentifier="<#= Guid.NewGuid() #>" triggerType="Snapshot">
+					<stateSnapshotTrigger identifier="<#= ss.Snapshot.Id #>" />
+				</stateTrigger>
+			</stateTriggers>
+			<stateProvider providerType="Simple">
+				<stateSimpleProvider>
+					<dataItems><#
+					for (var i=0;i<ss.SnapshotFields.Length;i++) { #>
+						<dataItem descriptorName="<#= ss.StateTemplate.Items[i] #>">
+							<snapshotItem snapshotIdentifier="<#= ss.Snapshot.Id #>" descriptorName="<#= ss.SnapshotFields[i] #>" <#= ss.Transforms[i]??"" #> />
+						</dataItem><# } #>
+					</dataItems>
+				</stateSimpleProvider>
+			</stateProvider>
+		</driverState><# }
+		
+		var chanIndex = 0;
+		foreach (var channel in channels) {
+			var chanSnapshot = channelSnapshotTempalte[chanIndex];
+			var programState = Guid.NewGuid();
+			var machineModeState = Guid.NewGuid();
+			var machieStateState = Guid.NewGuid();
+			#>
+<driverState driverIdentifier="<#= driverId #>" identifier="<#= machineModeState #>" stateIdentifier="<#= stateTemplateList[EventInfoConsts.MachineMode].Id #>" isActive="true" deviceClass="<#= channel.Class #>" deviceNumber="<#= channel.Number #>" publish="true" >
+			<stateTriggers>
+				<stateTrigger triggerIdentifier="<#= Guid.NewGuid() #>" triggerType="Snapshot">
+					<stateSnapshotTrigger identifier="<#= chanSnapshot.Id #>" />
+				</stateTrigger>
+			</stateTriggers>
+			<stateProvider providerType="Script">
+				<stateScriptProvider>
+<![CDATA[
+using Xtensive.DPA.Contracts;
+
+namespace Xtensive.DPA.DriverManager
+{
+    public class MachineModeScriptStateProvider : IStateProvider
+    {
+        public StateData Calculate(StateProviderContext context)
+        {
+            var machineModeStateItem = context.GetStateDataItem("<#=EventInfoConsts.MachineMode_Mode#>");
+
+            if (context.IsMachineDown) {
+                machineModeStateItem.Value = (int)MachineMode.Undefined;
+                return context.GetStateData(machineModeStateItem);
+            }
+            var snapshot = context.GetSnapshot("<#= chanSnapshot.Name #>");
+            var opMode = snapshot.GetData<int>("mode");
+            machineModeStateItem.Value = (int)MachineMode.Undefined;
+            switch (opMode) {
+                case 0: //Manual
+                    machineModeStateItem.Value = (int)MachineMode.Manual;
+                    break;
+
+                case 1: //SingleStep
+                    machineModeStateItem.Value = (int)MachineMode.Single;
+                    break;
+
+                case 2: //Auto
+                    machineModeStateItem.Value = (int)MachineMode.Automatic;
+                    break;
+            }
+            return context.GetStateData(machineModeStateItem);
+        }
+    }
+}
+]]>
+				</stateScriptProvider>
+			</stateProvider>
+		</driverState>
+		
+		<driverState driverIdentifier="<#= driverId #>" identifier="<#= programState #>"  stateIdentifier="<#= stateTemplateList[EventInfoConsts.NCProgram].Id #>" isActive="true" deviceClass="<#= channel.Class #>" deviceNumber="<#= channel.Number #>" publish="true" >
+			<stateTriggers>
+				<stateTrigger triggerIdentifier="<#= Guid.NewGuid() #>" triggerType="Snapshot">
+					<stateSnapshotTrigger identifier="<#= chanSnapshot.Id #>" />
+				</stateTrigger>
+			</stateTriggers>
+			<stateProvider providerType="Script">
+				<stateScriptProvider>
+<![CDATA[
+using System;
+using Xtensive.DPA.Contracts;
+
+namespace Xtensive.DPA.DriverManager
+{
+    public class NcProgramScriptStateProvider : IStateProvider
+    {
+        public StateData Calculate(StateProviderContext context)
+        {
+            var statusItem = context.GetStateDataItem("<#= EventInfoConsts.NCProgram_Status #>");
+            var mainPrgStateItem = context.GetStateDataItem("<#= EventInfoConsts.NCProgram_MainProgram #>");
+            mainPrgStateItem.Value = string.Empty;
+
+            if (context.IsMachineDown) {
+                statusItem.Value = (int)MachineProgramStatus.Undefined;
+                return context.GetStateData(statusItem, mainPrgStateItem);
+            }
+
+            statusItem.Value = (int)MachineProgramStatus.Idle;
+
+            var chanSnapshot = context.GetSnapshot("<#= chanSnapshot.Name #>");
+            var progStatus = chanSnapshot.GetData<int>("programStatus");
+            var progName = chanSnapshot.GetData<string>("programName");
+
+            if (string.IsNullOrEmpty(progName))
+                return context.GetStateData(statusItem, mainPrgStateItem);
+
+            mainPrgStateItem.Value = progName;
+			if (progName.StartsWith("MP\\", StringComparison.InvariantCultureIgnoreCase))
+                mainPrgStateItem.Value = progName.Substring(3);
+
+            switch (progStatus) {
+                case 0: //no program
+                case 1: //Idle
+                    mainPrgStateItem.Value = string.Empty;
+                    break;
+                case 2: //Running
+                    statusItem.Value = (int)MachineProgramStatus.Running;
+                    break;
+                case 3: //Interrupted 
+                    statusItem.Value = (int)MachineProgramStatus.Waiting;
+                    break;
+                case 4: //Error  
+                    statusItem.Value = (int)MachineProgramStatus.Cancel;
+                    break;
+                case 5: //Completed   
+                    statusItem.Value = (int)MachineProgramStatus.Complete;
+                    break;
+            }
+            return context.GetStateData(statusItem, mainPrgStateItem);
+        }       
+    }
+}
+
+]]>
+				</stateScriptProvider>
+			</stateProvider>
+		</driverState>
+		
+		<driverState driverIdentifier="<#= driverId #>" identifier="<#= machieStateState #>" stateIdentifier="<#= stateTemplateList[EventInfoConsts.MachineState].Id #>" isActive="true" deviceClass="<#= channel.Class #>" deviceNumber="<#= channel.Number #>" publish="true" >
+			<stateTriggers>
+				<stateTrigger triggerIdentifier="<#= Guid.NewGuid() #>" triggerType="State">
+					<stateStateTrigger identifier="<#= programState #>" />
+				</stateTrigger>
+				<stateTrigger triggerIdentifier="<#= Guid.NewGuid() #>" triggerType="State">
+					<stateStateTrigger identifier="<#= machineModeState #>" />
+				</stateTrigger>
+				<stateTrigger triggerIdentifier="<#= Guid.NewGuid() #>" triggerType="Timer">
+					<stateTimerTrigger period="00:00:02" />
+				</stateTrigger>
+			</stateTriggers>
+			<stateProvider providerType="Script">
+				<stateScriptProvider>
+<![CDATA[
+using System.Linq;
+using Xtensive.DPA.Contracts;
+
+namespace Xtensive.DPA.DriverManager
+{
+    public class MachineStateScriptStateProvider : IStateProvider
+    {
+        private T GetStateField<T>(StateProviderContext context, string stateName, string stateField, T defaultValue)
+        {
+            var trigger = context.Triggers.OfType<IStateStateTrigger>()
+                .SingleOrDefault(x => x.DriverState.StateConfiguration.Name == stateName);
+            if (trigger == null || trigger.DriverStateRuntimeData == null)
+                return defaultValue;
+            var data = trigger.DriverStateRuntimeData.Data;
+            return data != null
+                ? (T)data.Single(s => s.Descriptor.Name == stateField).Value
+                : defaultValue;
+        }
+
+        public StateData Calculate(StateProviderContext context)
+        {
+            var machineStateStateItem = context.GetStateDataItem("<#= EventInfoConsts.MachineState_State #>");
+            machineStateStateItem.Value = (int)MachineStateType.SwitchedOff;
+
+            if (context.IsMachineDown)
+                return context.GetStateData(machineStateStateItem);
+
+            var machineMode = GetStateField<MachineMode>(context, "<#= EventInfoConsts.MachineMode #>", "<#= EventInfoConsts.MachineMode_Mode #>", MachineMode.Undefined);
+            var progStatus = GetStateField<MachineProgramStatus>(context, "<#= EventInfoConsts.NCProgram #>", "<#= EventInfoConsts.NCProgram_Status #>", MachineProgramStatus.Undefined);
+            
+            if (progStatus == MachineProgramStatus.Running) {
+                if (machineMode == MachineMode.Automatic)
+                    machineStateStateItem.Value = (int)MachineStateType.Production;
+                else
+                    machineStateStateItem.Value = (int)MachineStateType.Adjustment;
+            }
+            else {
+                machineStateStateItem.Value = (int)MachineStateType.SwitchedOn;
+            }
+
+            return context.GetStateData(machineStateStateItem);
+        }
+    }
+}
+
+]]>
+				</stateScriptProvider>
+			</stateProvider>
+		</driverState>
+			<#
+		}
+		#>
+	</driverStates>
+	<eventStorages><#
+	foreach (var driverState in simpleStateList)
+		if (!string.IsNullOrEmpty(driverState.StateTemplate.EntityName)) {
+		#>
+		<eventStorage eventIdentifier="<#= driverState.Id #>" entityName="<#= driverState.StateTemplate.EntityName #>" isActive="true">
+			<settingsValueStorages><# 
+			for (var i=0;i<driverState.StateTemplate.Items.Length;i++) { #>
+				<settingsValueStorage valueName="<#= driverState.StateTemplate.Items[i] #>" entityFieldName="<#=driverState.StateTemplate.EntityFields[i] #>" /><#}#>
+			</settingsValueStorages>
+		</eventStorage><#}#>
+	</eventStorages>
+	<indicators><#
+		foreach (var st in simpleStateList) 
+			if (st.StateTemplate.IndicatorNames != null)
+				for (var i=0;i<st.StateTemplate.IndicatorNames.Length; i++) { #>
+		<indicator
+		  name="<#=st.StateTemplate.IndicatorNames[i] #>"
+		  stateName = "<#= st.StateTemplate.Name #>" stateField="<#= st.StateTemplate.Items[i] #>"
+		  class="<#= st.Device.Class #>" number="<#= st.Device.Number #>"
+		  storeType="Memory LogToFileSystem"
+		  memoryStoreLimitByCount="true" memoryStoreCountLimit="1000" MemoryStorePeriodLimit="10:00:00"
+		  fileStoreDaysLimit="365" >
+		  <nameParameters>
+				<nameParameter value="<#= st.Device.Name #>" />
+		  </nameParameters>
+		</indicator><#}#>
+	</indicators>
+</root>

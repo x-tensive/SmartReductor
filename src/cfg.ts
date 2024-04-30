@@ -169,3 +169,27 @@ interface threeDimensionalModelCfg
     fileName: string;
     data: string;
 }
+
+interface dpaServerCfg
+{
+    id: number | undefined,
+    name: string,
+    hostName: string,
+    port: number
+}
+
+interface driverRefCfg
+{
+    name: string,
+    driverIdentifier: string
+}
+
+interface driverCfg
+{
+    name: string,
+    serverName: string | undefined,
+    isValid: boolean | undefined,
+    dpaDriverType: number | undefined,
+    driverConfigurationInfo: any | undefined,
+    deviceTree_fileName: string | undefined,
+}

@@ -1,0 +1,98 @@
+services:
+  dpa-postgres:
+    image: xtensive/dpa-postgres
+    profiles: ['full']
+    ports:
+      - ${POSTGRES_PORT}:5432
+    environment:
+      POSTGRES_MULTIPLE_DATABASES: dpa_host,dpa_audit,dpa_toolmanagement,dpa_messenger,dpa_kpi
+      PGUSER: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+         - ${DATABASE_PATH}:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+
+  dpa-server:
+    image: xtensive/dpa-server:${DPA_VERSION}
+    profiles: ['full']
+    environment:
+      - TZ=${TZ}
+    volumes:
+      - ${COMMONDATA_PATH}:/usr/share/X-tensive
+    restart: unless-stopped
+
+  dpa-host:
+    image: xtensive/dpa-host:${DPA_VERSION}
+    ports:
+      - ${DPA_HOST_HTTP_PORT}:6216
+      - ${DPA_HOST_HTTPS_PORT}:6217
+    volumes:
+      - ${COMMONDATA_PATH}:/usr/share/X-tensive
+    environment:
+      - DatabaseConnection__ConnectionString=Host=dpa-postgres; Database=dpa_host; User ID=dpa_host; Password=dpa_host;
+      - DatabaseConnection__Provider=postgresql
+      - TZ=${TZ}
+      - SystemLocale=${SYSTEM_LOCALE}
+      - DefaultDpaServerAddress=dpa-server
+      - DefaultHostAddress=dpa-host
+    restart: unless-stopped
+    depends_on:
+        dpa-postgres:
+            condition: service_healthy
+  
+  ntmx-1:
+    image: xtensive/emul.mill:${MILL_VERSION}
+    ports:
+      - 4841:4840
+      - 801:80
+    restart: unless-stopped
+  
+  ntmx-2:
+    image: xtensive/emul.mill:${MILL_VERSION}
+    ports:
+      - 4842:4840
+      - 802:80
+    restart: unless-stopped
+  
+  ntmx-3:
+    image: xtensive/emul.mill:${MILL_VERSION}
+    ports:
+      - 4843:4840
+      - 803:80
+    restart: unless-stopped
+  
+  ntmx-4:
+    image: xtensive/emul.mill:${MILL_VERSION}
+    ports:
+      - 4844:4840
+      - 804:80
+    restart: unless-stopped
+  
+  ntmx-5:
+    image: xtensive/emul.mill:${MILL_VERSION}
+    ports:
+      - 4845:4840
+      - 805:80
+    restart: unless-stopped
+
+  ntmx-6:
+    image: xtensive/emul.mill:${MILL_VERSION}
+    ports:
+      - 4846:4840
+      - 806:80
+    restart: unless-stopped
+  
+  ntmx-7:
+    image: xtensive/emul.mill:${MILL_VERSION}
+    ports:
+      - 4847:4840
+      - 807:80
+    restart: unless-stopped
+
+  

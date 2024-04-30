@@ -80,4 +80,10 @@ export class smartReductorConfig
         })
         return dashboards;
     }
+
+    public static readDriversConfiguration(): driverCfg[]
+    {
+        const buffer = fs.readFileSync("./data/drivers.json");
+        return JSON.parse(buffer.toString());
+    }
 }

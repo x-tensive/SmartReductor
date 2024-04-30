@@ -716,6 +716,41 @@ export class dpa {
         return result.id;
     }
 
+    public async dpaServers_list(): Promise<dpaServerCfg[]>
+    {
+        return await this.REST_JSON_TRANSACTION("/api/DPA/getServers", "GET", null);
+    }
+
+    public async drivers_list(server: string): Promise<driverRefCfg[]>
+    {
+        return await this.REST_JSON_TRANSACTION("/api/DPA/getDriversByServerName/" + server, "GET", null);
+    }
+
+    public async driver_get(server: string, id: string): Promise<driverCfg>
+    {
+        return await this.REST_JSON_TRANSACTION("/api/DPA/getDriver/" + server + "/" + id, "GET", null);
+    }
+
+    public async driver_remove(server: string, id: string): Promise<void>
+    {
+        await this.REST_JSON_CALL("/api/DPA/removeDriver/" + server + "/" + id + "/1", "POST", null);
+    }
+
+    public async driver_opcua_getDeviceConfiguration(server: string, sourceUri: string, name: string, securityMode: number, fileName: string, deviceTree: string): Promise<any>
+    {
+        const form = new FormData();
+        form.append("file", deviceTree, {
+            filename: fileName,
+            contentType: "text/plain"
+        });
+        return await this.REST_JSON_FORM_TRANSACTION("/api/server/" + server + "/opcUa/getDeviceConfiguration?sourceUri=" + encodeURIComponent(sourceUri) + "&name=" + encodeURIComponent(name) + "&securityMode=" + securityMode, "POST", form);
+    }
+
+    public async driver_create(driverCfg: driverCfg): Promise<any[]>
+    {
+        return await this.REST_JSON_TRANSACTION("/api/dpa/createDriver/", "POST", driverCfg);
+    }
+
     private constructor(url: string, user: string, password: string)
     {
         this.url = url;
