@@ -1,4 +1,5 @@
 import { dpa } from "../dpa";
+import fs from "fs";
 
 export class compareDriverLinks
 {
@@ -29,8 +30,8 @@ export class compareDriverLinks
         }
 
         for (const driverLinkCfg of driverLinksCfg) {
-            const existentDriverLinkCfg = existentCfg.find((item) => item.workCenterId == driverLinkCfg.workCenterId && item.driverInfo == driverLinkCfg.driverInfo);
-            if (!existentDriverLinkCfg) {
+            const existentDriverLinkCfg = existentCfg.find((item) => item.workCenterId == driverLinkCfg.workCenterId && item.driverIdentifier == driverLinkCfg.driverIdentifier);
+            if (!existentDriverLinkCfg && driverLinkCfg.driverInfo) {
                 actions.push({
                     actionName: "CreateDriverLink",
                     cfg: { ...driverLinkCfg, name: "[" + driverLinkCfg.workCenterId + "] " + driverLinkCfg.driverInfo },
@@ -41,6 +42,11 @@ export class compareDriverLinks
                         workCenter.driverinfo = action.cfg.driverInfo;
                         workCenter.serverId = server!.id;
                         await client.manageEnterpriseStructure_updateWorkCenter(workCenter);
+                        if (action.cfg.driverCfg_fileName) {
+                            const driverCfg = fs.readFileSync("./data/drivers/" + action.cfg.driverCfg_fileName).toString();
+                            await client.driver_importSettings(server!.name, action.cfg.driverIdentifier, action.cfg.driverCfg_fileName, driverCfg);
+                            await client.driver_importWorkCenterSettings(server!.id!, action.cfg.driverIdentifier, action.cfg.workCenterId, action.cfg.driverCfg_fileName, driverCfg);
+                        }
                     }
                 });
             }

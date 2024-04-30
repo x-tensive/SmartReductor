@@ -22,7 +22,8 @@ export class driverLinks
                         workCenterId: workCenterInfo.id,
                         workCenterName: workCenterInfo.name,
                         driverIdentifier: workCenterInfo.driverIdentifier,
-                        driverInfo: workCenterInfo.driverinfo
+                        driverInfo: workCenterInfo.driverinfo,
+                        driverCfg_fileName: undefined
                     });
                 }
             }

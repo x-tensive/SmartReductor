@@ -193,6 +193,7 @@ interface driverCfg
     dpaDriverType: number | undefined;
     driverConfigurationInfo: any | undefined;
     deviceTree_fileName: string | undefined;
+    cfg_fileName: string | undefined;
 }
 
 interface driverLinkCfg
@@ -201,4 +202,5 @@ interface driverLinkCfg
     workCenterName: string;
     driverIdentifier: string;
     driverInfo: string;
+    driverCfg_fileName: string | undefined;
 }

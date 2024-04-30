@@ -751,6 +751,26 @@ export class dpa {
         return await this.REST_JSON_TRANSACTION("/api/dpa/createDriver/", "POST", driverCfg);
     }
 
+    public async driver_importSettings(server: string, id: string, fileName: string, deviceCfg: string): Promise<void>
+    {
+        const form = new FormData();
+        form.append("file", deviceCfg, {
+            filename: fileName,
+            contentType: "text/plain"
+        });
+        return await this.REST_JSON_FORM_TRANSACTION("/api/dpa/importDriverSettings/" + server + "/" + id + "/1/2/null", "POST", form);
+    }
+
+    public async driver_importWorkCenterSettings(serverId: number, driverId: string, workCenterId: number, fileName: string, deviceCfg: string): Promise<void>
+    {
+        const form = new FormData();
+        form.append("file", deviceCfg, {
+            filename: fileName,
+            contentType: "text/plain"
+        });
+        return await this.REST_JSON_FORM_TRANSACTION("/api/enterpriseStruct/importSettings/" + serverId + "/" + driverId + "/" + workCenterId + "/1/null", "POST", form);
+    }
+
     private constructor(url: string, user: string, password: string)
     {
         this.url = url;

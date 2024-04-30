@@ -33,7 +33,8 @@
                 "policyId": ""
             }
         },
-        "deviceTree_fileName": "ntmx_deviceTree.cs"
+        "deviceTree_fileName": "ntmx_deviceTree.cs",
+        "cfg_fileName": "ntmx_config.tt"
     },
     {
         "name": "ntmx-2",
@@ -69,7 +70,8 @@
                 "policyId": ""
             }
         },
-        "deviceTree_fileName": "ntmx_deviceTree.cs"
+        "deviceTree_fileName": "ntmx_deviceTree.cs",
+        "cfg_fileName": "ntmx_config.tt"
     },
     {
         "name": "ntmx-3",
@@ -105,6 +107,7 @@
                 "policyId": ""
             }
         },
-        "deviceTree_fileName": "ntmx_deviceTree.cs"
+        "deviceTree_fileName": "ntmx_deviceTree.cs",
+        "cfg_fileName": "ntmx_config.tt"
     }
 ]

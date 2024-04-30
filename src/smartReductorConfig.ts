@@ -107,7 +107,8 @@ export class smartReductorConfig
                         workCenterId: workCenter.id,
                         workCenterName: workCenter.name,
                         driverIdentifier: driver?.driverConfigurationInfo.identifier,
-                        driverInfo: workCenter.driver!
+                        driverInfo: workCenter.driver!,
+                        driverCfg_fileName: driver?.cfg_fileName
                     });
                 }
             }
