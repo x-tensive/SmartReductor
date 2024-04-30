@@ -43,6 +43,7 @@ export class compareDrivers
                         const deviceCfg = await client.driver_opcua_getDeviceConfiguration(driverCfg.serverName!, endpoint.sourceUri, endpoint.name, endpoint.securityMode, driverCfg.deviceTree_fileName!, deviceTree);
                         driverCfg.driverConfigurationInfo.rootDeviceInfo = deviceCfg;
                         const data = await client.driver_create(driverCfg);
+                        action.cfg.driverConfigurationInfo.identifier = data[1];
                     }
                 });
             }

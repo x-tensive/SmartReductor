@@ -49,7 +49,8 @@
                             "inventoryNumber": "INV-NTMX-2",
                             "description": "Двухшпиндельный многозадачный токарный центр с двойными 24-инструментальными автоматами ATC, двумя револьверными головками с функциями токарной и фрезерной обработки и одним фрезерным шпинделем с осями Y и B",
                             "groups": [ "NTMX" ],
-                            "threeDModel": "Nakamura-Tome Super NTMX"
+                            "threeDModel": "Nakamura-Tome Super NTMX",
+                            "driver": "DPAServer/ntmx-2"
                         },
                         {
                             "name": "NTMX-3",
@@ -57,7 +58,8 @@
                             "inventoryNumber": "INV-NTMX-3",
                             "description": "Двухшпиндельный многозадачный токарный центр с двойными 24-инструментальными автоматами ATC, двумя револьверными головками с функциями токарной и фрезерной обработки и одним фрезерным шпинделем с осями Y и B",
                             "groups": [ "NTMX" ],
-                            "threeDModel": "Nakamura-Tome Super NTMX"
+                            "threeDModel": "Nakamura-Tome Super NTMX",
+                            "driver": "DPAServer/ntmx-3"
                         },
                         {
                             "name": "NTMX-4",

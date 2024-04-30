@@ -34,5 +34,77 @@
             }
         },
         "deviceTree_fileName": "ntmx_deviceTree.cs"
+    },
+    {
+        "name": "ntmx-2",
+        "serverName": "DPAServer",
+        "isValid": true,
+        "dpaDriverType": 36,
+        "driverConfigurationInfo": {
+            "$type": "Xtensive.DPA.Contracts.OpcUaDriverConfigurationInfo, Xtensive.DPA.Contracts",
+            "endpoint": {
+                "encoding": "Binary",
+                "name": "opc.tcp://ntmx-2:4840/Mill - None - None - Binary",
+                "securityLevel": 1,
+                "securityMode": 1,
+                "securityModeStr": "None",
+                "securityPolicyId": "None",
+                "securityPolicyUri": "http://opcfoundation.org/UA/SecurityPolicy#None",
+                "sourceHost": "ntmx-2",
+                "sourcePort": 4840,
+                "sourceProtocol": "OpcTcp",
+                "sourceUri": "opc.tcp://ntmx-2:4840/",
+                "uri": "opc.tcp://ntmx-2:4840/Mill"
+            },
+            "isValid": true,
+            "keepAliveIntervalMs": 0,
+            "mainChannel": 1,
+            "maxReconnectionIntervalMs": 0,
+            "operationTimeoutMs": 0,
+            "sessionTimeoutMs": 0,
+            "type": 36,
+            "programRenameConfig": {},
+            "userIdentityConfig": {
+                "$type": "Xtensive.DPA.Contracts.OpcUaAnonymousIdentityConfig, Xtensive.DPA.Contracts",
+                "policyId": ""
+            }
+        },
+        "deviceTree_fileName": "ntmx_deviceTree.cs"
+    },
+    {
+        "name": "ntmx-3",
+        "serverName": "DPAServer",
+        "isValid": true,
+        "dpaDriverType": 36,
+        "driverConfigurationInfo": {
+            "$type": "Xtensive.DPA.Contracts.OpcUaDriverConfigurationInfo, Xtensive.DPA.Contracts",
+            "endpoint": {
+                "encoding": "Binary",
+                "name": "opc.tcp://ntmx-3:4840/Mill - None - None - Binary",
+                "securityLevel": 1,
+                "securityMode": 1,
+                "securityModeStr": "None",
+                "securityPolicyId": "None",
+                "securityPolicyUri": "http://opcfoundation.org/UA/SecurityPolicy#None",
+                "sourceHost": "ntmx-3",
+                "sourcePort": 4840,
+                "sourceProtocol": "OpcTcp",
+                "sourceUri": "opc.tcp://ntmx-3:4840/",
+                "uri": "opc.tcp://ntmx-3:4840/Mill"
+            },
+            "isValid": true,
+            "keepAliveIntervalMs": 0,
+            "mainChannel": 1,
+            "maxReconnectionIntervalMs": 0,
+            "operationTimeoutMs": 0,
+            "sessionTimeoutMs": 0,
+            "type": 36,
+            "programRenameConfig": {},
+            "userIdentityConfig": {
+                "$type": "Xtensive.DPA.Contracts.OpcUaAnonymousIdentityConfig, Xtensive.DPA.Contracts",
+                "policyId": ""
+            }
+        },
+        "deviceTree_fileName": "ntmx_deviceTree.cs"
     }
 ]
