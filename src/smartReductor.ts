@@ -34,7 +34,9 @@ import { import3DModels } from "./import/import3DModels.js";
 import { import3DModelsAttachments } from "./import/import3DModelsAttachments.js";
 import { importDashboards } from "./import/importDashboards.js";
 import { drivers } from "./extract/drivers.js";
+import { driverLinks } from "./extract/driverLinks.js";
 import { importDrivers } from "./import/importDrivers.js";
+import { importDriverLinks } from "./import/importDriverLinks.js";
 import { importAll } from "./import/importAll.js";
 
 const dirName = url.fileURLToPath(new URL(".", import.meta.url));
@@ -167,7 +169,11 @@ yargs(hideBin(process.argv))
                 .command(createImportCommandModule(
                     "drivers",
                     "import drivers",
-                    (client: dpa) => importDrivers.run(client)));
+                    (client: dpa) => importDrivers.run(client)))
+                .command(createImportCommandModule(
+                    "driverLinks",
+                    "import driver links",
+                    (client: dpa) => importDriverLinks.run(client)));
         }
     })
     .command({
@@ -223,7 +229,11 @@ yargs(hideBin(process.argv))
                 .command(createDumpCommandModule(
                     "drivers",
                     "dump drivers",
-                    (client: dpa) => drivers.fetch(client)));
+                    (client: dpa) => drivers.fetch(client)))
+                .command(createDumpCommandModule(
+                    "driverLinks",
+                    "dump driver links",
+                    (client: dpa) => driverLinks.fetch_clean(client)));
         }
     })
     .version(packageJson.version)

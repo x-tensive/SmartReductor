@@ -18,6 +18,7 @@ import { import3DModels } from "./import3DModels.js";
 import { import3DModelsAttachments } from "./import3DModelsAttachments.js";
 import { importDashboards } from "./importDashboards.js";
 import { importDrivers } from "./importDrivers.js";
+import { importDriverLinks } from "./importDriverLinks.js";
 
 export class importAll extends importBase
 {
@@ -169,5 +170,13 @@ export class importAll extends importBase
 
         console.log("drivers EXECUTE UPDATE ACTIONS");
         await this.executeUpdateActions(client, importDriversCfg.updateActions);
+
+        // driver links
+
+        const importDriverLinksCfg = await importDriverLinks.prepareCfg(client, enterpriseStructImportCfg.enterpriseCfg, importDriversCfg.driversCfg);
+        this.dumpUpdateActions(importDriverLinksCfg.updateActions);
+
+        console.log("driver links EXECUTE UPDATE ACTIONS");
+        await this.executeUpdateActions(client, importDriverLinksCfg.updateActions);
     }
 }

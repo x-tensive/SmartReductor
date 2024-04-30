@@ -40,7 +40,8 @@
                             "shiftSchedule": "template 1",
                             "shiftScheduleBefore": 30,
                             "shiftScheduleAfter": 360,
-                            "threeDModel": "Nakamura-Tome Super NTMX"
+                            "threeDModel": "Nakamura-Tome Super NTMX",
+                            "driver": "DPAServer/ntmx-1"
                         },
                         {
                             "name": "NTMX-2",

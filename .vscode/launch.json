@@ -6,7 +6,7 @@
             "program": "${workspaceFolder}/bin/smartReductor.js",
             "args": [ 
                 "import",
-                "drivers",
+                "driverLinks",
                 "--url", "http://localhost",
                 "--user", "admin",
                 "--password", "admin"

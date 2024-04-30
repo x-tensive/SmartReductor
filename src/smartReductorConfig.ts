@@ -1,4 +1,5 @@
 import fs from "fs";
+import { dpa } from "./dpa.js";
 
 export class smartReductorConfig
 {
@@ -85,5 +86,43 @@ export class smartReductorConfig
     {
         const buffer = fs.readFileSync("./data/drivers.json");
         return JSON.parse(buffer.toString());
+    }
+
+    public static async readDriverLinksConfiguration(client: dpa, enterprise: enterpriseCfg, drivers: driverCfg[]): Promise<driverLinkCfg[]>
+    {
+        let result = new Array<driverLinkCfg>();
+
+        const readFromDepartment = async (department: departmentCfg) => {
+            if (department.departments) {
+                for (const subDepartment of department.departments) {
+                    readFromDepartment(subDepartment);
+                }
+            }
+            if (department.workCenters) {
+                for (const workCenter of department.workCenters) {
+                    if (!workCenter.id)
+                        throw "workcenter id!";
+                    const driver = drivers.find((item) => item.serverName + "/" + item.name == workCenter.driver);
+                    result.push({
+                        workCenterId: workCenter.id,
+                        workCenterName: workCenter.name,
+                        driverIdentifier: driver?.driverConfigurationInfo.identifier,
+                        driverInfo: workCenter.driver!
+                    });
+                }
+            }
+        };
+
+        if (enterprise && enterprise.sites) {
+            for (const site of enterprise.sites) {
+                if (site.departments) {
+                    for (const department of site.departments) {
+                        await readFromDepartment(department);
+                    }
+                }
+            }
+        }
+
+        return result;
     }
 }

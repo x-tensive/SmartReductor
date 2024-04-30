@@ -37,6 +37,7 @@ interface workCenterCfg extends shiftScheduleOwnerCfg, availableReasonsOwnerCfg
     parseCP: "name" | "tags" | "none" | undefined;
     parseCPsystemName: "disabled" | "fanuc1" | "fanuc2" | undefined;
     threeDModel: string | undefined;
+    driver: string | undefined;
 }
 
 interface storageZoneCfg
@@ -172,24 +173,32 @@ interface threeDimensionalModelCfg
 
 interface dpaServerCfg
 {
-    id: number | undefined,
-    name: string,
-    hostName: string,
-    port: number
+    id: number | undefined;
+    name: string;
+    hostName: string;
+    port: number;
 }
 
 interface driverRefCfg
 {
-    name: string,
-    driverIdentifier: string
+    name: string;
+    driverIdentifier: string;
 }
 
 interface driverCfg
 {
-    name: string,
-    serverName: string | undefined,
-    isValid: boolean | undefined,
-    dpaDriverType: number | undefined,
-    driverConfigurationInfo: any | undefined,
-    deviceTree_fileName: string | undefined,
+    name: string;
+    serverName: string | undefined;
+    isValid: boolean | undefined;
+    dpaDriverType: number | undefined;
+    driverConfigurationInfo: any | undefined;
+    deviceTree_fileName: string | undefined;
+}
+
+interface driverLinkCfg
+{
+    workCenterId: number;
+    workCenterName: string;
+    driverIdentifier: string;
+    driverInfo: string;
 }
